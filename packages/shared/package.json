@@ -5,5 +5,8 @@
   "type": "module",
   "devDependencies": {
     "@repo/typescript-config": "^0.0.0"
+  },
+  "dependencies": {
+    "zod": "^4.3.6"
   }
 }

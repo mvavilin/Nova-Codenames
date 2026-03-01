@@ -1,5 +1,5 @@
 import { Router, type NextFunction, type Request, type Response } from 'express';
-import { LoginDtoSchema, RegisterDtoSchema } from '../models/auth.ts';
+import { LoginDtoSchema, RegisterDtoSchema } from '@repo/shared/src/types.ts';
 import { Endpoints, HttpStatus, ServerConstants } from '@repo/shared/src/api.types.ts';
 import { prisma } from '../prisma/prisma.ts';
 import * as argon from 'argon2';
