@@ -2,7 +2,7 @@ import express, { type Request, type Response } from 'express';
 import { createServer } from 'node:http';
 import { userRouter } from './api/users.js';
 import { errorHandler } from './middlewares/errorHandler.ts';
-import { Endpoints, ServerConstants } from './models/api.types.ts';
+import { Endpoints, ServerConstants } from '@repo/shared/src/api.types.ts';
 import { authRouter } from './api/auth.ts';
 import cors from 'cors';
 import 'dotenv/config';
@@ -25,7 +25,7 @@ app.get(Endpoints.BASE, (_req: Request, res: Response) => {
 });
 
 app.use(Endpoints.USERS, userRouter);
-app.use(Endpoints.AUTH, authRouter);
+app.use('', authRouter);
 
 app.use(errorHandler);
 
