@@ -1,6 +1,7 @@
 {
-  "extends": "@repo/typescript-config/base.json",
+  "extends": "../../packages/typescript-config/base.json",
   "compilerOptions": {
+    "target": "ES2021",
     "types": ["vite/client"],
     "baseUrl": "./src",
     "paths": {
