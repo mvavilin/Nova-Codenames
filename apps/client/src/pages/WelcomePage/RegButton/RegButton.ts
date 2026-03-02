@@ -1,7 +1,7 @@
 import { ButtonComponent } from '@/api/ComponentsAPI';
 import type { RegButtonProperties } from './RegButton.types';
 import store from '@/store/store';
-import { WelcomePageActionType } from '@/store/actions/welcomePage';
+import { WelcomeActions } from '@/store/actions/welcome.actions';
 
 export default class RegButton extends ButtonComponent {
   constructor({ ...rest }: RegButtonProperties = {}) {
@@ -20,7 +20,7 @@ export default class RegButton extends ButtonComponent {
     this.setListeners({
       click: (): void => {
         store.dispatch({
-          type: WelcomePageActionType.GO_TO_REG_PAGE,
+          type: WelcomeActions.GO_TO_REG_PAGE,
           payload: { empty: 'some payload' },
         });
       },

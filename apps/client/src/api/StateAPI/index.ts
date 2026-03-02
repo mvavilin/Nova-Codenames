@@ -1,6 +1,6 @@
 import Store from './core/Store';
 import Dispatcher from './core/Dispatcher';
-import type { Reducer, Action, Afterware } from './types/types';
+import type { Reducer, Action, Afterware, Middleware } from './types/types';
 
 export default class StateApi<State, A extends Action = Action> {
   private store: Store<State, A>;
@@ -27,6 +27,14 @@ export default class StateApi<State, A extends Action = Action> {
     this.dispatcher.removeAfterware(mw);
   }
 
+  public addMiddleware(...mws: Middleware<State, A>[]): void {
+    this.dispatcher.addMiddleware(...mws);
+  }
+
+  public removeMiddleware(mw: Middleware<State, A>): void {
+    this.dispatcher.removeMiddleware(mw);
+  }
+
   public dispatch(action: A): Promise<void> {
     return this.dispatcher.dispatch(action).catch((error) => {
       console.error('[StateApi dispatch error]:', error);
@@ -42,4 +50,4 @@ export default class StateApi<State, A extends Action = Action> {
   }
 }
 
-export type { Reducer, Action, Afterware } from './types/types';
+export type { Reducer, Action, Afterware, Middleware } from './types/types';

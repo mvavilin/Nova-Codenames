@@ -3,10 +3,10 @@ import type { RegPageProperties } from './RegPage.types';
 import BackButton from '@/pages/RegPage/BackButton/BackButton';
 import RegHeading from './RegHeading/RegHeading';
 import type { State } from '@/store/types/state.types';
-import { WelcomePageActionType } from '@/store/actions/welcomePage';
+import { WelcomeActions } from '@/store/actions/welcome.actions';
 import type { Action } from '@/api/StateAPI';
 import store from '@/store/store';
-import { RegPageActionType } from '@/store/actions/regPage';
+import { RegistrationActions } from '@/store/actions/registration.actions';
 
 export default class RegPage extends ContainerComponent {
   constructor({ ...rest }: RegPageProperties = {}) {
@@ -29,7 +29,7 @@ export default class RegPage extends ContainerComponent {
   }
 
   private showPage(_state: State, action: Action): void {
-    if (action.type === WelcomePageActionType.GO_TO_REG_PAGE) {
+    if (action.type === WelcomeActions.GO_TO_REG_PAGE) {
       setTimeout(() => {
         this.show(true, 500);
       }, 500);
@@ -37,7 +37,7 @@ export default class RegPage extends ContainerComponent {
   }
 
   private hidePage(_state: State, action: Action): void {
-    if (action.type === RegPageActionType.GO_TO_WELCOME_PAGE) {
+    if (action.type === RegistrationActions.GO_TO_WELCOME_PAGE) {
       this.hide(true, 500);
     }
   }

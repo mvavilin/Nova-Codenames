@@ -1,7 +1,7 @@
 import { ButtonComponent } from '@/api/ComponentsAPI';
 import type { BackButtonProperties } from './BackButton.types';
 import store from '@/store/store';
-import { RegPageActionType } from '@/store/actions/regPage';
+import { RegistrationActions } from '@/store/actions/registration.actions';
 
 export default class BackButton extends ButtonComponent {
   constructor({ ...rest }: BackButtonProperties = {}) {
@@ -20,7 +20,7 @@ export default class BackButton extends ButtonComponent {
     this.setListeners({
       click: (): void => {
         store.dispatch({
-          type: RegPageActionType.GO_TO_WELCOME_PAGE,
+          type: RegistrationActions.GO_TO_WELCOME_PAGE,
           payload: { empty: 'some payload' },
         });
       },
