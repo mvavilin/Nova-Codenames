@@ -4,7 +4,7 @@ import { prisma } from '../prisma/prisma.js';
 import { HttpStatus } from '@repo/shared/src/api.constants.ts';
 import * as argon from 'argon2';
 import { getUserWithoutPassword } from '../utils/getUserWithoutPassword.ts';
-import { RegisterDtoSchema } from '@repo/shared/src/schemas.ts';
+import { RegisterDtoSchema } from '@repo/shared/src/schemas/auth.ts';
 
 const createUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
