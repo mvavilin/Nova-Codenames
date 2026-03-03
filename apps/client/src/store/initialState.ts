@@ -8,6 +8,8 @@ const initialState: State = {
   avatar: 'url',
   status: 'logged',
   page: 'welcome',
+  count: 1,
+  title: '',
 };
 
 export default initialState;

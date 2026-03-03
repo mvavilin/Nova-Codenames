@@ -7,7 +7,7 @@ export default function welcomePageReducer<State>(state: State, action: Action):
       return { ...state, page: 'login' };
     }
 
-    case WelcomeActions.GO_TO_REG_PAGE: {
+    case WelcomeActions.GO_TO_REGISTRATION_PAGE: {
       return { ...state, page: 'registration' };
     }
 

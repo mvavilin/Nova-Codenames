@@ -1,8 +1,5 @@
-export type Payload = Record<string, unknown>;
-
-export interface Action<Type extends string = string, P = Payload> {
+export interface Action<Type extends string = string> {
   type: Type;
-  payload?: P;
 }
 
 export type Middleware<State, A extends Action = Action> = (context: {

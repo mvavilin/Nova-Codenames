@@ -20,8 +20,7 @@ export default class RegButton extends ButtonComponent {
     this.setListeners({
       click: (): void => {
         store.dispatch({
-          type: WelcomeActions.GO_TO_REG_PAGE,
-          payload: { empty: 'some payload' },
+          type: WelcomeActions.GO_TO_REGISTRATION_PAGE,
         });
       },
     });

@@ -7,6 +7,9 @@ import { WelcomeActions } from '@/store/actions/welcome.actions';
 import type { Action } from '@/api/StateAPI';
 import store from '@/store/store';
 import { RegistrationActions } from '@/store/actions/registration.actions';
+import SendButton from './SendButton/SendButton';
+import FetchButton from './FetchButton/FetchButton';
+import RegText from './RegText/RegText';
 
 export default class RegPage extends ContainerComponent {
   constructor({ ...rest }: RegPageProperties = {}) {
@@ -25,11 +28,17 @@ export default class RegPage extends ContainerComponent {
   }
 
   private render(): void {
-    this.appendChildren([new RegHeading(), new BackButton()]);
+    this.appendChildren([
+      new RegHeading(),
+      new RegText(),
+      new SendButton(),
+      new FetchButton(),
+      new BackButton(),
+    ]);
   }
 
   private showPage(_state: State, action: Action): void {
-    if (action.type === WelcomeActions.GO_TO_REG_PAGE) {
+    if (action.type === WelcomeActions.GO_TO_REGISTRATION_PAGE) {
       setTimeout(() => {
         this.show(true, 500);
       }, 500);

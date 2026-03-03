@@ -8,7 +8,7 @@ export default class LoginButton extends ButtonComponent {
     super({
       id: 'login-button',
       classes:
-        'px-6 py-2 rounded-lg bg-gray-200 text-black font-medium opacity-50 cursor-not-allowed',
+        'px-6 py-2 rounded-lg bg-gray-200 text-black font-medium opacity-50 cursor-not-allowed pointer-events-none',
       ...rest,
     });
 
@@ -21,7 +21,6 @@ export default class LoginButton extends ButtonComponent {
       click: (): void => {
         store.dispatch({
           type: WelcomeActions.GO_TO_LOGIN_PAGE,
-          payload: { empty: 'some payload' },
         });
       },
     });

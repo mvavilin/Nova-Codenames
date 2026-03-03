@@ -6,4 +6,6 @@ export interface State {
   avatar: string;
   status: string;
   page: string;
+  title: string;
+  count: number;
 }
