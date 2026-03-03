@@ -24,8 +24,8 @@ export const PATHS = {
     url: () => '/login',
   },
   REGISTER: {
-    pattern: /^\/register$/,
-    url: () => '/register',
+    pattern: /^\/registeration$/,
+    url: () => '/registeration',
   },
   LOBBY: {
     pattern: /^\/lobby$/,

@@ -1,86 +1,70 @@
 import { UserType } from '@types';
-import { type Route } from '@router/router.types';
+import type { Route } from '@router/router.types';
+import type Page from '@ComponentsAPI/ui/PageComponent/PageComponent';
+import type App from '@components/App/App';
+
 import { Access } from '@router/router.enums';
 import { ROUTES, PATHS } from '@router/router.constants';
+
 import { authState } from '@state';
+
 import { NotFoundPage } from '@pages';
-import { type BaseComponent } from '@ComponentsAPI';
-import type Page from '@ComponentsAPI/ui/PageComponent/PageComponent';
 
 export default class Router {
-  private container: BaseComponent;
-  private routes: Route[];
-  private currentPath = globalThis.location.pathname;
+  private app: App;
+  private routes = ROUTES;
   private lastAllowedPath = PATHS.HOME.url();
 
-  constructor(container: BaseComponent) {
-    this.container = container;
-    this.routes = ROUTES;
-
+  constructor(app: App) {
+    this.app = app;
     authState.subscribe(() => this.render());
   }
 
   public init(): void {
-    globalThis.addEventListener('popstate', () => {
-      this.currentPath = globalThis.location.pathname;
-      this.render();
-    });
-
-    this.currentPath = globalThis.location.pathname;
+    globalThis.addEventListener('popstate', () => this.render());
     this.render();
   }
 
   private render(): void {
-    if (!this.checkAccess(this.currentPath)) {
+    const path = globalThis.location.pathname;
+    const route = this.routes.find((route) => route.path.test(path));
+
+    if (!route) {
+      this.app.setChildren(new NotFoundPage());
+      return;
+    }
+
+    if (!this.checkAccess(route)) {
       this.navigate(this.lastAllowedPath);
       return;
     }
 
-    this.lastAllowedPath = this.currentPath;
-
-    const page = this.getPageForPath(this.currentPath);
-    this.container.setChildren(page);
+    this.lastAllowedPath = path;
+    this.app.setChildren(this.getPage(route, path));
   }
 
-  private getPageForPath(pathname: string): Page {
-    const route = this.routes.find((route) => route.path.test(pathname));
-    if (!route) return new NotFoundPage();
-
-    const match = pathname.match(route.path);
-    if (!match) return new NotFoundPage();
-
-    const parameters = Object.fromEntries(Object.entries(match.groups || {}));
-
-    return new route.page(parameters);
-  }
-
-  private checkAccess(pathname: string): boolean {
-    const route = this.routes.find((route) => route.path.test(pathname));
-    if (!route) return false;
-
+  private checkAccess(route: Route): boolean {
     const { userStatus: user } = authState;
-
-    if (route.access === Access.PUBLIC) return true;
-
-    if (route.access === Access.UNAUTHORIZED) {
-      return user.type === UserType.UNAUTHORIZED;
-    }
-
-    if (route.access === Access.AUTHORIZED) {
-      return (
+    const accessCheck: Record<Access, () => boolean> = {
+      [Access.PUBLIC]: () => true,
+      [Access.UNAUTHORIZED]: () => user.type === UserType.UNAUTHORIZED,
+      [Access.AUTHORIZED]: () =>
         user.type === UserType.AUTHORIZED &&
-        (!route.allowedSubStatuses || route.allowedSubStatuses.includes(user.subStatus))
-      );
-    }
+        (!route.allowedSubStatuses || route.allowedSubStatuses.includes(user.subStatus)),
+    };
 
-    return false;
+    return accessCheck[route.access]();
+  }
+
+  private getPage(route: Route, path: string): Page {
+    const match = path.match(route.path);
+    const parameters = match?.groups ? { ...match.groups } : {};
+    return match ? new route.page(parameters) : new NotFoundPage();
   }
 
   public navigate(path: string): void {
-    if (this.currentPath === path) return;
-
+    if (globalThis.location.pathname === path) return;
     globalThis.history.pushState({}, '', path);
-    this.currentPath = path;
     this.render();
   }
 }
