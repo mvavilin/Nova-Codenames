@@ -1,4 +1,4 @@
-import { AuthStatus } from '@state/auth/auth.types';
+import { AuthStatus } from '@types';
 
 export enum Access {
   PUBLIC = 'PUBLIC',

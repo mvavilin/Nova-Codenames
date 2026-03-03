@@ -6,7 +6,7 @@ import type App from '@components/App/App';
 import { Access } from '@router/router.enums';
 import { ROUTES, PATHS } from '@router/router.constants';
 
-import { authState } from '@state';
+import { UserState } from '@store/initialState';
 
 import { NotFoundPage } from '@pages';
 
@@ -17,7 +17,6 @@ export default class Router {
 
   constructor(app: App) {
     this.app = app;
-    authState.subscribe(() => this.render());
   }
 
   public init(): void {
@@ -44,13 +43,13 @@ export default class Router {
   }
 
   private checkAccess(route: Route): boolean {
-    const { userStatus: user } = authState;
+    const { status: userStatus } = UserState;
     const accessCheck: Record<Access, () => boolean> = {
       [Access.PUBLIC]: () => true,
-      [Access.UNAUTHORIZED]: () => user.type === UserType.UNAUTHORIZED,
+      [Access.UNAUTHORIZED]: () => userStatus.type === UserType.UNAUTHORIZED,
       [Access.AUTHORIZED]: () =>
-        user.type === UserType.AUTHORIZED &&
-        (!route.allowedSubStatuses || route.allowedSubStatuses.includes(user.subStatus)),
+        userStatus.type === UserType.AUTHORIZED &&
+        (!route.allowedSubStatuses || route.allowedSubStatuses.includes(userStatus.subStatus)),
     };
 
     return accessCheck[route.access]();

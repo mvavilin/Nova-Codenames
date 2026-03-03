@@ -1,11 +1,12 @@
 import '@/index.css';
+import '@/input.css';
 import App from '@components/App/App';
-import Router from '@router/router';
+import Router from '@/router/router';
 
 const app = new App();
 if (app.element) document.body.append(app.element);
 
-const router = new Router(app);
+export const router = new Router(app);
 router.init();
 
 app.hide(false);
