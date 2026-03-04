@@ -18,7 +18,11 @@ import {
   buttonStyles,
   spanStyles,
 } from './Registration.styles';
-import { inputEmailInfo, inputNameInfo, inputPasswordInfo } from '../../constants/input.constants';
+import {
+  inputEmailInfo,
+  inputNameInfo,
+  inputPasswordInfo,
+} from './RegistrationInputBlock/input.constants';
 import type { inputBlockType } from '@/types/registration.types';
 import { checkForm } from '@/utils/validateForm';
 import { saveStorageData } from '@/utils/localStorage';

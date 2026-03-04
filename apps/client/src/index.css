@@ -1,1 +1,27 @@
 @import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Orbitron:wght@400..900&display=swap');
+
+@theme {
+  --font-brand: 'Orbitron', sans-serif;
+  --font-primary: 'Inter', sans-serif;
+  --color-brand: #fcee0a; /*yellow*/
+  --color-primary: #64696c; /*gray*/
+  --color-dark-red: #cf0000;
+  --color-gray-blue: #6f919b;
+  /* --color-hover: #9d8f8e; */
+  /* --color-hover: #de8a32; */
+  --color-soothing-green: #708b58;
+  --color-background-disabled: #bbbbbb;
+  --color-text-disabled: #808080;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-main);
+    color: var(--color-black);
+  }
+
+  @utility disabled-state {
+    @apply disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed;
+  }
+}

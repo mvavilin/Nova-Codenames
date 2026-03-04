@@ -1,12 +1,9 @@
-export type inputBlockType = {
+export type inputBlockProps = {
   id: string;
   type: string;
   name: string;
-  placeholder: string;
   autocomplete: 'on' | 'off';
   minLength?: string;
   maxLength?: string;
   pattern: RegExp;
-  errorMessage: string;
-  labelText: string;
 };
