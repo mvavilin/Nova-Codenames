@@ -1,6 +1,6 @@
 import { UserType } from '@types';
 import type { Route } from '@router/router.types';
-import type Page from '@ComponentsAPI/ui/PageComponent/PageComponent';
+import type Page from '@ComponentsAPI/layout/PageComponent/PageComponent';
 import type App from '@components/App/App';
 
 import { Access } from '@router/router.enums';
