@@ -1,7 +1,7 @@
 import { ButtonComponent } from '@/api/ComponentsAPI';
 import type { RegButtonProperties } from './RegButton.types';
-import clientUserStore from '@/store/store';
-import { WelcomeActions } from '@/store/actions/welcome.actions';
+import store from '@store/store';
+import { WelcomeActions } from '@store/actions/welcome.actions';
 
 export default class RegButton extends ButtonComponent {
   constructor({ ...rest }: RegButtonProperties = {}) {
@@ -19,7 +19,7 @@ export default class RegButton extends ButtonComponent {
     this.setContent('REGISTRATION');
     this.setListeners({
       click: (): void => {
-        clientUserStore.dispatch({ type: WelcomeActions.GO_TO_REGISTRATION_PAGE });
+        store.dispatch({ type: WelcomeActions.GO_TO_REGISTRATION_PAGE });
       },
     });
   }

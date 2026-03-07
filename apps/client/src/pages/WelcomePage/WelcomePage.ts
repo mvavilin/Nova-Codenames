@@ -5,9 +5,9 @@ import WelcomeHeading from './WelcomeHeading/WelcomeHeading';
 import type { Action } from '@/api/StateAPI';
 import store from '@store/store';
 import RegButton from './RegButton/RegButton';
-import { WelcomeActions } from '@/store/actions/welcome.actions';
+import { WelcomeActions } from '@store/actions/welcome.actions';
 import type { State } from '@store/types/state';
-import { TestActions } from '@/store/actions/test.actions';
+import { TestActions } from '@store/actions/test.actions';
 
 export default class WelcomePage extends ContainerComponent {
   constructor({ ...rest }: WelcomePageProperties = {}) {
