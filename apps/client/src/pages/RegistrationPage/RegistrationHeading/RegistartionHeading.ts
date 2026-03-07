@@ -1,13 +1,15 @@
 import { HeadingComponent } from '@/api/ComponentsAPI';
-import { en } from '../registration.lang';
-import type { RegistrationPageProps } from './RegistrationHeading.types';
+import { formHeadingText } from './RegistrationHeading.constants';
 
 export default class RegistrationHeading extends HeadingComponent {
-  constructor({ ...rest }: RegistrationPageProps = {}) {
-    super({ classes: 'mb-4 text-4xl font-bold text-brand font-brand', ...rest });
+  constructor() {
+    super({ classes: 'mb-4 text-3xl font-bold text-brand font-brand' });
     this.render();
   }
   private render(): void {
-    this.setContent(en.regHeading);
+    const context = formHeadingText.ru.regHeading;
+    if (typeof context === 'string') {
+      this.setContent(context);
+    }
   }
 }

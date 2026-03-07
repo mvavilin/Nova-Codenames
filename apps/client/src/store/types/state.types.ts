@@ -1,3 +1,5 @@
+import type { FormState } from '@/components/BaseForm/BaseFormTypes';
+
 export interface State {
   id: string;
   username: string;
@@ -8,6 +10,9 @@ export interface State {
   page: string;
   title: string;
   count: number;
+  registration: FormState;
+  login: FormState;
+  profile: FormState;
 }
 
 // suggestion
@@ -24,4 +29,7 @@ export interface User {
   page: string;
   title: string;
   count: number;
+  registration: FormState;
+  login: FormState;
+  profile: FormState;
 }

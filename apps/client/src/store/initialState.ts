@@ -10,6 +10,9 @@ const initialState: State = {
   page: 'welcome',
   count: 1,
   title: '',
+  registration: { fields: {}, isFormValid: false },
+  login: { fields: {}, isFormValid: false },
+  profile: { fields: {}, isFormValid: false },
 };
 
 export default initialState;
@@ -32,6 +35,9 @@ export const UserState: User = {
   page: PAGES_CONFIG.WELCOME_PAGE.id,
   title: PAGES_CONFIG.WELCOME_PAGE.label,
   count: 1,
+  registration: { fields: {}, isFormValid: false },
+  login: { fields: {}, isFormValid: false },
+  profile: { fields: {}, isFormValid: false },
 };
 
 // export const UserState: User = {

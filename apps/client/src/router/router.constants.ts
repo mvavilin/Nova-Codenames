@@ -11,7 +11,7 @@ import {
 import { AuthorizedSubStatus } from '@types';
 import { type Route } from '@router/router.types';
 import { Access } from '@router/router.enums';
-import RegistrationPage from '@pages/RegistrationPage/RegistrationPage';
+import RegistrationPage from '@/pages/RegistrationPage/RegistrationForm.ts/RegistrationForm';
 import WelcomePage from '@pages/WelcomePage/WelcomePage';
 
 export const PATHS = {
@@ -24,8 +24,8 @@ export const PATHS = {
     url: () => '/login',
   },
   REGISTER: {
-    pattern: /^\/registeration$/,
-    url: () => '/registeration',
+    pattern: /^\/registration$/,
+    url: () => '/registration',
   },
   LOBBY: {
     pattern: /^\/lobby$/,

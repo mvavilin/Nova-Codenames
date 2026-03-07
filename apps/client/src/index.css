@@ -20,8 +20,7 @@
     font-family: var(--font-main);
     color: var(--color-black);
   }
-
-  @utility disabled-state {
-    @apply disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed;
-  }
+}
+@utility disabled-state {
+  @apply pointer-events-none disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed;
 }
