@@ -14,7 +14,8 @@ export default class WelcomePage extends ContainerComponent {
   constructor({ ...rest }: WelcomePageProperties = {}) {
     super({
       id: 'welcome-page',
-      classes: 'flex flex-col items-center gap-6 p-10 bg-white rounded-2xl shadow-xl',
+      classes:
+        'flex flex-col justify-between items-center w-full min-h-screen py-10 px-20 bg-[url(/src/assets/welcome-page/welcome-page-background.webp)] bg-center bg-no-repeat bg-cover',
       ...rest,
     });
 
@@ -27,12 +28,15 @@ export default class WelcomePage extends ContainerComponent {
   }
 
   private render(): void {
-    this.appendChildren([
-      new WelcomeHeading(),
-      new RegButton(),
-      new LoginButton(),
-      new LangButton(),
-    ]);
+    const header = new ContainerComponent({ tag: 'header', classes: 'w-full max-w-[1440px]' });
+    header.appendChildren(new LangButton());
+
+    const container = new ContainerComponent({ classes: 'flex flex-col w-full max-w-[1440px]' });
+    container.appendChildren([new WelcomeHeading(), new RegButton(), new LoginButton()]);
+
+    const footer = new ContainerComponent({ tag: 'footer', classes: 'w-full max-w-[1440px]' });
+
+    this.appendChildren([header, container, footer]);
   }
 
   private hidePage(_state: State, action: Action): void {
