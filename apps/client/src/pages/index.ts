@@ -1,72 +1,25 @@
-import Page from '@ComponentsAPI/layout/PageComponent/PageComponent';
-import HeadingComponent from '@ComponentsAPI/ui/HeadingComponent/HeadingComponent';
-import { PAGES } from '@constants';
+import BaseComponent from '@ComponentsAPI/base/BaseComponent';
 
-export class LoginPage extends Page {
+export { default as RegistrationPage } from '@pages/RegistrationPage/RegistrationPage';
+export { default as WelcomePage } from '@pages/WelcomePage/WelcomePage';
+
+export class LobbyPage extends BaseComponent {
   constructor() {
-    const { id, label } = PAGES.LOGIN;
-    super({ id, children: [new HeadingComponent({ level: 1, content: label })] });
+    super();
+    console.log('LobbyPage');
   }
 }
 
-export class LobbyPage extends Page {
+export class RoomPage extends BaseComponent {
   constructor() {
-    const { id, label } = PAGES.LOBBY;
-    super({
-      id,
-      children: [new HeadingComponent({ level: 1, content: label })],
-    });
+    super();
+    console.log('RoomPage');
   }
 }
 
-export class RoomPage extends Page {
+export class NotFoundPage extends BaseComponent {
   constructor() {
-    const { id, label } = PAGES.ROOM;
-    super({ id, children: [new HeadingComponent({ level: 1, content: label })] });
-  }
-}
-
-export class GamePage extends Page {
-  constructor() {
-    const { id, label } = PAGES.GAME;
-    super({ id, children: [new HeadingComponent({ level: 1, content: label })] });
-  }
-}
-
-export class SoloSetupPage extends Page {
-  constructor() {
-    const { id, label } = PAGES.SOLO_SETUP;
-    super({
-      id,
-      children: [new HeadingComponent({ level: 1, content: label })],
-    });
-  }
-}
-
-export class SoloGamePage extends Page {
-  constructor() {
-    const { id, label } = PAGES.SOLO_GAME;
-    super({ id, children: [new HeadingComponent({ level: 1, content: label })] });
-  }
-}
-
-export class ResultsPage extends Page {
-  constructor() {
-    const { id, label } = PAGES.RESULTS;
-    super({ id, children: [new HeadingComponent({ level: 1, content: label })] });
-  }
-}
-
-export class ProfilePage extends Page {
-  constructor() {
-    const { id, label } = PAGES.PROFILE;
-    super({ id, children: [new HeadingComponent({ level: 1, content: label })] });
-  }
-}
-
-export class NotFoundPage extends Page {
-  constructor() {
-    const { id, label } = PAGES.NOT_FOUND;
-    super({ id, children: [new HeadingComponent({ level: 1, content: label })] });
+    super();
+    console.log('NotFoundPage');
   }
 }

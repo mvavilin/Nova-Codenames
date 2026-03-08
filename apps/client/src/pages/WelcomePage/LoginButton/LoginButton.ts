@@ -1,7 +1,7 @@
 import { ButtonComponent } from '@/api/ComponentsAPI';
 import type { LoginButtonProperties } from './LoginButton.types';
-import store from '@/store/clientUserStore';
-import { WelcomeActions } from '@/store/actions/welcome.actions';
+import store from '@store/store';
+import { WelcomeActions } from '@store/actions/welcome.actions';
 
 export default class LoginButton extends ButtonComponent {
   constructor({ ...rest }: LoginButtonProperties = {}) {

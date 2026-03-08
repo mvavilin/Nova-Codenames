@@ -1,6 +1,6 @@
 import { ButtonComponent, FormComponent } from '@/api/ComponentsAPI';
 import type { BaseFormProps, FormType } from './BaseFormTypes';
-import clientUserStore from '@/store/clientUserStore';
+import store from '@/store/store';
 import type InputForm from '../InputForm/InputForm';
 import type RegistrationHeading from '@/pages/RegistrationPage/RegistrationHeading/RegistartionHeading';
 
@@ -28,7 +28,7 @@ export default class BaseForm extends FormComponent {
   private init(): void {
     this.appendChildren([this.title, ...this.inputArray, this.buttonSubmit]);
 
-    clientUserStore.subscribe(() => this.updateUI());
+    store.subscribe(() => this.updateUI());
 
     this.setListeners({
       submit: (event: Event) => {
@@ -50,7 +50,7 @@ export default class BaseForm extends FormComponent {
 
   private updateUI(): void {
     // 1. Достаем состояние конкретной формы по formId (registration | login | profile)
-    const state = clientUserStore.getState()[this.formId];
+    const state = store.getState()[this.formId];
     if (!state) return;
     // 2. Управляем кнопкой через флаг isFormValid
     const isValid = state.isFormValid;
@@ -69,7 +69,7 @@ export default class BaseForm extends FormComponent {
   }
 
   public getFormInputValues(): Record<string, string> {
-    const { fields } = clientUserStore.getState()[this.formId];
+    const { fields } = store.getState()[this.formId];
     const data: Record<string, string> = {};
     // Собираем только значения (values) из всех полей
     for (const [key, field] of Object.entries(fields)) {
@@ -81,7 +81,7 @@ export default class BaseForm extends FormComponent {
   }
 
   private handleSubmit(): void {
-    if (!clientUserStore.getState()[this.formId].isFormValid) return;
+    if (!store.getState()[this.formId].isFormValid) return;
 
     const data = this.getFormInputValues();
     console.log(`Submit ${this.formId}:`, data);
