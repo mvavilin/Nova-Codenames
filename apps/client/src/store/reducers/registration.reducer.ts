@@ -1,5 +1,6 @@
 import type { Action } from 'api/StateAPI';
 import { RegistrationActions } from '@store/actions/registration.actions';
+import { Language } from '@types';
 
 export default function registrationPageReducer<State>(state: State, action: Action): State {
   switch (action.type) {
@@ -11,6 +12,7 @@ export default function registrationPageReducer<State>(state: State, action: Act
         username: 'Alice',
         email: 'alice101@example.com',
         authStatus: true,
+        language: Language.RU,
       };
     }
 
