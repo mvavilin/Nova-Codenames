@@ -1,4 +1,11 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
+import mockStore from '@__mocks__/store/store.mock';
+
+vi.mock('@store/store', () => ({
+  __esModule: true,
+  default: mockStore,
+}));
+
 import WelcomePage from './WelcomePage';
 
 describe('WelcomePage container creation', () => {

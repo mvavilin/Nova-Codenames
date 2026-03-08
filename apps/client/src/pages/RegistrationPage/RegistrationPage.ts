@@ -24,6 +24,8 @@ import { checkForm } from '@/utils/validateForm';
 import { saveStorageData } from '@/utils/localStorage';
 import { register } from '@/api/auth.api';
 import { localStorageProps } from '@/constants/localStorage.constants';
+import store from '@store/store';
+import { RegistrationActions } from '@store/actions/registration.actions';
 
 const inputFocusedClass = 'focus:border-yellow';
 const inputInvalidClass = 'border-red focus:border-red';
@@ -121,6 +123,7 @@ export default class RegistrationPage extends BaseComponent {
       if (user && token) {
         saveStorageData(localStorageProps.token, token);
         saveStorageData(localStorageProps.user, user);
+        store.dispatch({ type: RegistrationActions.GO_TO_LOBBY_PAGE });
       }
     } catch (error) {
       console.error(error);
