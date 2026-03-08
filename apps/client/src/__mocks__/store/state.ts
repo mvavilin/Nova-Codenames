@@ -1,8 +1,12 @@
 import { type State } from '@store/types/state';
+import { Language } from '@types';
 
-export const mockInitialState: State = {
+const mockInitialState: State = {
   id: null,
   username: null,
   email: null,
   authStatus: false,
+  language: Language.RU,
 };
+
+export default mockInitialState;

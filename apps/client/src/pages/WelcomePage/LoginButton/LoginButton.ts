@@ -1,7 +1,11 @@
 import { ButtonComponent } from '@/api/ComponentsAPI';
 import type { LoginButtonProperties } from './LoginButton.types';
 import store from '@store/store';
-import { WelcomeActions } from '@store/actions/welcome.actions';
+import { WelcomeActions } from '@/store/actions/welcome.actions';
+import type { State } from '@store/types/state';
+import type { Action } from '@/api/StateAPI';
+import { TranslationKeys } from '@/i18n/translationKeys';
+import { t } from '@/i18n';
 
 export default class LoginButton extends ButtonComponent {
   constructor({ ...rest }: LoginButtonProperties = {}) {
@@ -12,11 +16,13 @@ export default class LoginButton extends ButtonComponent {
       ...rest,
     });
 
+    this.addSubscriptions([store.subscribe((state, action) => this.switchLanguage(state, action))]);
+
     this.render();
   }
 
   private render(): void {
-    this.setContent('LOGIN');
+    this.setContent(t(TranslationKeys.LOGIN));
     this.setListeners({
       click: (): void => {
         store.dispatch({
@@ -24,5 +30,11 @@ export default class LoginButton extends ButtonComponent {
         });
       },
     });
+  }
+
+  private switchLanguage(_state: State, action: Action): void {
+    if (action.type === WelcomeActions.SWITCH_LANGUAGE) {
+      this.setContent(t(TranslationKeys.LOGIN));
+    }
   }
 }
