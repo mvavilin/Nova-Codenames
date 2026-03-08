@@ -6,11 +6,11 @@ vi.mock('@store/store', () => ({
   default: mockStore,
 }));
 
-import LoginButton from './LoginButton';
+import LangButton from './LangButton';
 
-describe('Login button creation', () => {
+describe('Language button creation', () => {
   it('creates a button element', () => {
-    const button = new LoginButton();
+    const button = new LangButton();
 
     expect(button.element?.tagName).toBe('BUTTON');
   });

@@ -2,7 +2,8 @@ import { describe, it, expect, vi } from 'vitest';
 import mockStore from '@__mocks__/store/store.mock';
 
 vi.mock('@store/store', () => ({
-  store: mockStore,
+  __esModule: true,
+  default: mockStore,
 }));
 
 import RegButton from './RegButton';

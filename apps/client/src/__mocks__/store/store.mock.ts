@@ -1,5 +1,5 @@
 import { vi } from 'vitest';
-import { mockInitialState } from '@__mocks__/store/state';
+import mockInitialState from '@__mocks__/store/state';
 
 const mockStore = {
   getState: vi.fn(() => ({ ...mockInitialState })),

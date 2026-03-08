@@ -1,4 +1,5 @@
 import type { State } from '@/store/types/state.types';
+import { Language } from '@/types';
 
 export const initialState: State = {
   id: null,
@@ -10,4 +11,5 @@ export const initialState: State = {
   registration: { fields: {}, isFormValid: false },
   login: { fields: {}, isFormValid: false },
   profile: { fields: {}, isFormValid: false },
+  language: Language.RU,
 };
