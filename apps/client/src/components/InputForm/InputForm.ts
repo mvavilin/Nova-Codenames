@@ -37,7 +37,7 @@ export default class InputForm extends ContainerComponent {
     this.span = new TextComponent({
       tag: 'span',
       classes:
-        'h-16 whitespace-pre-line text-dark-red text-xs font-medium transition-opacity duration-200',
+        'h-14 whitespace-pre-line text-dark-red text-xs font-medium transition-opacity duration-200',
     });
 
     this.input = new InputComponent({

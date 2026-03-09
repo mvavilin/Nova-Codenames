@@ -30,7 +30,7 @@ export default class RegistrationForm extends BaseForm {
     const submitButton = new ButtonComponent({
       content: formHeadingText.ru.regButton,
       classes:
-        'bg-transparent border border-solid border-black w-36 h-9 rounded-md font-medium hover:cursor-pointer hover:bg-yellow-400 hover:transition-colors hover:duration-300 disabled-state',
+        'mt-6 bg-transparent border border-solid border-black w-36 h-9 rounded-md font-medium hover:cursor-pointer hover:bg-yellow-400 hover:transition-colors hover:duration-300 disabled-state',
       type: 'submit',
       attributes: { disabled: true },
     });
