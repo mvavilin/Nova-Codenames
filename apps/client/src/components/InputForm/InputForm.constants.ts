@@ -11,7 +11,8 @@ export const formInputText = {
     errorMessageName: `•\u00A0Minimum length is 2, maximum length is 20. •\u00A0Only English and Russian letters, digits and hyphen are allowed.`,
     errorMessageEmail: `•\u00A0Minimum length is 6, maximum length is 30. •\u00A0Please enter a valid email address (e.g., name@domain.com).`,
     errorMessagePassword: `•\u00A0Minimum length is 6, maximum length is 12.
-    •\u00A0Password must contain one capital English letter and one special character.`,
+    •\u00A0Password must contain one capital English letter and one special character.
+    •\u00A0Russian letters are not allowed.`,
   },
   ru: {
     labelName: 'Имя',
@@ -23,7 +24,8 @@ export const formInputText = {
     errorMessageName: `•\u00A0Минимальная длина 2, максимальная длина 20. •\u00A0Допускаются только английские и русские буквы, цифры и дефис.`,
     errorMessageEmail: `•\u00A0Минимальная длина 6, максимальная длина 30. •\u00A0Пожалуйста введите валидный email (например, name@domain.com).`,
     errorMessagePassword: `•\u00A0Минимальная длина 6, максимальная длина 12.
-    •\u00A0Пароль должен содержать одну заглавную английскую букву и один спецсимвол.`,
+    •\u00A0Пароль должен содержать одну заглавную английскую букву и один спецсимвол.
+    •\u00A0Русские буквы не допускаются.`,
   },
 };
 
@@ -60,7 +62,7 @@ export const formInputValues: Record<FieldName, InputFieldProps> = {
     autocomplete: 'off',
     minLength: '6',
     maxLength: '12',
-    pattern: /^(?=.*[A-Z])(?=.*[!@#$%^&*]).+$/,
+    pattern: /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]+$/,
     placeholder: formInputText.ru.placeholderPassword,
     labelText: formInputText.ru.labelPassword,
     errorMessage: formInputText.ru.errorMessagePassword,

@@ -8,7 +8,14 @@ export const initialState: State = {
   email: null,
   avatarUrl: null,
   authStatus: false,
-  registration: { fields: {}, isFormValid: false },
+  registration: {
+    fields: {
+      username: { value: '', isValid: false, isChanged: false, error: '' },
+      email: { value: '', isValid: false, isChanged: false, error: '' },
+      password: { value: '', isValid: false, isChanged: false, error: '' },
+    },
+    isFormValid: false,
+  },
   login: { fields: {}, isFormValid: false },
   profile: { fields: {}, isFormValid: false },
   language: Language.RU,

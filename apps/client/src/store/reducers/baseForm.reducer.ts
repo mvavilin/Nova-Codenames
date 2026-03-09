@@ -4,6 +4,8 @@ import type { AppActions } from '../types/action.types';
 import type { FieldName } from '@/components/InputForm/InputForm.type';
 import type { FieldState } from '@/components/BaseForm/BaseFormTypes';
 import store from '../store';
+import { saveSessionStorageData } from '@/utils/sessionStorage';
+import { sessionStorageProps } from '@/constants/sessionStorage.constants';
 
 export default function baseFormReducer<State extends GlobalFormState>(
   state: State,
@@ -25,7 +27,6 @@ export default function baseFormReducer<State extends GlobalFormState>(
       };
       const isFormValid = Object.values(updatedFields).every((field) => field.isValid);
 
-      // Возвращаем НОВЫЙ стейт с обновленной формой
       return {
         ...state,
         [formId]: {
@@ -40,7 +41,7 @@ export default function baseFormReducer<State extends GlobalFormState>(
       store.dispatch({ type: FormActions.GO_TO_LOBBY_PAGE });
 
       if (action.payload.token) {
-        sessionStorage.setItem('token', action.payload.token);
+        saveSessionStorageData(sessionStorageProps.authToken, action.payload.token);
       }
 
       return {
@@ -49,6 +50,14 @@ export default function baseFormReducer<State extends GlobalFormState>(
         id: action.payload.user.id,
         email: action.payload.user.email,
         username: action.payload.user.username,
+        registration: {
+          fields: {
+            username: { value: '', isValid: false, isChanged: false, error: '' },
+            email: { value: '', isValid: false, isChanged: false, error: '' },
+            password: { value: '', isValid: false, isChanged: false, error: '' },
+          },
+          isFormValid: false,
+        },
       };
     }
 
