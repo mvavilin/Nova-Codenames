@@ -1,14 +1,14 @@
 import express, { type Request, type Response } from 'express';
 import { createServer } from 'node:http';
 import { userRouter } from './api/users.js';
-import { errorHandler } from './middlewares/errorHandler.ts';
+import { errorHandler } from './ws/errorHandler.ts';
 import { Endpoints, ServerConstants } from '../../../packages/shared/src/api.constants.ts';
 import { authRouter } from './api/auth.ts';
 import cors from 'cors';
 import 'dotenv/config';
 import { Server } from 'socket.io';
-import { authMiddleware } from './middlewares/authMiddleware.ts';
-import { sessionMiddleware } from './middlewares/sessionMiddleware.ts';
+import { authMiddleware } from './ws/authMiddleware.ts';
+import { sessionMiddleware } from './ws/sessionMiddleware.ts';
 
 const FRONTEND_URL = process.env.FRONTEND_URL || ServerConstants.DEFAULT_FRONTEND_URL;
 
