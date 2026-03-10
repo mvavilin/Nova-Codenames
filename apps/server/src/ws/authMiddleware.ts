@@ -22,6 +22,7 @@ export const authMiddleware = async (
     if (!user) throw new Error('No found');
 
     socket.data.userId = userId;
+    socket.data.username = user.username;
     next();
   } catch {
     console.error('Authentication error');

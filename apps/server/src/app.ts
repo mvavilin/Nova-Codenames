@@ -9,6 +9,7 @@ import 'dotenv/config';
 import { Server } from 'socket.io';
 import { authMiddleware } from './ws/authMiddleware.ts';
 import { sessionMiddleware } from './ws/sessionMiddleware.ts';
+import { RoomManager } from './rooms/roomManager.ts';
 
 const FRONTEND_URL = process.env.FRONTEND_URL || ServerConstants.DEFAULT_FRONTEND_URL;
 
@@ -20,6 +21,7 @@ const io = new Server(server, {
     methods: ['GET', 'POST'],
   },
 });
+const roomManager = new RoomManager();
 
 app.use(
   cors({
@@ -43,6 +45,7 @@ io.use(authMiddleware);
 io.use(sessionMiddleware);
 
 io.on('connection', (socket) => {
+  const { userId, username } = socket.data;
   if (socket.data.isReconnect) {
     console.log('reconnect', socket.data.sessionToken);
     socket.emit('session:token', { sessionToken: socket.data.sessionToken });
@@ -50,6 +53,7 @@ io.on('connection', (socket) => {
     setTimeout(() => {
       console.log('connect', socket.data.sessionToken);
       socket.emit('session:token', { sessionToken: socket.data.sessionToken });
+      roomManager.addPlayerToLobby(userId, username);
     });
   }
 });
