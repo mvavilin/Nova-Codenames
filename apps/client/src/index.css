@@ -1,19 +1,35 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Orbitron:wght@400..900&display=swap');
 @import 'tailwindcss';
 
+@font-face {
+  font-family: 'Star Jedi';
+  src: url('./assets/fonts/starjedi_cyrillic.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'RussoOne';
+  src: url('./assets/fonts/RussoOne-Regular.ttf format') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('./assets/fonts/Inter-VariableFont_opsz\,wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
-  --font-brand: 'Orbitron', sans-serif;
-  --font-primary: 'Inter', sans-serif;
+  --font-brand: 'Star Jedi', sans-serif;
+  --font-main: 'Inter', sans-serif;
   --color-brand: #ffd700; /*yellow*/
   --color-primary: #64696c; /*gray*/
-  --color-dark-red: #cf0000;
-  --color-gray-blue: #6f919b;
-  --color-steel: #38485f;
-  /* --color-hover: #9d8f8e; */
-  /* --color-hover: #de8a32; */
-  --color-soothing-green: #708b58;
-  --color-background-disabled: #bbbbbb;
-  --color-text-disabled: #808080;
+  --color-nova-blue: #3e5f8a; /*brilliant blue*/
 }
 
 @layer base {

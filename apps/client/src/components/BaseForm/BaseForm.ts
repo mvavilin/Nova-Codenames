@@ -15,7 +15,7 @@ export default class BaseForm extends FormComponent {
     super({
       method: 'post',
       classes:
-        'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-87 p-8 bg-white/65 rounded-xl flex flex-col justify-center items-center gap-2 m-0',
+        'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-91 p-8 bg-white/65 rounded-xl flex flex-col justify-center items-center gap-2 m-0',
     });
 
     this.formId = parameters.formId;

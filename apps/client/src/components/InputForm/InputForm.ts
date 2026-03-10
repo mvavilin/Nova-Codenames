@@ -37,7 +37,7 @@ export default class InputForm extends ContainerComponent {
     this.span = new TextComponent({
       tag: 'span',
       classes:
-        'h-14 whitespace-pre-line text-dark-red text-xs font-medium transition-opacity duration-200',
+        'h-14 whitespace-pre-line text-red-600 text-xs font-medium transition-opacity duration-200',
     });
 
     this.input = new InputComponent({
@@ -47,7 +47,7 @@ export default class InputForm extends ContainerComponent {
       placeholder: parameters.placeholder,
       autocomplete: parameters.autocomplete,
       classes:
-        'px-3 py-2 bg-white/40 border border-solid border-black rounded-md outline-none transition-colors duration-300 hover:cursor-pointer hover:bg-white/60 focus:border-yellow-400',
+        'px-3 py-2 bg-white/60 border border-solid border-black rounded-md outline-none transition-colors duration-300 hover:cursor-pointer hover:border-green-600 focus:border-brand',
     });
 
     if (parameters.minLength && parameters.maxLength) {
