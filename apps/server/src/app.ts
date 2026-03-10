@@ -11,6 +11,8 @@ import { authMiddleware } from './ws/authMiddleware.ts';
 import { sessionMiddleware } from './ws/sessionMiddleware.ts';
 import { RoomManager } from './rooms/roomManager.ts';
 
+const socketIdMap = new Map<string, Set<string>>();
+
 const FRONTEND_URL = process.env.FRONTEND_URL || ServerConstants.DEFAULT_FRONTEND_URL;
 
 const app = express();
@@ -56,6 +58,18 @@ io.on('connection', (socket) => {
       roomManager.addPlayerToLobby(userId, username);
     });
   }
+  if (!socketIdMap.has(userId)) {
+    socketIdMap.set(userId, new Set());
+  }
+  socketIdMap.get(userId)?.add(socket.id);
+
+  socket.on('disconnect', () => {
+    const idSet = socketIdMap.get(userId);
+    if (idSet) {
+      idSet.delete(socket.id);
+    }
+    console.log(`disconnect ${socket.data.sessionToken}`);
+  });
 });
 
 export default server;
