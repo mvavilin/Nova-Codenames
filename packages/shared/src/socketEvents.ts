@@ -1,14 +1,21 @@
-import type { RoomPreview, RoomSettings } from './types/room.ts';
+import type { Player, RoomInfo, RoomPreview, RoomSettings } from './types/room.ts';
 
 type ClientEvent =
   | { type: 'room:create'; payload: { settings: RoomSettings } }
   | { type: 'room:ask-list' }
-  | { type: 'room:search'; payload: { name: string | undefined } };
+  | { type: 'room:search'; payload: { name: string | undefined } }
+  | { type: 'room:join'; payload: { roomId: string } };
 
 type ServerEvent =
   | { type: 'session:token'; payload: { sessionToken: string } }
   | { type: 'room:send-list'; payload: { roomPreviews: RoomPreview[] } }
-  | { type: 'room:created'; payload: { roomPreview: RoomPreview } };
+  | { type: 'room:created'; payload: { roomPreview: RoomPreview } }
+  | { type: 'room:state'; payload: { roomInfo: RoomInfo } }
+  | { type: 'room:update-review'; payload: { roomPreview: RoomPreview } }
+  | { type: 'room:player-joined'; payload: { player: Player } }
+  | { type: 'error'; payload: { code: ErrorCode } };
+
+export type ErrorCode = 'ROOM_NOT_FOUND' | 'ROOM_FULL' | 'INVALID_ACTION';
 
 type EventName<T> = T extends { type: infer K } ? K : never;
 

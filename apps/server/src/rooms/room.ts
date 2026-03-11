@@ -1,5 +1,6 @@
 import type {
   Player,
+  RoomInfo,
   RoomPreview,
   RoomSettings,
   RoomStatus,
@@ -30,5 +31,26 @@ export class Room {
       playerCount: this.players.length,
       status,
     };
+  }
+
+  public getId(): string {
+    return this.id;
+  }
+
+  public getRoomInfo(): RoomInfo {
+    const { id, name, maxPlayers } = this;
+    return { id, name, maxPlayers, players: this.players };
+  }
+
+  public isFull(): boolean {
+    return this.players.length >= this.maxPlayers;
+  }
+
+  public getPlayerIds(): string[] {
+    return this.players.map((player) => player.userId);
+  }
+
+  public addPlayer(player: Player): void {
+    this.players.push(player);
   }
 }

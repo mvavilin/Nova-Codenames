@@ -62,7 +62,7 @@ io.on(
     } else {
       console.log('connect', socket.data.sessionToken);
       socket.emit('session:token', { sessionToken: socket.data.sessionToken });
-      roomManager.addPlayerToLobby(userId, username);
+      roomManager.addPlayerToLobby({ userId, username });
     }
     if (!socketIdMap.has(userId)) {
       socketIdMap.set(userId, new Set());

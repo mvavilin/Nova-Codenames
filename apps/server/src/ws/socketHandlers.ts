@@ -39,4 +39,44 @@ export function setupSocketHandlers(
       io.to([...idSet]).emit('room:send-list', { roomPreviews: payload });
     }
   });
+
+  setupRoomJoinEvent(io, socket, roomManager);
+}
+
+function setupRoomJoinEvent(
+  io: Server<ClientToServerEvents, ServerToClientEvents>,
+  socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>,
+  roomManager: RoomManager
+): void {
+  const userId = socket.data.userId;
+
+  socket.on('room:join', ({ roomId }) => {
+    const response = roomManager.joinToRoom(userId, roomId);
+    if ('error' in response) {
+      const idSet = socketIdMap.get(userId);
+      if (idSet) {
+        io.to([...idSet]).emit('error', { code: response.error });
+      }
+    } else {
+      const { payload, player, lobbyRecipients, roomRecipients } = response;
+      const idSet = socketIdMap.get(userId);
+      if (idSet) {
+        io.to([...idSet]).emit('room:state', { roomInfo: payload.getRoomInfo() });
+      }
+
+      for (const recipient of lobbyRecipients) {
+        const idSet = socketIdMap.get(recipient);
+        if (idSet) {
+          io.to([...idSet]).emit('room:update-review', { roomPreview: payload.getRoomPreview() });
+        }
+      }
+
+      for (const recipient of roomRecipients) {
+        const idSet = socketIdMap.get(recipient);
+        if (idSet) {
+          io.to([...idSet]).emit('room:player-joined', { player });
+        }
+      }
+    }
+  });
 }
