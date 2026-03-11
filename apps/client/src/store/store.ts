@@ -7,7 +7,7 @@ import formFetcherMiddleware from './middlewares/form.fetcher.middleware';
 
 import testReducer from './reducers/test.reducer';
 import welcomeReducer from './reducers/welcome.reducer';
-import baseFormReducer from './reducers/baseForm.reducer';
+import formReducer from './reducers/form.reducer';
 
 import loggerAfterware from '@store/afterwares/logger.afterware';
 // import storageAfterware from './afterwares/storage.afterware';
@@ -19,7 +19,7 @@ import type { AppActions } from './types/action.types';
 
 const store = new StateAPI<State, AppActions>(initialState);
 
-store.addReducer(testReducer, welcomeReducer, baseFormReducer);
+store.addReducer(testReducer, welcomeReducer, formReducer);
 
 store.addMiddleware(testSenderMiddleware(), testFetcherMiddleware(), formFetcherMiddleware());
 store.addAfterware(

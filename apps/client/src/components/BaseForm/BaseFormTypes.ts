@@ -17,7 +17,6 @@ export interface FieldState {
   value: string;
   isValid: boolean;
   isChanged: boolean;
-  error: string;
 }
 
 export interface FormState {
@@ -36,7 +35,6 @@ export interface UpdateFieldPayload {
   fieldName: FieldName;
   value: string;
   isValid: boolean;
-  errorMessage: string;
 }
 
 export interface FormFetchDataPayload {

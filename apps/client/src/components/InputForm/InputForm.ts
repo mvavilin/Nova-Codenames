@@ -8,43 +8,50 @@ import type { FieldName, InputBlockProps } from './InputForm.type';
 import type { Action } from '@/api/StateAPI';
 import type { State } from '@/store/types/state.types';
 import store from '@/store/store';
+import { t } from '@/i18n';
+import type { TranslationKey } from '@/i18n/translationKeys';
 
 export default class InputForm extends ContainerComponent {
   private formId: FormType;
   private fieldName: FieldName;
   private input: InputComponent | null = null;
   private span: TextComponent | null = null;
+  private label: LabelComponent | null = null;
   private pattern: RegExp;
-  private errorMessage: string;
+  private labelKey: TranslationKey;
+  private placeholderKey: TranslationKey;
+  private errorKey: TranslationKey;
 
   constructor(parameters: InputBlockProps) {
     super({ classes: 'w-full flex flex-col self-center gap-1' });
     this.formId = parameters.formId;
     this.fieldName = parameters.fieldName;
     this.pattern = parameters.pattern;
-    this.errorMessage = parameters.errorMessage;
+    this.labelKey = parameters.labelTextKey;
+    this.placeholderKey = parameters.placeholderKey;
+    this.errorKey = parameters.errorKey;
     this.render(parameters);
     this.addSubscribe();
   }
 
   private render(parameters: InputBlockProps): void {
-    const label = new LabelComponent({
-      classes: 'uppercase text-sm font-medium',
-      content: parameters.labelText,
+    this.label = new LabelComponent({
+      classes: 'uppercase text-sm font-medium font-main',
+      content: t(this.labelKey),
       htmlFor: parameters.id,
     });
 
     this.span = new TextComponent({
       tag: 'span',
       classes:
-        'h-14 whitespace-pre-line text-red-600 text-xs font-medium transition-opacity duration-200',
+        'h-12 whitespace-pre-line text-red-600 text-xs font-medium transition-opacity duration-200',
     });
 
     this.input = new InputComponent({
       id: parameters.id,
       type: parameters.type,
       name: parameters.name,
-      placeholder: parameters.placeholder,
+      placeholder: t(this.placeholderKey),
       autocomplete: parameters.autocomplete,
       classes:
         'px-3 py-2 bg-white/60 border border-solid border-black rounded-md outline-none transition-colors duration-300 hover:cursor-pointer hover:border-green-600 focus:border-brand',
@@ -63,14 +70,14 @@ export default class InputForm extends ContainerComponent {
       },
     });
 
-    this.appendChildren([label, this.input, this.span]);
+    this.appendChildren([this.label, this.input, this.span]);
   }
 
   private handleInput(event: Event): void {
     if (!(event.target instanceof HTMLInputElement)) return;
     const value = event.target.value;
     const isValid = this.pattern.test(value) && value.length >= Number(event.target.minLength);
-    const errorMessage = isValid ? '' : this.errorMessage;
+
     store.dispatch({
       type: FormActions.FORM_UPDATE_FIELD,
       payload: {
@@ -78,7 +85,6 @@ export default class InputForm extends ContainerComponent {
         fieldName: this.fieldName,
         value,
         isValid,
-        errorMessage,
       },
     });
   }
@@ -90,17 +96,23 @@ export default class InputForm extends ContainerComponent {
   }
 
   private updateInputForm(_state: State, action: Action): void {
-    if (action.type === FormActions.FORM_UPDATE_FIELD) {
+    const isFieldUpdate = action.type === FormActions.FORM_UPDATE_FIELD;
+    const isLanguageSwitch = action.type === FormActions.SWITCH_LANGUAGE;
+    if (isFieldUpdate || isLanguageSwitch) {
       const formState = store.getState()[this.formId];
       const fieldState = formState.fields[this.fieldName];
+      if (!fieldState || !this.input || !this.label || !this.span) return;
 
-      if (!fieldState) return;
-      if (fieldState.isChanged) {
-        if (!(this.input && this.span)) return;
-        this.input.toggleClasses('border-red-500', !fieldState.isValid);
-        this.input.toggleClasses('focus:border-yellow-500', fieldState.isValid);
-        this.span.setContent(fieldState.isValid ? '' : fieldState.error);
+      if (isLanguageSwitch) {
+        this.input.setPlaceholder(t(this.placeholderKey));
+        this.label.setContent(t(this.labelKey));
       }
+
+      const isInvalid = fieldState.isChanged && !fieldState.isValid;
+
+      this.input.toggleClasses('border-red-500', isInvalid);
+      this.input.toggleClasses('focus:border-yellow-500', !isInvalid);
+      this.span.setContent(isInvalid ? t(this.errorKey) : '');
     }
   }
 
@@ -109,10 +121,9 @@ export default class InputForm extends ContainerComponent {
     return this.fieldName;
   }
 
-  public updateStatus(isValid: boolean, error: string): void {
+  public updateStatus(isValid: boolean): void {
     if (!this.input || !this.span) return;
     this.input.toggleClasses('border-red-500', !isValid);
     this.input.toggleClasses('focus:border-yellow-500', isValid);
-    this.span.setContent(isValid ? '' : error);
   }
 }

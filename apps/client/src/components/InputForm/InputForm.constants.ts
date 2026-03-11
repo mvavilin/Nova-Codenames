@@ -1,30 +1,5 @@
 import type { FieldName, InputFieldProps } from './InputForm.type';
-
-export const formInputText = {
-  en: {
-    labelName: 'Name',
-    labelEmail: 'Email',
-    labelPassword: 'Password',
-    placeholderName: 'Enter your name...',
-    placeholderEmail: 'Enter your email...',
-    placeholderPassword: 'Enter your password...',
-    errorMessageName: `•\u00A0Minimum length is 2, maximum length is 20. •\u00A0Only English and Russian letters, digits and hyphen are allowed.`,
-    errorMessageEmail: `•\u00A0Minimum length is 6, maximum length is 30. •\u00A0Please enter a valid email address (e.g., name@domain.com).`,
-    errorMessagePassword:
-      '•\u00A0Minimum length is 6, maximum length is 12.\n •\u00A0Password must contain one capital English letter and one special character.\n •\u00A0Russian letters are not allowed.',
-  },
-  ru: {
-    labelName: 'Имя',
-    labelEmail: 'Email',
-    labelPassword: 'Пароль',
-    placeholderName: 'Введите имя...',
-    placeholderEmail: 'Введите email...',
-    placeholderPassword: 'Введите пароль...',
-    errorMessageName: `•\u00A0Минимальная длина 2, максимальная длина 20.\n •\u00A0Допускаются только английские и русские буквы, цифры и дефис.`,
-    errorMessageEmail: `•\u00A0Минимальная длина 6, максимальная длина 30.\n •\u00A0Пожалуйста введите валидный email (например, name@domain.com).`,
-    errorMessagePassword: `•\u00A0Минимальная длина 6, максимальная длина 12.\n •\u00A0Пароль должен содержать одну заглавную английскую букву и один спецсимвол.\n •\u00A0Русские буквы не допускаются.`,
-  },
-};
+import { TranslationKeys } from '@/i18n/translationKeys';
 
 export const formInputValues: Record<FieldName, InputFieldProps> = {
   username: {
@@ -35,9 +10,9 @@ export const formInputValues: Record<FieldName, InputFieldProps> = {
     minLength: '2',
     maxLength: '16',
     pattern: /^[a-za-яёA-ZА-ЯЁ0-9-]+$/,
-    placeholder: formInputText.ru.placeholderName,
-    labelText: formInputText.ru.labelName,
-    errorMessage: formInputText.ru.errorMessageName,
+    placeholderKey: TranslationKeys.FORM_PLACEHOLDER_NAME,
+    labelTextKey: TranslationKeys.FORM_LABEL_NAME,
+    errorKey: TranslationKeys.FORM_ERROR_MESSAGE_NAME,
   },
   email: {
     id: 'userEmail',
@@ -47,9 +22,9 @@ export const formInputValues: Record<FieldName, InputFieldProps> = {
     minLength: '6',
     maxLength: '30',
     pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-    placeholder: formInputText.ru.placeholderEmail,
-    labelText: formInputText.ru.labelEmail,
-    errorMessage: formInputText.ru.errorMessageEmail,
+    placeholderKey: TranslationKeys.FORM_PLACEHOLDER_EMAIL,
+    labelTextKey: TranslationKeys.FORM_LABEL_EMAIL,
+    errorKey: TranslationKeys.FORM_ERROR_MESSAGE_EMAIL,
   },
 
   password: {
@@ -60,8 +35,8 @@ export const formInputValues: Record<FieldName, InputFieldProps> = {
     minLength: '6',
     maxLength: '12',
     pattern: /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]+$/,
-    placeholder: formInputText.ru.placeholderPassword,
-    labelText: formInputText.ru.labelPassword,
-    errorMessage: formInputText.ru.errorMessagePassword,
+    placeholderKey: TranslationKeys.FORM_PLACEHOLDER_PASSWORD,
+    labelTextKey: TranslationKeys.FORM_LABEL_PASSWORD,
+    errorKey: TranslationKeys.FORM_ERROR_MESSAGE_PASSWORD,
   },
 };

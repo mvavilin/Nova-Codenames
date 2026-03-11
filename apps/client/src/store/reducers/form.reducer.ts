@@ -1,4 +1,4 @@
-import type { GlobalFormState } from '@/components/BaseForm/BaseFormTypes';
+import type { State } from '../types/state.types';
 import { FormActions } from '../actions/form.actions';
 import type { AppActions } from '../types/action.types';
 import type { FieldName } from '@/components/InputForm/InputForm.type';
@@ -6,14 +6,12 @@ import type { FieldState } from '@/components/BaseForm/BaseFormTypes';
 import store from '../store';
 import { saveSessionStorageData } from '@/utils/sessionStorage';
 import { sessionStorageProps } from '@/constants/sessionStorage.constants';
+import { Language } from '@/types';
 
-export default function baseFormReducer<State extends GlobalFormState>(
-  state: State,
-  action: AppActions
-): State {
+export default function formReducer(state: State, action: AppActions): State {
   switch (action.type) {
     case FormActions.FORM_UPDATE_FIELD: {
-      const { formId, fieldName, value, isValid, errorMessage } = action.payload;
+      const { formId, fieldName, value, isValid } = action.payload;
       const currentForm = state[formId];
       if (!currentForm) return state;
       const updatedFields: Partial<Record<FieldName, FieldState>> = {
@@ -21,7 +19,6 @@ export default function baseFormReducer<State extends GlobalFormState>(
         [fieldName]: {
           value,
           isValid,
-          error: errorMessage,
           isChanged: true,
         },
       };
@@ -52,9 +49,9 @@ export default function baseFormReducer<State extends GlobalFormState>(
         username: action.payload.user.username,
         registration: {
           fields: {
-            username: { value: '', isValid: false, isChanged: false, error: '' },
-            email: { value: '', isValid: false, isChanged: false, error: '' },
-            password: { value: '', isValid: false, isChanged: false, error: '' },
+            username: { value: '', isValid: false, isChanged: false },
+            email: { value: '', isValid: false, isChanged: false },
+            password: { value: '', isValid: false, isChanged: false },
           },
           isFormValid: false,
         },
@@ -63,6 +60,15 @@ export default function baseFormReducer<State extends GlobalFormState>(
 
     case FormActions.GO_TO_LOBBY_PAGE: {
       return { ...state };
+    }
+
+    case FormActions.SWITCH_LANGUAGE: {
+      const nextLanguage = state.language === Language.RU ? Language.EN : Language.RU;
+
+      return {
+        ...state,
+        language: nextLanguage,
+      };
     }
 
     default: {

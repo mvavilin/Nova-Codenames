@@ -7,15 +7,15 @@ import { FormActions } from '@/store/actions/form.actions';
 
 export default class BaseForm extends FormComponent {
   private formId: FormType;
-  private title: RegistrationHeading;
-  private inputArray: InputForm[];
-  private buttonSubmit: ButtonComponent;
+  protected title: RegistrationHeading;
+  protected inputArray: InputForm[];
+  protected buttonSubmit: ButtonComponent;
 
   constructor(parameters: BaseFormProps) {
     super({
       method: 'post',
       classes:
-        'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-91 p-8 bg-white/65 rounded-xl flex flex-col justify-center items-center gap-2 m-0',
+        'w-91 p-8 bg-white/65 rounded-xl flex flex-col justify-center items-center gap-2 m-0',
     });
 
     this.formId = parameters.formId;
@@ -60,7 +60,7 @@ export default class BaseForm extends FormComponent {
       const fieldData = state.fields[fieldName];
 
       if (fieldData?.isChanged) {
-        input.updateStatus(fieldData.isValid, fieldData.error);
+        input.updateStatus(fieldData.isValid);
       }
     }
   }

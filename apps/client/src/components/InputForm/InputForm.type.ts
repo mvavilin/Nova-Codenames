@@ -1,3 +1,4 @@
+import type { TranslationKey } from '@/i18n/translationKeys';
 import type { FormType } from '../BaseForm/BaseFormTypes';
 
 export type FieldName = 'username' | 'email' | 'password';
@@ -10,9 +11,9 @@ export interface InputFieldProps {
   minLength?: string;
   maxLength?: string;
   pattern: RegExp;
-  placeholder: string;
-  labelText: string;
-  errorMessage: string;
+  placeholderKey: TranslationKey;
+  labelTextKey: TranslationKey;
+  errorKey: TranslationKey;
 }
 
 export interface InputBlockProps extends InputFieldProps {

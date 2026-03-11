@@ -8,8 +8,8 @@ export type State = {
   email: string | null;
   avatarUrl: string | null;
   authStatus: boolean;
+  language: Language;
   registration: FormState;
   login: FormState;
   profile: FormState;
-  language: Language;
 };
