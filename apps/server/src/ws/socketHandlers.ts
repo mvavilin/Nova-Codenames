@@ -31,4 +31,12 @@ export function setupSocketHandlers(
       io.to([...idSet]).emit('room:send-list', { roomPreviews: payload });
     }
   });
+
+  socket.on('room:search', ({ name }) => {
+    const { payload } = roomManager.getRoomPreviews(name);
+    const idSet = socketIdMap.get(userId);
+    if (idSet) {
+      io.to([...idSet]).emit('room:send-list', { roomPreviews: payload });
+    }
+  });
 }

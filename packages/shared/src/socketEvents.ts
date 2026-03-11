@@ -2,7 +2,8 @@ import type { RoomPreview, RoomSettings } from './types/room.ts';
 
 type ClientEvent =
   | { type: 'room:create'; payload: { settings: RoomSettings } }
-  | { type: 'room:ask-list' };
+  | { type: 'room:ask-list' }
+  | { type: 'room:search'; payload: { name: string | undefined } };
 
 type ServerEvent =
   | { type: 'session:token'; payload: { sessionToken: string } }

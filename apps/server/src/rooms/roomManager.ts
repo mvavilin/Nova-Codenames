@@ -28,8 +28,12 @@ export class RoomManager {
     return { payload: roomPreview, recipients };
   }
 
-  public getRoomPreviews(): { payload: RoomPreview[] } {
-    const roomPreviews = this.rooms.map((room) => room.getRoomPreview());
+  public getRoomPreviews(name?: string): { payload: RoomPreview[] } {
+    let roomPreviews = this.rooms.map((room) => room.getRoomPreview());
+    if (name) {
+      const regExp = new RegExp(name, 'i');
+      roomPreviews = roomPreviews.filter((preview) => regExp.test(preview.name));
+    }
     return { payload: roomPreviews };
   }
 }
