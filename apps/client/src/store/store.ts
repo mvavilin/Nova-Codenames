@@ -16,7 +16,23 @@ import registrationPageAfterware from '@store/afterwares/registration.afterware'
 import type { State } from '@store/types/state';
 import type { Actions } from './types/action';
 
-const store = new StateAPI<State, Actions>(initialState);
+function loadState(): State {
+  try {
+    const saved = localStorage.getItem('store');
+    if (!saved) return initialState;
+
+    const parsed = JSON.parse(saved);
+
+    return {
+      ...initialState,
+      ...parsed,
+    };
+  } catch {
+    return initialState;
+  }
+}
+
+const store = new StateAPI<State, Actions>(loadState());
 
 store.addReducer(testReducer, welcomeReducer, registrationPageReducer);
 

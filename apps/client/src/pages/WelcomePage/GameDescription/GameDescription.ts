@@ -11,7 +11,8 @@ export default class GameDescription extends TextComponent {
   constructor({ ...rest }: GameDescriptionProperties = {}) {
     super({
       id: 'game-description',
-      classes: 'font-third font-bold text-2xl leading-[1.17] text-center text-[var(--color-white)]',
+      classes:
+        'font-main text-1xl md:text-2xl leading-[1.17] text-center text-[var(--color-white)] whitespace-pre-line text-center',
       ...rest,
     });
 

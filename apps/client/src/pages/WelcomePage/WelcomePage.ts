@@ -1,4 +1,4 @@
-import { ContainerComponent } from '@/api/ComponentsAPI';
+import { ButtonComponent, ContainerComponent } from '@/api/ComponentsAPI';
 import type { WelcomePageProperties } from './WelcomePage.types';
 import LoginButton from '@/pages/WelcomePage/LoginButton/LoginButton';
 import WelcomeHeading from './WelcomeHeading/WelcomeHeading';
@@ -10,13 +10,14 @@ import type { State } from '@store/types/state';
 import LangButton from './LangButton/LangButton';
 import AboutButton from './AboutButton/AboutButton';
 import GameDescription from './GameDescription/GameDescription';
+import LobbyButton from './LobbyButton/LobbyButton';
 
 export default class WelcomePage extends ContainerComponent {
   constructor({ ...rest }: WelcomePageProperties = {}) {
     super({
       id: 'welcome-page',
       classes:
-        'flex flex-col justify-between items-center w-full min-h-screen py-10 px-20 bg-[url(/src/assets/welcome-page/welcome-page-background.webp)] bg-center bg-no-repeat bg-cover',
+        'flex flex-col justify-between items-center w-full min-h-screen py-10 px-10 md:px-20 bg-[url(/src/assets/welcome-page/welcome-page-background.webp)] bg-center bg-no-repeat bg-cover',
       ...rest,
     });
 
@@ -34,13 +35,16 @@ export default class WelcomePage extends ContainerComponent {
     header.appendChildren(nav);
     header.appendChildren([new AboutButton(), new LangButton()]);
 
-    const content = new ContainerComponent({ classes: 'flex flex-col w-full max-w-[1024px]' });
-    content.appendChildren([
-      new WelcomeHeading(),
-      new GameDescription(),
-      new RegistrationButton(),
-      new LoginButton(),
-    ]);
+    const content = new ContainerComponent({
+      classes: 'grid grid-rows-[auto_1fr_auto] w-full h-full max-w-[1024px] gap-10',
+    });
+    const buttons = new ContainerComponent({
+      id: 'buttons',
+      classes: 'flex justify-center gap-10',
+    });
+
+    buttons.appendChildren(this.checkStatus());
+    content.appendChildren([new WelcomeHeading(), new GameDescription(), buttons]);
 
     const footer = new ContainerComponent({ tag: 'footer', classes: 'w-full max-w-[1440px]' });
 
@@ -51,5 +55,10 @@ export default class WelcomePage extends ContainerComponent {
     if (action.type === WelcomeActions.SHOW_GAME_RULES) {
       alert('Modal Window with Game Rules');
     }
+  }
+
+  private checkStatus(): ButtonComponent[] {
+    const isAuth = store.getState().authStatus;
+    return isAuth ? [new LobbyButton()] : [new LoginButton(), new RegistrationButton()];
   }
 }
