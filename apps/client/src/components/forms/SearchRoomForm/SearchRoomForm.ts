@@ -1,11 +1,11 @@
 import { FORM_CLASSES } from '@constants/styles';
 import { ContainerComponent, FormComponent } from '@api/ComponentsAPI';
-import { Input, Button, FieldLabel } from '@components/ui';
+import { InputText, Button, FieldLabel } from '@components/ui';
 
 export default class SearchRoomForm extends FormComponent {
   private roomLabel: FieldLabel;
   private inputContainer: ContainerComponent;
-  private roomInput: Input;
+  private roomInput: InputText;
   private searchRoomButton: Button;
 
   constructor() {
@@ -17,7 +17,7 @@ export default class SearchRoomForm extends FormComponent {
       classes: 'w-full',
     });
 
-    this.roomInput = new Input({
+    this.roomInput = new InputText({
       id: 'searchRoom',
       name: 'searchRoom',
       placeholder: 'Поиск комнаты',

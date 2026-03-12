@@ -20,4 +20,5 @@ export const FORM_CLASSES = {
   INPUT_ROW: `flex gap-2 items-center`,
   INPUT: `flex-[2]`,
   BUTTON: `flex-[1]`,
+  LABEL: `w-full block font-bold`,
 } as const;
