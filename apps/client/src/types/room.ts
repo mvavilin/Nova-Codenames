@@ -19,3 +19,11 @@ export interface RoomPreview {
   playerCount: number;
   status: RoomStatus;
 }
+
+export const ROOM_PREVIEW_FIELDS = {
+  ID: 'id',
+  NAME: 'name',
+  MAX_PLAYERS: 'maxPlayers',
+  PLAYER_COUNT: 'playerCount',
+  STATUS: 'status',
+} as const;

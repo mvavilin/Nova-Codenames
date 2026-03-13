@@ -22,3 +22,25 @@ export const FORM_CLASSES = {
   BUTTON: `flex-[1]`,
   LABEL: `w-full block font-bold`,
 } as const;
+
+export const HEADER_TITLES = ['Комната', 'Игроков', 'Статус', ''];
+export const CELL_BASE = 'truncate overflow-hidden whitespace-nowrap';
+export const GRID_ROW = 'w-full grid grid-cols-[3fr_2fr_3fr_2fr] px-3';
+export const TABLE_CLASSES = {
+  TABLE: 'w-full flex flex-col gap-2 border-collapse border-0 p-0 m-0 flex-1 overflow-y-hidden',
+  THEAD: {
+    TR: GRID_ROW,
+    TH: {
+      FIRST: `text-left`,
+      BASE: `text-center`,
+    },
+  },
+  TBODY: {
+    TBODY: `flex-1 flex flex-col gap-2 overflow-y-auto max-h-70`,
+    TR: `${GRID_ROW} text-black bg-white rounded py-1`,
+    TD: {
+      FIRST: `${CELL_BASE} text-left`,
+      BASE: `${CELL_BASE} text-center`,
+    },
+  },
+};

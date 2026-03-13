@@ -1,46 +1,24 @@
-import { ROOM_STATUS_RU, type RoomPreview } from '@types';
+import { type RoomPreview, ROOM_PREVIEW_FIELDS } from '@types';
 import { BaseComponent } from '@ComponentsAPI';
-import { Button } from '@components/ui';
-
-const HEADER_TITLES = ['Комната', 'Игроков', 'Статус', ''];
-const roomsData: RoomPreview[] = [
-  { id: '1', name: 'js-masters', playerCount: 3, maxPlayers: 4, status: 'waiting' },
-  { id: '2', name: 'python-pro', playerCount: 2, maxPlayers: 4, status: 'waiting' },
-  { id: '3', name: 'fronted-legends', playerCount: 4, maxPlayers: 4, status: 'playing' },
-  { id: '4', name: 'backend-warriors', playerCount: 1, maxPlayers: 4, status: 'waiting' },
-];
-
-const CELL_BASE = 'truncate overflow-hidden whitespace-nowrap';
-const GRID_ROW = 'w-full grid grid-cols-[3fr_2fr_3fr_2fr] px-3';
-const TABLE_CLASSES = {
-  TABLE: 'w-full flex flex-col gap-2 border-collapse border-0 p-0 m-0 flex-1 overflow-y-hidden',
-  THEAD: {
-    TR: GRID_ROW,
-    TH: {
-      FIRST: `text-left`,
-      BASE: `text-center`,
-    },
-  },
-  TBODY: {
-    TBODY: `flex-1 flex flex-col gap-2 overflow-y-auto max-h-70`,
-    TR: `${GRID_ROW} text-black bg-white rounded py-1`,
-    TD: {
-      FIRST: `${CELL_BASE} text-left`,
-      BASE: `${CELL_BASE} text-center`,
-    },
-  },
-};
+import { RoomRow } from '@components';
+import { TABLE_CLASSES, HEADER_TITLES } from '@constants/styles';
+import { initialRooms } from '@__mocks__';
 
 export default class RoomsTable extends BaseComponent {
-  private rooms: RoomPreview[] = roomsData;
+  private rooms: RoomPreview[] = [];
+  private tbody: BaseComponent;
 
   constructor() {
     super({ tag: 'table', classes: TABLE_CLASSES.TABLE });
+
+    this.rooms = initialRooms;
+    this.tbody = this.createBody();
+
     this.render();
   }
 
   private render(): void {
-    this.appendChildren([this.createHeader(), this.createBody()]);
+    this.appendChildren([this.createHeader(), this.tbody]);
   }
 
   private createHeader(): BaseComponent {
@@ -53,58 +31,86 @@ export default class RoomsTable extends BaseComponent {
         content: text,
         classes: (index === 0 ? TABLE_CLASSES.THEAD.TH.FIRST : TABLE_CLASSES.THEAD.TH.BASE).trim(),
       });
+
       tr.appendChildren(th);
     }
 
     thead.appendChildren(tr);
+
     return thead;
   }
 
   private createBody(): BaseComponent {
     const tbody = new BaseComponent({ tag: 'tbody', classes: TABLE_CLASSES.TBODY.TBODY });
 
-    for (const room of this.rooms) {
-      const tr = new BaseComponent({ id: room.id, tag: 'tr', classes: TABLE_CLASSES.TBODY.TR });
-
-      const nameTd = new BaseComponent({
-        tag: 'td',
-        content: room.name,
-        classes: TABLE_CLASSES.TBODY.TD.FIRST,
-      });
-
-      const playersTd = new BaseComponent({
-        tag: 'td',
-        content: `${room.playerCount}/${room.maxPlayers}`,
-        classes: TABLE_CLASSES.TBODY.TD.BASE,
-      });
-
-      const statusTd = new BaseComponent({
-        tag: 'td',
-        content: ROOM_STATUS_RU[room.status],
-        classes: TABLE_CLASSES.TBODY.TD.BASE,
-      });
-
-      const emptyTd = new BaseComponent({
-        tag: 'td',
-        content: '',
-        classes: TABLE_CLASSES.TBODY.TD.BASE,
-      });
-
-      if (room.playerCount < room.maxPlayers)
-        emptyTd.appendChildren(
-          new Button({
-            content: 'Вступить',
-            classes: 'text-xs bg-green-600 hover:bg-green-700 mx-auto',
-            onClick: (): void => {
-              console.log('Вступаем в комнату с id:', room.id);
-            },
-          })
-        );
-
-      tr.appendChildren([nameTd, playersTd, statusTd, emptyTd]);
-      tbody.appendChildren(tr);
-    }
+    for (const room of this.rooms) tbody.appendChildren(new RoomRow(room));
 
     return tbody;
+  }
+
+  private isRoom(component: BaseComponent): component is RoomRow {
+    return component instanceof RoomRow;
+  }
+
+  public getRoomsByField<K extends keyof RoomPreview>(key: K, value: RoomPreview[K]): RoomRow[] {
+    const result: RoomRow[] = [];
+
+    for (const child of this.tbody.children) {
+      if (this.isRoom(child)) {
+        const roomValue = child['room'][key];
+
+        if (typeof roomValue === 'string' && typeof value === 'string') {
+          if (roomValue.toLowerCase() === value.toLowerCase()) {
+            result.push(child);
+          }
+        } else if (roomValue === value) {
+          result.push(child);
+        }
+      }
+    }
+
+    return result;
+  }
+
+  public addRoom(room: RoomPreview): void {
+    this.rooms.push(room);
+    this.tbody.appendChildren(new RoomRow(room));
+  }
+
+  public removeRoom(id: string): void {
+    const rows = this.getRoomsByField(ROOM_PREVIEW_FIELDS.ID, id);
+
+    for (const row of rows) row.removeRoom();
+
+    this.rooms = this.rooms.filter((room) => room.id !== id);
+  }
+
+  public updateRoomField<K extends keyof RoomPreview>(
+    id: string,
+    key: K,
+    value: RoomPreview[K]
+  ): void {
+    const rows = this.getRoomsByField(ROOM_PREVIEW_FIELDS.ID, id);
+    for (const row of rows) row.updateField(key, value);
+
+    const room = this.rooms.find((room) => room.id === id);
+    if (room) room[key] = value;
+  }
+
+  public updateRoomPlayers(id: string, count: number): void {
+    const rows = this.getRoomsByField(ROOM_PREVIEW_FIELDS.ID, id);
+    for (const row of rows) row.updatePlayers(count);
+
+    const room = this.rooms.find((room) => room.id === id);
+    if (room) room.playerCount = count;
+  }
+
+  public getAllRows(): RoomRow[] {
+    return this.tbody.children.filter((child) => this.isRoom(child));
+  }
+
+  public clearRooms(): void {
+    this.tbody.destroyChildren();
+    this.rooms = [];
   }
 }
