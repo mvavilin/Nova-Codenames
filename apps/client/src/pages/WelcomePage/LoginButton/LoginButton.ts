@@ -11,8 +11,7 @@ export default class LoginButton extends ButtonComponent {
   constructor({ ...rest }: LoginButtonProperties = {}) {
     super({
       id: 'login-button',
-      classes:
-        'px-6 py-2 rounded-lg bg-gray-200 text-black font-medium opacity-50 cursor-not-allowed pointer-events-none',
+      classes: 'px-6 py-2 rounded-lg bg-gray-200 text-black font-medium cursor-pointer',
       ...rest,
     });
 

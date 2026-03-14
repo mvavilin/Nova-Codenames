@@ -7,6 +7,8 @@ export default function welcomePageAfterware<State>(): Afterware<State> {
   return async function afterware(context) {
     if (context.action.type === WelcomeActions.GO_TO_REGISTRATION_PAGE) {
       router.navigate(URLS.REGISTRATION());
+    } else if (context.action.type === WelcomeActions.GO_TO_LOGIN_PAGE) {
+      router.navigate(URLS.LOGIN());
     }
   };
 }
