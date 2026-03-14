@@ -12,7 +12,7 @@ export default class GameDescription extends TextComponent {
     super({
       id: 'game-description',
       classes:
-        'font-main text-1xl md:text-2xl leading-[1.17] text-center text-[var(--color-white)] whitespace-pre-line text-center',
+        'font-main text-1xl md:text-2xl leading-[1.17] text-center text-[var(--color-light)] whitespace-pre-line text-center',
       ...rest,
     });
 

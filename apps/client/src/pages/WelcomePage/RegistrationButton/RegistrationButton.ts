@@ -12,7 +12,7 @@ export default class RegistrationButton extends ButtonComponent {
     super({
       id: 'registration-button',
       classes:
-        'font-brand text-[var(--color-black)] px-6 py-2 rounded-lg bg-[var(--color-green)] font-medium transition duration-200 ease-in-out active:scale-95 cursor-pointer justify-self-center text-xs md:text-base',
+        'font-brand text-[var(--color-dark)] px-6 py-2 rounded-lg bg-[var(--color-accent)] font-medium transition duration-200 ease-in-out active:scale-95 cursor-pointer justify-self-center text-xs md:text-base',
       ...rest,
     });
 
