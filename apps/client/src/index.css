@@ -21,6 +21,9 @@
   --font-main: 'Inter', sans-serif;
   --color-brand: #ffd700; /*yellow*/
   --color-primary: #64696c; /*gray*/
+  --color-light: #ffffff;
+  --color-dark: #000000;
+  --color-accent: #00a63e;
 }
 
 @layer base {
