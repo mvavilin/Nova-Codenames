@@ -1,6 +1,6 @@
-import type { State } from '../types/state';
-import type { AppActions } from '../types/action';
-import { SocketActionTypes } from '../actions/socket.actions';
+import type { State } from '@State';
+import type { AppActions } from '@AppActions';
+import { SocketActionTypes } from '@actions';
 
 export default function socketReducer(state: State, action: AppActions): State {
   switch (action.type) {

@@ -1,13 +1,15 @@
-import type { Middleware } from '@api/StateAPI/types/types';
-import type { AppActions } from '../types/action';
+import type { Middleware } from '@StateAPI';
+import type { AppActions } from '@AppActions';
+
 import { saveSessionStorageData, showErrorToast } from '@utils';
-import { SOCKET_ERROR_MESSAGES } from '@api/SocketClientAPI/socket.constants';
 import TOKENS from '@constants/tokens';
-import { router } from '@app';
-import { URLS } from '@api/RouterAPI/router.constants';
-import { SocketActionTypes } from '../actions/socket.actions';
+import { router } from '@router';
+import { URLS } from '@RouterAPI/router.constants';
+import { SOCKET_ERROR_MESSAGES } from '@SocketClientAPI/socket.constants';
+import { SocketActionTypes } from '@actions';
+
+import { SocketClient } from '@SocketClientAPI';
 import { ServerUrl } from '@repo/shared/src/api.constants';
-import { SocketClient } from '@/api/SocketClientAPI';
 
 export default function socketFetcher<State>(): Middleware<State, AppActions> {
   return function middleware(context) {
