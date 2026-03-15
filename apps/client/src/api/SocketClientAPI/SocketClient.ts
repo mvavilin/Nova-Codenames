@@ -1,7 +1,9 @@
-import { BaseSocketClient } from '@/api/SocketClientAPI';
-import type { ErrorCode } from '@repo/shared/src/socketEvents';
 import type { Player, RoomInfo, RoomPreview } from '@repo/shared/src/types/room';
-import { ServerUrl } from '@shared/api.constants';
+import { ServerUrl } from '@repo/shared/src/api.constants';
+import { type ErrorCode, ServerEventType } from '@repo/shared/src/socketEvents';
+import { showErrorToast } from '@utils';
+import { BaseSocketClient } from '@api/SocketClientAPI';
+import { SOCKET_ERROR_MESSAGES } from '@api/SocketClientAPI/socket.constants';
 
 class SocketClient extends BaseSocketClient {
   constructor(serverUrl: string) {
@@ -10,65 +12,65 @@ class SocketClient extends BaseSocketClient {
 
   public onRoomCreated(handler: (payload: { roomPreview: RoomPreview }) => void): void {
     try {
-      this.socket.on('room:created', handler);
+      this.socket.on(ServerEventType.ROOM_CREATED, handler);
     } catch (error) {
-      console.error('Error in onRoomCreated:', error);
+      showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ROOM_CREATED);
     }
   }
 
   public onRoomUpdated(handler: (payload: { roomPreview: RoomPreview }) => void): void {
     try {
-      this.socket.on('room:update-review', handler);
+      this.socket.on(ServerEventType.ROOM_UPDATE_PREVIEW, handler);
     } catch (error) {
-      console.error('Error in onRoomUpdated:', error);
+      showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ROOM_UPDATED);
     }
   }
 
   public onRoomState(handler: (payload: { roomInfo: RoomInfo }) => void): void {
     try {
-      this.socket.on('room:state', handler);
+      this.socket.on(ServerEventType.ROOM_STATE, handler);
     } catch (error) {
-      console.error('Error in onRoomState:', error);
+      showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ROOM_STATE);
     }
   }
 
   public onPlayerJoined(handler: (payload: { player: Player }) => void): void {
     try {
-      this.socket.on('room:player-joined', handler);
+      this.socket.on(ServerEventType.ROOM_PLAYER_JOINED, handler);
     } catch (error) {
-      console.error('Error in onPlayerJoined:', error);
+      showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_PLAYER_JOINED);
     }
   }
 
   public onPlayerLeft(handler: (payload: { player: Player }) => void): void {
     try {
-      this.socket.on('room:player-left', handler);
+      this.socket.on(ServerEventType.ROOM_PLAYER_LEFT, handler);
     } catch (error) {
-      console.error('Error in onPlayerLeft:', error);
+      showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_PLAYER_LEFT);
     }
   }
 
   public onError(handler: (payload: { code: ErrorCode }) => void): void {
     try {
-      this.socket.on('error', handler);
+      this.socket.on(ServerEventType.ERROR, handler);
     } catch (error) {
-      console.error('Error in onError:', error);
+      showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ERROR);
     }
   }
 
   public onRoomList(handler: (payload: { roomPreviews: RoomPreview[] }) => void): void {
     try {
-      this.socket.on('room:send-list', handler);
+      this.socket.on(ServerEventType.ROOM_SEND_LIST, handler);
     } catch (error) {
-      console.error('Error in onRoomList:', error);
+      showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ROOM_LIST);
     }
   }
 
   public onSessionToken(handler: (payload: { sessionToken: string }) => void): void {
     try {
-      this.socket.on('session:token', handler);
+      this.socket.on(ServerEventType.SESSION_TOKEN, handler);
     } catch (error) {
-      console.error('Error in onSessionToken:', error);
+      showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_SESSION_TOKEN);
     }
   }
 }

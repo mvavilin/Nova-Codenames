@@ -12,7 +12,7 @@ interface ToastProperties {
 }
 
 const TOAST_CLASSES = {
-  BASE: 'fixed bottom-3 right-3 p-3 rounded shadow-md flex items-center justify-between space-x-3 opacity-0 translate-y-4 transition-all duration-300 border max-w-sm min-w-3xs',
+  BASE: 'fixed z-100 bottom-3 right-3 p-3 rounded shadow-md flex items-center justify-between space-x-3 opacity-0 translate-y-4 transition-all duration-300 border max-w-sm min-w-3xs',
   [MessageType.SUCCESS]: 'bg-green-50 border-green-600 text-green-600',
   [MessageType.INFO]: 'bg-blue-50 border-blue-600 text-blue-600',
   [MessageType.ERROR]: 'bg-red-50 border-red-600 text-red-600',
