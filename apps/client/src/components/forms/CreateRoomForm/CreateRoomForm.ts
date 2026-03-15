@@ -8,7 +8,12 @@ export default class CreateRoomForm extends FormComponent {
   private roomName: string | null = null;
 
   constructor() {
-    super({ classes: FORM_CLASSES.FORM });
+    super({
+      classes: FORM_CLASSES.FORM,
+      listeners: {
+        submit: (event: Event): void => event.preventDefault(),
+      },
+    });
     this.render();
   }
 
