@@ -1,6 +1,7 @@
-import type { ErrorCode } from '../../../../packages/shared/src/socketEvents.ts';
+import type { ErrorCode, UserStatus } from '../../../../packages/shared/src/socketEvents.ts';
 import type {
   Player,
+  RoomInfo,
   RoomPreview,
   RoomSettings,
 } from '../../../../packages/shared/src/types/room.ts';
@@ -19,6 +20,10 @@ export class RoomManager {
 
   public removePlayerFromLobby(userId: string): void {
     this.lobby = this.lobby.filter((player) => player.userId !== userId);
+  }
+
+  private getLobbyIds(): string[] {
+    return this.lobby.map((player) => player.userId);
   }
 
   public createRoom(settings: RoomSettings): {
@@ -58,7 +63,7 @@ export class RoomManager {
       const roomRecipients = room.getPlayerIds();
       room.addPlayer(newPlayer);
       this.removePlayerFromLobby(userId);
-      const lobbyRecipients = this.lobby.map((player) => player.userId);
+      const lobbyRecipients = this.getLobbyIds();
 
       return { payload: room, player: newPlayer, lobbyRecipients, roomRecipients };
     }
@@ -82,12 +87,28 @@ export class RoomManager {
         this.addPlayerToLobby(player);
         room.removePlayer(userId);
         const roomRecipients = room.getPlayerIds();
-        const lobbyRecipients = this.lobby.map((player) => player.userId);
+        const lobbyRecipients = this.getLobbyIds();
 
         return { payload: room.getRoomPreview(), player, lobbyRecipients, roomRecipients };
       }
     }
 
     return { error: 'ROOM_NOT_FOUND' };
+  }
+
+  public getStatus(userId: string): UserStatus | undefined {
+    if (this.getLobbyIds().includes(userId)) return 'IN_LOBBY';
+
+    for (const room of this.rooms) {
+      if (room.getPlayerIds().includes(userId)) return 'IN_ROOM';
+    }
+
+    return;
+  }
+
+  public getRoomInfo(userId: string): RoomInfo | undefined {
+    const room = this.rooms.find((room) => room.getPlayerIds().includes(userId));
+    if (room) return room.getRoomInfo();
+    return;
   }
 }

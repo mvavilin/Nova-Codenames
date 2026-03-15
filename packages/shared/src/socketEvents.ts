@@ -11,15 +11,21 @@ export enum ServerEventType {
   ERROR = 'error',
 }
 
+export type UserStatus = 'IN_LOBBY' | 'IN_ROOM' | 'IN_GAME';
+
 type ClientEvent =
   | { type: 'room:create'; payload: { settings: RoomSettings } }
   | { type: 'room:ask-list' }
   | { type: 'room:search'; payload: { name: string | undefined } }
   | { type: 'room:join'; payload: { roomId: string } }
-  | { type: 'room:leave' };
+  | { type: 'room:leave' }
+  | { type: 'room:ask-room-info' };
 
 type ServerEvent =
   | { type: 'session:token'; payload: { sessionToken: string } }
+  | { type: 'session:connect' }
+  | { type: 'session:reconnect'; payload: { userStatus: UserStatus } }
+  | { type: 'session:status'; payload: { userStatus: UserStatus } }
   | { type: 'room:send-list'; payload: { roomPreviews: RoomPreview[] } }
   | { type: 'room:created'; payload: { roomPreview: RoomPreview } }
   | { type: 'room:state'; payload: { roomInfo: RoomInfo } }
@@ -28,7 +34,12 @@ type ServerEvent =
   | { type: 'room:player-left'; payload: { player: Player } }
   | { type: 'error'; payload: { code: ErrorCode } };
 
-export type ErrorCode = 'ROOM_NOT_FOUND' | 'ROOM_FULL' | 'INVALID_ACTION';
+export type ErrorCode =
+  | 'ROOM_NOT_FOUND'
+  | 'ROOM_FULL'
+  | 'INVALID_ACTION'
+  | 'AUTH_REQUIRED'
+  | 'ALREADY_ONLINE';
 
 type EventName<T> = T extends { type: infer K } ? K : never;
 
