@@ -83,7 +83,6 @@ export default class BaseForm extends FormComponent {
 
     this.isSubmiting = true;
 
-    const loaderOverlay = new Overlay(new Loader());
     const loaderOverlay = new Overlay(new Loader(messageToUser));
     loaderOverlay.show();
 
