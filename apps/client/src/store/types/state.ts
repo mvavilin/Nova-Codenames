@@ -1,4 +1,4 @@
-import type { FormState } from '@components/BaseForm/BaseFormTypes';
+import type { FormState } from '@components/BaseForm/BaseForm.types';
 import { Language, type RoomPreview } from '@types';
 
 export type State = {
