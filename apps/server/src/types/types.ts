@@ -11,4 +11,4 @@ export interface SocketData {
   isReconnect: boolean;
 }
 
-export const RECONNECT_MAX_TIME = 10_000;
+export const RECONNECT_MAX_TIME = 60_000;
