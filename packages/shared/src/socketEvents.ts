@@ -23,9 +23,9 @@ type ClientEvent =
 
 type ServerEvent =
   | { type: 'session:token'; payload: { sessionToken: string } }
-  | { type: 'session:connect' }
-  | { type: 'session:reconnect'; payload: { userStatus: UserStatus } }
-  | { type: 'session:player-reconnect'; payload: { player: Player } }
+  | { type: 'session:connect'; payload: { userStatus: UserStatus } }
+  | { type: 'session:player-connected'; payload: { player: Player } }
+  | { type: 'session:player-disconnected'; payload: { player: Player } }
   | { type: 'session:status'; payload: { userStatus: UserStatus } }
   | { type: 'room:send-list'; payload: { roomPreviews: RoomPreview[] } }
   | { type: 'room:created'; payload: { roomPreview: RoomPreview } }

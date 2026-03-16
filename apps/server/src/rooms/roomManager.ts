@@ -11,11 +11,14 @@ export class RoomManager {
   private lobby: Player[] = [];
   private rooms: Room[] = [];
 
-  public addPlayerToLobby(newPlayer: Player): void {
+  public addPlayerToLobby(newPlayer: Player): Player {
     const player = this.lobby.find((item) => item.userId === newPlayer.userId);
     if (!player) {
       this.lobby.push(newPlayer);
+      return newPlayer;
     }
+
+    return player;
   }
 
   public removePlayerFromLobby(userId: string): void {
@@ -101,15 +104,13 @@ export class RoomManager {
   }
 
   public getStatus(
-    userId: string
-  ): { userStatus: UserStatus; player: Player; recipients: string[] } | undefined {
-    if (this.getLobbyIds().includes(userId)) {
-      const player = this.getPlayer(userId);
-      if (player) {
-        return { userStatus: 'IN_LOBBY', player, recipients: [] };
-      }
-    }
-
+    userId: string,
+    username: string
+  ): {
+    userStatus: UserStatus;
+    player: Player;
+    recipients: string[];
+  } {
     for (const room of this.rooms) {
       if (room.getPlayerIds().includes(userId)) {
         const player = room.getPlayer(userId);
@@ -120,7 +121,8 @@ export class RoomManager {
       }
     }
 
-    return;
+    const player = this.getPlayer(userId) || this.addPlayerToLobby({ userId, username });
+    return { userStatus: 'IN_LOBBY', player, recipients: [] };
   }
 
   public getRoomInfo(userId: string): RoomInfo | undefined {

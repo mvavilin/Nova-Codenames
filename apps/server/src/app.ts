@@ -59,30 +59,38 @@ io.on(
     const userSocketCount = [...io.sockets.sockets].filter(
       (s) => s[1].data.userId === userId
     ).length;
+
     if (userSocketCount > 1) {
       socket.emit('error', { code: 'ALREADY_ONLINE' });
       socket.disconnect();
     } else {
-      const status = roomManager.getStatus(userId);
-      if (status) {
-        const { userStatus, player, recipients } = status;
-        socket.emit('session:reconnect', { userStatus });
-        for (const recipient of recipients) {
-          const socketId = socketIdMap.get(recipient);
-          if (socketId) {
-            io.to(socketId).emit('session:player-reconnect', { player });
-          }
+      const status = roomManager.getStatus(userId, username);
+      const { userStatus, player, recipients } = status;
+      socket.emit('session:connect', { userStatus });
+      for (const recipient of recipients) {
+        const socketId = socketIdMap.get(recipient);
+        if (socketId) {
+          io.to(socketId).emit('session:player-connected', { player });
         }
-      } else {
-        socket.emit('session:connect');
-        roomManager.addPlayerToLobby({ userId, username });
       }
+      console.log('connect');
     }
 
     socketIdMap.set(userId, socket.id);
 
     socket.on('disconnect', () => {
-      socketIdMap.delete(userId);
+      console.log('disconnect');
+      // socketIdMap.delete(userId);
+      const status = roomManager.getStatus(userId, username);
+      const { userStatus, player, recipients } = status;
+      if (userStatus === 'IN_ROOM') {
+        for (const recipient of recipients) {
+          const socketId = socketIdMap.get(recipient);
+          if (socketId) {
+            io.to(socketId).emit('session:player-disconnected', { player });
+          }
+        }
+      }
     });
 
     setupSocketHandlers(io, socket, roomManager);
