@@ -10,3 +10,5 @@ export interface SocketData {
   sessionToken: string;
   isReconnect: boolean;
 }
+
+export const RECONNECT_MAX_TIME = 10_000;

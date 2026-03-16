@@ -14,9 +14,11 @@ import type {
   ClientToServerEvents,
   ServerToClientEvents,
 } from '../../../packages/shared/src/socketEvents.ts';
-import type { SocketData } from './types/types.ts';
+import { RECONNECT_MAX_TIME, type SocketData } from './types/types.ts';
+import { sessionMiddleware } from './ws/sessionMiddleware.ts';
 
 export const socketIdMap = new Map<string, string>();
+const timerMap = new Map<string, NodeJS.Timeout>();
 
 const FRONTEND_URL = process.env.FRONTEND_URL || ServerConstants.DEFAULT_FRONTEND_URL;
 
@@ -49,7 +51,7 @@ app.use('', authRouter);
 app.use(errorHandler);
 
 io.use(authMiddleware);
-// io.use(sessionMiddleware);
+io.use(sessionMiddleware);
 
 io.on(
   'connection',
@@ -73,24 +75,37 @@ io.on(
           io.to(socketId).emit('session:player-connected', { player });
         }
       }
-      console.log('connect');
+      clearTimeout(timerMap.get(userId));
+      timerMap.delete(userId);
+      console.log('connect', userId);
     }
 
     socketIdMap.set(userId, socket.id);
 
     socket.on('disconnect', () => {
-      console.log('disconnect');
-      // socketIdMap.delete(userId);
+      console.log('disconnect', userId);
+
       const status = roomManager.getStatus(userId, username);
-      const { userStatus, player, recipients } = status;
-      if (userStatus === 'IN_ROOM') {
-        for (const recipient of recipients) {
-          const socketId = socketIdMap.get(recipient);
-          if (socketId) {
-            io.to(socketId).emit('session:player-disconnected', { player });
-          }
+      const { player, recipients } = status;
+      for (const recipient of recipients) {
+        const socketId = socketIdMap.get(recipient);
+        if (socketId) {
+          io.to(socketId).emit('session:player-disconnected', { player });
         }
       }
+
+      timerMap.set(
+        userId,
+        setTimeout(() => {
+          for (const recipient of recipients) {
+            const socketId = socketIdMap.get(recipient);
+            if (socketId) {
+              io.to(socketId).emit('session:player-exit', { player });
+            }
+          }
+          timerMap.delete(userId);
+        }, RECONNECT_MAX_TIME)
+      );
     });
 
     setupSocketHandlers(io, socket, roomManager);

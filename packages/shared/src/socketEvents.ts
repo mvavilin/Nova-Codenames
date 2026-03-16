@@ -26,7 +26,7 @@ type ServerEvent =
   | { type: 'session:connect'; payload: { userStatus: UserStatus } }
   | { type: 'session:player-connected'; payload: { player: Player } }
   | { type: 'session:player-disconnected'; payload: { player: Player } }
-  | { type: 'session:status'; payload: { userStatus: UserStatus } }
+  | { type: 'session:player-exit'; payload: { player: Player } }
   | { type: 'room:send-list'; payload: { roomPreviews: RoomPreview[] } }
   | { type: 'room:created'; payload: { roomPreview: RoomPreview } }
   | { type: 'room:state'; payload: { roomInfo: RoomInfo } }
