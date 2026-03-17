@@ -12,7 +12,7 @@ export function setupSocketHandlers(
   socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>,
   roomManager: RoomManager
 ): void {
-  const userId = socket.data.userId;
+  const { userId, username } = socket.data;
 
   socket.on('room:create', ({ settings }) => {
     const { payload, recipients } = roomManager.createRoom(settings);
@@ -37,6 +37,14 @@ export function setupSocketHandlers(
     const socketId = socketIdMap.get(userId);
     if (socketId) {
       io.to(socketId).emit('room:send-list', { roomPreviews: payload });
+    }
+  });
+
+  socket.on('session:ask-status', () => {
+    const { userStatus } = roomManager.getStatus(userId, username);
+    const socketId = socketIdMap.get(userId);
+    if (socketId) {
+      io.to(socketId).emit('session:send-status', { userStatus });
     }
   });
 

@@ -19,7 +19,8 @@ type ClientEvent =
   | { type: 'room:search'; payload: { name: string | undefined } }
   | { type: 'room:join'; payload: { roomId: string } }
   | { type: 'room:leave' }
-  | { type: 'room:ask-room-info' };
+  | { type: 'room:ask-room-info' }
+  | { type: 'session:ask-status' };
 
 type ServerEvent =
   | { type: 'session:token'; payload: { sessionToken: string } }
@@ -27,6 +28,7 @@ type ServerEvent =
   | { type: 'session:player-connected'; payload: { player: Player } }
   | { type: 'session:player-disconnected'; payload: { player: Player } }
   | { type: 'session:player-exit'; payload: { player: Player } }
+  | { type: 'session:send-status'; payload: { userStatus: UserStatus } }
   | { type: 'room:send-list'; payload: { roomPreviews: RoomPreview[] } }
   | { type: 'room:created'; payload: { roomPreview: RoomPreview } }
   | { type: 'room:state'; payload: { roomInfo: RoomInfo } }
