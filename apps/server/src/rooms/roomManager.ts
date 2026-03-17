@@ -1,6 +1,7 @@
-import type { ErrorCode } from '../../../../packages/shared/src/socketEvents.ts';
+import type { ErrorCode, UserStatus } from '../../../../packages/shared/src/socketEvents.ts';
 import type {
   Player,
+  RoomInfo,
   RoomPreview,
   RoomSettings,
 } from '../../../../packages/shared/src/types/room.ts';
@@ -10,15 +11,26 @@ export class RoomManager {
   private lobby: Player[] = [];
   private rooms: Room[] = [];
 
-  public addPlayerToLobby(newPlayer: Player): void {
+  public addPlayerToLobby(newPlayer: Player): Player {
     const player = this.lobby.find((item) => item.userId === newPlayer.userId);
     if (!player) {
       this.lobby.push(newPlayer);
+      return newPlayer;
     }
+
+    return player;
   }
 
   public removePlayerFromLobby(userId: string): void {
     this.lobby = this.lobby.filter((player) => player.userId !== userId);
+  }
+
+  private getLobbyIds(): string[] {
+    return this.lobby.map((player) => player.userId);
+  }
+
+  private getPlayer(userId: string): Player | undefined {
+    return this.lobby.find((player) => player.userId === userId);
   }
 
   public createRoom(settings: RoomSettings): {
@@ -58,7 +70,7 @@ export class RoomManager {
       const roomRecipients = room.getPlayerIds();
       room.addPlayer(newPlayer);
       this.removePlayerFromLobby(userId);
-      const lobbyRecipients = this.lobby.map((player) => player.userId);
+      const lobbyRecipients = this.getLobbyIds();
 
       return { payload: room, player: newPlayer, lobbyRecipients, roomRecipients };
     }
@@ -82,12 +94,40 @@ export class RoomManager {
         this.addPlayerToLobby(player);
         room.removePlayer(userId);
         const roomRecipients = room.getPlayerIds();
-        const lobbyRecipients = this.lobby.map((player) => player.userId);
+        const lobbyRecipients = this.getLobbyIds();
 
         return { payload: room.getRoomPreview(), player, lobbyRecipients, roomRecipients };
       }
     }
 
     return { error: 'ROOM_NOT_FOUND' };
+  }
+
+  public getStatus(
+    userId: string,
+    username: string
+  ): {
+    userStatus: UserStatus;
+    player: Player;
+    recipients: string[];
+  } {
+    for (const room of this.rooms) {
+      if (room.getPlayerIds().includes(userId)) {
+        const player = room.getPlayer(userId);
+        const recipients = room.getPlayerIds().filter((item) => item !== userId);
+        if (player) {
+          return { userStatus: 'IN_ROOM', player, recipients };
+        }
+      }
+    }
+
+    const player = this.getPlayer(userId) || this.addPlayerToLobby({ userId, username });
+    return { userStatus: 'IN_LOBBY', player, recipients: [] };
+  }
+
+  public getRoomInfo(userId: string): RoomInfo | undefined {
+    const room = this.rooms.find((room) => room.getPlayerIds().includes(userId));
+    if (room) return room.getRoomInfo();
+    return;
   }
 }

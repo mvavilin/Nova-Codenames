@@ -12,36 +12,45 @@ export function setupSocketHandlers(
   socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>,
   roomManager: RoomManager
 ): void {
-  const userId = socket.data.userId;
+  const { userId, username } = socket.data;
 
   socket.on('room:create', ({ settings }) => {
     const { payload, recipients } = roomManager.createRoom(settings);
     for (const recipient of recipients) {
-      const idSet = socketIdMap.get(recipient);
-      if (idSet) {
-        io.to([...idSet]).emit('room:created', { roomPreview: payload });
+      const socketId = socketIdMap.get(recipient);
+      if (socketId) {
+        io.to([socketId]).emit('room:created', { roomPreview: payload });
       }
     }
   });
 
   socket.on('room:ask-list', () => {
     const { payload } = roomManager.getRoomPreviews();
-    const idSet = socketIdMap.get(userId);
-    if (idSet) {
-      io.to([...idSet]).emit('room:send-list', { roomPreviews: payload });
+    const socketId = socketIdMap.get(userId);
+    if (socketId) {
+      io.to(socketId).emit('room:send-list', { roomPreviews: payload });
     }
   });
 
   socket.on('room:search', ({ name }) => {
     const { payload } = roomManager.getRoomPreviews(name);
-    const idSet = socketIdMap.get(userId);
-    if (idSet) {
-      io.to([...idSet]).emit('room:send-list', { roomPreviews: payload });
+    const socketId = socketIdMap.get(userId);
+    if (socketId) {
+      io.to(socketId).emit('room:send-list', { roomPreviews: payload });
+    }
+  });
+
+  socket.on('session:ask-status', () => {
+    const { userStatus } = roomManager.getStatus(userId, username);
+    const socketId = socketIdMap.get(userId);
+    if (socketId) {
+      io.to(socketId).emit('session:send-status', { userStatus });
     }
   });
 
   setupRoomJoinEvent(io, socket, roomManager);
   setupRoomLeaveEvent(io, socket, roomManager);
+  setupSendRoomInfoEvent(io, socket, roomManager);
 }
 
 function setupRoomJoinEvent(
@@ -54,28 +63,28 @@ function setupRoomJoinEvent(
   socket.on('room:join', ({ roomId }) => {
     const response = roomManager.joinToRoom(userId, roomId);
     if ('error' in response) {
-      const idSet = socketIdMap.get(userId);
-      if (idSet) {
-        io.to([...idSet]).emit('error', { code: response.error });
+      const socketId = socketIdMap.get(userId);
+      if (socketId) {
+        io.to(socketId).emit('error', { code: response.error });
       }
     } else {
       const { payload, player, lobbyRecipients, roomRecipients } = response;
-      const idSet = socketIdMap.get(userId);
-      if (idSet) {
-        io.to([...idSet]).emit('room:state', { roomInfo: payload.getRoomInfo() });
+      const socketId = socketIdMap.get(userId);
+      if (socketId) {
+        io.to(socketId).emit('room:state', { roomInfo: payload.getRoomInfo() });
       }
 
       for (const recipient of lobbyRecipients) {
-        const idSet = socketIdMap.get(recipient);
-        if (idSet) {
-          io.to([...idSet]).emit('room:update-review', { roomPreview: payload.getRoomPreview() });
+        const socketId = socketIdMap.get(recipient);
+        if (socketId) {
+          io.to(socketId).emit('room:update-review', { roomPreview: payload.getRoomPreview() });
         }
       }
 
       for (const recipient of roomRecipients) {
-        const idSet = socketIdMap.get(recipient);
-        if (idSet) {
-          io.to([...idSet]).emit('room:player-joined', { player });
+        const socketId = socketIdMap.get(recipient);
+        if (socketId) {
+          io.to(socketId).emit('room:player-joined', { player });
         }
       }
     }
@@ -96,25 +105,51 @@ export function roomLeaveHandler(io: Server, socket: Socket, roomManager: RoomMa
   const userId = socket.data.userId;
   const response = roomManager.leaveRoom(userId);
   if ('error' in response) {
-    const idSet = socketIdMap.get(userId);
-    if (idSet) {
-      io.to([...idSet]).emit('error', { code: response.error });
+    const socketId = socketIdMap.get(userId);
+    if (socketId) {
+      io.to(socketId).emit('error', { code: response.error });
     }
   } else {
     const { payload, player, lobbyRecipients, roomRecipients } = response;
 
+    const socketId = socketIdMap.get(userId);
+    const roomPreviews = roomManager.getRoomPreviews();
+    if (socketId && roomPreviews) {
+      io.to(socketId).emit('room:send-list', { roomPreviews });
+    }
+
     for (const recipient of lobbyRecipients) {
-      const idSet = socketIdMap.get(recipient);
-      if (idSet) {
-        io.to([...idSet]).emit('room:update-review', { roomPreview: payload });
+      const socketId = socketIdMap.get(recipient);
+      if (socketId) {
+        io.to(socketId).emit('room:update-review', { roomPreview: payload });
       }
     }
 
     for (const recipient of roomRecipients) {
-      const idSet = socketIdMap.get(recipient);
-      if (idSet) {
-        io.to([...idSet]).emit('room:player-left', { player });
+      const socketId = socketIdMap.get(recipient);
+      if (socketId) {
+        io.to(socketId).emit('room:player-left', { player });
       }
     }
   }
+}
+
+function setupSendRoomInfoEvent(
+  io: Server<ClientToServerEvents, ServerToClientEvents>,
+  socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>,
+  roomManager: RoomManager
+): void {
+  const userId = socket.data.userId;
+
+  socket.on('room:ask-room-info', () => {
+    const response = roomManager.getRoomInfo(userId);
+    const socketId = socketIdMap.get(userId);
+    if (socketId) {
+      if (response) {
+        io.to(socketId).emit('room:state', { roomInfo: response });
+      } else {
+        io.to(socketId).emit('error', { code: 'ROOM_NOT_FOUND' });
+      }
+    }
+  });
 }

@@ -8,24 +8,29 @@ import cors from 'cors';
 import 'dotenv/config';
 import { Server, Socket } from 'socket.io';
 import { authMiddleware } from './ws/authMiddleware.ts';
-import { sessionMiddleware } from './ws/sessionMiddleware.ts';
 import { RoomManager } from './rooms/roomManager.ts';
-import { roomLeaveHandler, setupSocketHandlers } from './ws/socketHandlers.ts';
+import { setupSocketHandlers } from './ws/socketHandlers.ts';
 import type {
   ClientToServerEvents,
   ServerToClientEvents,
 } from '../../../packages/shared/src/socketEvents.ts';
-import type { SocketData } from './types/types.ts';
+import { RECONNECT_MAX_TIME, type SocketData } from './types/types.ts';
+import { sessionMiddleware } from './ws/sessionMiddleware.ts';
 
-export const socketIdMap = new Map<string, Set<string>>();
+export const socketIdMap = new Map<string, string>();
+const timerMap = new Map<string, NodeJS.Timeout>();
 
 const FRONTEND_URL = process.env.FRONTEND_URL || ServerConstants.DEFAULT_FRONTEND_URL;
+const FRONTEND_URL_BACKUP = process.env.FRONTEND_URL_BACKUP;
+const originForCors = [FRONTEND_URL];
+if (typeof FRONTEND_URL_BACKUP === 'string' && FRONTEND_URL_BACKUP !== FRONTEND_URL)
+  originForCors.push(FRONTEND_URL_BACKUP);
 
 const app = express();
 const server = createServer(app);
 const io = new Server<ClientToServerEvents, ServerToClientEvents>(server, {
   cors: {
-    origin: FRONTEND_URL,
+    origin: originForCors,
     methods: ['GET', 'POST'],
   },
 });
@@ -33,7 +38,7 @@ const roomManager = new RoomManager();
 
 app.use(
   cors({
-    origin: FRONTEND_URL,
+    origin: originForCors,
     credentials: true,
   })
 );
@@ -56,30 +61,67 @@ io.on(
   'connection',
   (socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>) => {
     const { userId, username } = socket.data;
-    if (socket.data.isReconnect) {
-      console.log('reconnect', socket.data.sessionToken);
-      socket.emit('session:token', { sessionToken: socket.data.sessionToken });
+
+    const userSocketCount = [...io.sockets.sockets].filter(
+      (s) => s[1].data.userId === userId
+    ).length;
+
+    if (userSocketCount > 1) {
+      socket.emit('error', { code: 'ALREADY_ONLINE' });
+      socket.disconnect();
     } else {
-      console.log('connect', socket.data.sessionToken);
-      socket.emit('session:token', { sessionToken: socket.data.sessionToken });
-      roomManager.addPlayerToLobby({ userId, username });
-    }
-    if (!socketIdMap.has(userId)) {
-      socketIdMap.set(userId, new Set());
-    }
-    socketIdMap.get(userId)?.add(socket.id);
-
-    socket.on('disconnect', () => {
-      const idSet = socketIdMap.get(userId);
-      if (idSet) {
-        idSet.delete(socket.id);
-
-        if (idSet.size === 0) {
-          // roomManager.leaveRoom(userId);
-          roomLeaveHandler(io, socket, roomManager);
-          roomManager.removePlayerFromLobby(userId);
+      const status = roomManager.getStatus(userId, username);
+      const { userStatus, player, recipients } = status;
+      socket.emit('session:connect', { userStatus });
+      for (const recipient of recipients) {
+        const socketId = socketIdMap.get(recipient);
+        if (socketId) {
+          io.to(socketId).emit('session:player-connected', { player });
         }
       }
+      clearTimeout(timerMap.get(userId));
+      timerMap.delete(userId);
+      console.log('connect', userId);
+    }
+
+    socketIdMap.set(userId, socket.id);
+
+    socket.on('disconnect', () => {
+      console.log('disconnect', userId);
+
+      const status = roomManager.getStatus(userId, username);
+      const { player, recipients } = status;
+      for (const recipient of recipients) {
+        const socketId = socketIdMap.get(recipient);
+        if (socketId) {
+          io.to(socketId).emit('session:player-disconnected', { player });
+        }
+      }
+
+      timerMap.set(
+        userId,
+        setTimeout(() => {
+          for (const recipient of recipients) {
+            const socketId = socketIdMap.get(recipient);
+            if (socketId) {
+              io.to(socketId).emit('session:player-exit', { player });
+            }
+          }
+
+          const response = roomManager.leaveRoom(userId);
+          if ('payload' in response) {
+            const { payload, lobbyRecipients } = response;
+            for (const recipient of lobbyRecipients) {
+              const socketId = socketIdMap.get(recipient);
+              if (socketId) {
+                io.to(socketId).emit('room:update-review', { roomPreview: payload });
+              }
+            }
+            roomManager.removePlayerFromLobby(userId);
+          }
+          timerMap.delete(userId);
+        }, RECONNECT_MAX_TIME)
+      );
     });
 
     setupSocketHandlers(io, socket, roomManager);
