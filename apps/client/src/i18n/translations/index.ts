@@ -5,9 +5,11 @@ import registrationPageLanguage from './registrationPage';
 import welcomePage from './welcomePage';
 import loginPageLanguage from './loginPage';
 import gameRules from './gameRules';
+import appLanguage from './app';
 
 export const translations: Record<Language, Record<TranslationKey, string>> = {
   [Language.EN]: {
+    ...appLanguage[Language.EN],
     ...welcomePage[Language.EN],
     ...formLanguage[Language.EN],
     ...registrationPageLanguage[Language.EN],
@@ -15,6 +17,7 @@ export const translations: Record<Language, Record<TranslationKey, string>> = {
     ...gameRules[Language.EN],
   },
   [Language.RU]: {
+    ...appLanguage[Language.RU],
     ...welcomePage[Language.RU],
     ...formLanguage[Language.RU],
     ...registrationPageLanguage[Language.RU],

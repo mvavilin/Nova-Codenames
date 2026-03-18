@@ -1,5 +1,5 @@
 import type { Middleware } from '@/api/StateAPI/types/types';
-import { FormActions } from '../actions/form.actions';
+import { FormActionTypes } from '../actions/form.actions';
 import type { AppActions } from '../types/action';
 import type { AuthResponse } from '@/types/user.types';
 import type { Overlay } from '@/components/ui';
@@ -26,7 +26,7 @@ const AuthToken = 'auth_token';
 
 export default function fetcher<State>(): Middleware<State, AppActions> {
   return async function middleware(context) {
-    if (context.action.type === FormActions.FETCH_DATA) {
+    if (context.action.type === FormActionTypes.FETCH_DATA) {
       let currentLoader: Overlay | null = null;
       let onFinishedFunction: () => void = () => {};
       try {
@@ -58,7 +58,7 @@ export default function fetcher<State>(): Middleware<State, AppActions> {
 
         if (isValidAuthResponse(user)) {
           return context.next({
-            type: FormActions.FETCH_SUCCESS,
+            type: FormActionTypes.FETCH_SUCCESS,
             payload: { user, token },
           });
         } else {

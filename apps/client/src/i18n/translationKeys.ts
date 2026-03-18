@@ -1,4 +1,6 @@
 export const TranslationKeys = {
+  LANGUAGE_BUTTON: 'language-button',
+
   WELCOME_ABOUT: 'welcome-about',
   WELCOME_LOGIN: 'welcome-login',
   WELCOME_LOBBY: 'welcome-lobby',
