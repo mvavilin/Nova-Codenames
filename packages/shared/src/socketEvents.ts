@@ -29,7 +29,7 @@ export enum SocketErrorCode {
 
 export type UserStatus = 'IN_LOBBY' | 'IN_ROOM' | 'IN_GAME';
 
-type ClientEvent =
+export type ClientEvent =
   | { type: 'room:create'; payload: { settings: RoomSettings } }
   | { type: 'room:ask-list' }
   | { type: 'room:search'; payload: { name: string | undefined } }
