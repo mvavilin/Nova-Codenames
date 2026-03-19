@@ -8,3 +8,4 @@ export { default as RoomsTable } from '@components/RoomsTable/RoomsTable';
 export { default as RoomRow } from '@components/RoomRow/RoomRow';
 export { default as JoinButton } from '@components/JoinButton/JoinButton';
 export { default as Toast } from '@components/Toast/Toast';
+export { default as UserMenu } from '@components/UserMenu/UserMenu';
