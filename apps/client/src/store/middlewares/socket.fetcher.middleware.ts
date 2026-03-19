@@ -21,7 +21,8 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
 
         socketClient.onSessionToken(({ sessionToken }) => {
           saveSessionStorageData(TOKENS.SESSION, sessionToken);
-          router.navigate(URLS.LOBBY());
+          // router.navigate(URLS.LOBBY());
+          router.navigate(URLS.GAME('27626bdf-f197-4c9d-8dd5-0cd1426f1f71'));
 
           socketClient.off(ServerEventType.SESSION_TOKEN);
         });
