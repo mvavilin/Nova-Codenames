@@ -1,30 +1,34 @@
 import store from '@store';
-import { BaseComponent, HeadingComponent } from '@ComponentsAPI';
-import { Logo, ProfileSection, ExitButton, Avatar } from '@components';
+import { BaseComponent, ContainerComponent, HeadingComponent } from '@ComponentsAPI';
+import { Logo, ExitButton } from '@components';
+import RoomUser from '../RoomUser/RoomUser';
 
-const USER_MENU_CLASSES = `flex items-center justify-end gap-4 justify-self-end`;
-const HEADER_CLASSES = `w-full grid grid-cols-3 items-center p-4 bg-white/25 text-white rounded`;
-const TITLE_CLASSES = `text-2xl text-center font-bold uppercase`;
+const styles = {
+  header: 'w-full grid grid-cols-3 items-center p-4 bg-white/25 text-white rounded',
+  userMenu: 'flex items-center justify-end gap-4 justify-self-end',
+  title: 'text-2xl text-center font-bold uppercase',
+};
 
-export default class RoomHeader extends BaseComponent {
-  private userMenu = new BaseComponent({ classes: USER_MENU_CLASSES });
+export default class RoomHeader extends ContainerComponent {
+  private userMenu = new BaseComponent({ classes: styles.userMenu });
 
   constructor() {
-    super({ tag: 'header', classes: HEADER_CLASSES });
+    super({ tag: 'header', classes: styles.header });
 
     this.render();
   }
 
   private render(): void {
-    this.userMenu.appendChildren([
-      new Avatar({ seed: store.getState().id }),
-      new ProfileSection({ name: store.getState().username }),
-      new ExitButton(),
-    ]);
+    const username = store.getState().username;
+    const userId = store.getState().id;
+    if (username && userId) {
+      this.userMenu.appendChildren([new RoomUser({ username: username, userId: userId })]);
+    }
+    this.userMenu.appendChildren([new ExitButton()]);
 
     this.appendChildren([
       new Logo(),
-      new HeadingComponent({ level: 1, content: 'Room', classes: TITLE_CLASSES }),
+      new HeadingComponent({ level: 1, content: 'Room', classes: styles.title }),
       this.userMenu,
     ]);
   }

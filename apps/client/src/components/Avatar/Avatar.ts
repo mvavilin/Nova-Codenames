@@ -6,7 +6,7 @@ import { bottts } from '@dicebear/collection';
 interface AvatarProperties extends ImageComponentProperties {
   seed: string | null;
 }
-const AVATAR_CLASSES = `rounded-full w-10 h-10 object-cover border-2 border-white`;
+const AVATAR_CLASSES = `rounded-full w-10 h-10 object-cover border-2 border-white shrink-0`;
 
 export default class Avatar extends ImageComponent {
   constructor(properties: AvatarProperties) {

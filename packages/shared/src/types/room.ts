@@ -16,6 +16,9 @@ export interface RoomPreview {
 export type Player = {
   userId: string;
   username: string;
+  command: string;
+  role: string;
+  // isReady: boolean;
 };
 
 export interface RoomInfo {
