@@ -1,8 +1,8 @@
-import { blueTeam, redTeam } from '@__mocks__';
+import { blueTeam, redTeam, Role, cards } from '@__mocks__';
 
 import { BaseComponent, ContainerComponent } from '@ComponentsAPI';
 import { SECTION_CLASSES } from '@constants/styles';
-import { Tablo, TeamHeader, Timer } from '@pages/GamePage/components';
+import { Tablo, TeamHeader, Timer, GameBoard } from '@pages/GamePage/components';
 
 const HEADER_CLASSES = {
   CONTAINER: 'grid grid-cols-3 items-center w-full',
@@ -10,8 +10,7 @@ const HEADER_CLASSES = {
   CENTER: 'w-full flex flex-col gap-2 justify-start items-center self-start',
   RIGHT: 'justify-self-end',
 };
-
-const MAIN_CLASSES = `flex-1 flex items-center justify-center`;
+const MAIN_CLASSES = `w-full h-full flex items-center justify-center`;
 
 export default class GameBoardSection extends BaseComponent {
   private header: ContainerComponent;
@@ -35,7 +34,9 @@ export default class GameBoardSection extends BaseComponent {
     const rightColumn = new TeamHeader({ ...redTeam, classes: HEADER_CLASSES.RIGHT });
 
     this.header.appendChildren([leftColumn, centerColumn, rightColumn]);
-    this.main.appendChildren([]);
+
+    this.main.appendChildren([new GameBoard({ cards, role: Role.SPYMASTER })]);
+    // this.main.appendChildren([new GameBoard({ cards, role: Role.OPERATIVE })]);
 
     this.appendChildren([this.header, this.main]);
   }

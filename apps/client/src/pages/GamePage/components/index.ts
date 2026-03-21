@@ -7,3 +7,7 @@ export { default as logOutput } from '@pages/GamePage/components/LogOutput/LogOu
 export { default as TeamHeader } from '@pages/GamePage/components/TeamHeader/TeamHeader';
 
 export { default as Tablo } from '@pages/GamePage/components/Tablo/Tablo';
+
+export { default as GameBoard } from '@pages/GamePage/components/GameBoard/GameBoard';
+
+export { default as CardComponent } from '@pages/GamePage/components/Card/Card';

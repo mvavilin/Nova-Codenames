@@ -2,7 +2,8 @@ import { type User } from '@repo/shared/src/types/user';
 import { type RoomPreview } from '@types';
 import { Role, Team } from '@__mocks__/constants';
 
-export { Role, Team } from '@__mocks__/constants';
+export { redTeam, blueTeam, cards, CardColor, CardStatus, Role, Team } from '@__mocks__/constants';
+export type { Card } from '@__mocks__/types';
 
 export const initialRooms: RoomPreview[] = [
   { id: '1', name: 'js-masters', playerCount: 3, maxPlayers: 4, status: 'waiting' },
@@ -16,5 +17,3 @@ export type Player = {
   role: Role;
   team: Team;
 } & Partial<User>;
-
-export { redTeam, blueTeam } from '@__mocks__/constants';
