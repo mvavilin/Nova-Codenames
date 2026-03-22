@@ -1,4 +1,4 @@
-import type { CheckQuestion, QuestionBank } from '../types/question';
+import type { CheckQuestion, QuestionBank } from '../types/question.ts';
 
 function getFallbackQuestion(word: string): CheckQuestion {
   return {
