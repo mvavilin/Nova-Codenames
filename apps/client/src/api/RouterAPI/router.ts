@@ -42,7 +42,7 @@ export default class Router {
     this.app.setChildren(new route.page());
   }
 
-  public navigate(path: string): void {
+  public navigate(path: string = URLS.WELCOME()): void {
     if (globalThis.location.pathname === path) return;
 
     globalThis.history.pushState({}, '', path);
