@@ -40,4 +40,9 @@ window.addEventListener('load', () => app.show(true, 500));
 //   possibleAnswer: `Объект Promise в JavaScript может находиться в одном из трех состояний: pending (ожидание, начальное состояние), fulfilled (выполнено успешно) или rejected (выполнено с ошибкой), при этом переход всегда осуществляется из pending либо в fulfilled, либо в rejected, после чего состояние навсегда остается неизменным.`,
 // }).show();
 
+// import { GameResultsModal } from '@pages/GamePage/components';
+// import { gameResults } from '@__mocks__';
+
+// new GameResultsModal(gameResults).show();
+
 export { app, router };

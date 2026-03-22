@@ -15,7 +15,7 @@ type TeamHeaderProperties = {
 
 const AVATAR_SIZE = { width: 35, height: 35 };
 
-const TEAM_HEADER_CLASSES = {
+export const TEAM_HEADER_CLASSES = {
   CONTAINER: 'flex flex-col gap-2 w-max',
   HEADER: 'uppercase font-bold',
   HEADER_COLOR: {

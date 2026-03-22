@@ -1,4 +1,4 @@
-import { CardColor, CardStatus } from '@__mocks__';
+import { CardColor, CardStatus, type Player } from '@__mocks__';
 
 export type Card = {
   id: string;
@@ -7,4 +7,10 @@ export type Card = {
   status: CardStatus;
   position: number;
   selected: boolean;
+};
+
+export type GameResultData = {
+  player: Player;
+  questionCount: number;
+  correctAnswersCount: number;
 };

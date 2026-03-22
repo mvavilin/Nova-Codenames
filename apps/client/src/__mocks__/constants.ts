@@ -281,3 +281,62 @@ export const cards: Card[] = [
     selected: false,
   },
 ];
+
+import type { GameResultsModalProperties } from '@pages/GamePage/components/modals/GameResultsModal/GameResultsModal';
+
+export const gameResults: GameResultsModalProperties = {
+  winningTeam: Team.RED,
+  gameId: 'game_12345',
+  score: '5:3',
+  time: '12:34',
+
+  redTeamPlayers: [
+    {
+      player: {
+        avatarUrl: '/avatars/red1.png',
+        role: Role.SPYMASTER,
+        team: Team.RED,
+        id: 'u1',
+        username: 'Red Player 1',
+      },
+      questionCount: 10,
+      correctAnswersCount: 7,
+    },
+    {
+      player: {
+        avatarUrl: '/avatars/red2.png',
+        role: Role.OPERATIVE,
+        team: Team.RED,
+        id: 'u2',
+        username: 'Red Player 2',
+      },
+      questionCount: 8,
+      correctAnswersCount: 5,
+    },
+  ],
+
+  blueTeamPlayers: [
+    {
+      player: {
+        avatarUrl: '/avatars/blue1.png',
+        role: Role.SPYMASTER,
+        team: Team.BLUE,
+        id: 'u3',
+        username: 'Blue Player 1',
+      },
+      questionCount: 9,
+      correctAnswersCount: 4,
+    },
+    {
+      player: {
+        avatarUrl: '/avatars/blue2.png',
+        role: Role.OPERATIVE,
+        team: Team.BLUE,
+        id: 'u4',
+        username: 'Blue Player 2',
+      },
+      questionCount: 7,
+      correctAnswersCount: 3,
+    },
+  ],
+};

@@ -15,8 +15,8 @@ const THIS_CLASSES = {
   TIMER: `absolute top-4 right-4`,
   ANSWER: `bg-white rounded text-black p-2 text-justify`,
   RESULT_BUTTONS: `flex w-full gap-4 justify-between`,
-  PASS_BUTTON: `flex-1 bg-green-500 font-bold`,
-  FAIL_BUTTON: `flex-1 bg-red-500 font-bold`,
+  PASS_BUTTON: `flex-1 bg-green-500 hover:bg-green-700 font-bold`,
+  FAIL_BUTTON: `flex-1 bg-red-500 hover:bg-red-700 font-bold`,
 };
 
 type AnswerRatingModalProperties = {
