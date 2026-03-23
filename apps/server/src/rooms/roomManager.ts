@@ -149,4 +149,19 @@ export class RoomManager {
     if (room) return room.getRoomInfo();
     return;
   }
+
+  public chooseTeam(
+    player: Player
+  ): { roomInfo: RoomInfo; recipients: string[] } | { error: ErrorCode } {
+    const room = this.rooms.find((room) => room.getPlayerIds().includes(player.userId));
+
+    if (room) {
+      room.chooseTeam(player);
+      const roomInfo = room.getRoomInfo();
+      const recipients = room.getPlayerIds();
+      return { roomInfo, recipients };
+    }
+
+    return { error: 'ROOM_NOT_FOUND' };
+  }
 }

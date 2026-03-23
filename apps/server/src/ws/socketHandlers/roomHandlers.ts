@@ -17,6 +17,7 @@ export function setupRoomHandlers(
   setupRoomJoinEvent(socket);
   setupRoomLeaveEvent(socket);
   setupSendRoomInfoEvent(socket);
+  setupChooseTeam(socket);
 }
 
 function setupCreateRoomHandlers(
@@ -166,6 +167,34 @@ function setupSendRoomInfoEvent(
       } else {
         io.to(socketId).emit('error', { code: 'ROOM_NOT_FOUND' });
         logger.emit(userId, 'error', { code: 'ROOM_NOT_FOUND' });
+      }
+    }
+  });
+}
+
+function setupChooseTeam(
+  socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
+): void {
+  const userId = socket.data.userId;
+
+  socket.on('team:change', ({ player }) => {
+    logger.on(userId, 'team:change', { player });
+    if (userId !== player.userId) return;
+    const response = roomManager.chooseTeam(player);
+    if ('roomInfo' in response) {
+      const { roomInfo, recipients } = response;
+      for (const recipient of recipients) {
+        const socketId = socketIdMap.get(recipient);
+        if (socketId) {
+          io.to(socketId).emit('team:changed', { roomInfo });
+          logger.emit(userId, 'team:changed', { roomInfo });
+        }
+      }
+    } else {
+      const socketId = socketIdMap.get(userId);
+      if (socketId) {
+        io.to(socketId).emit('error', { code: response.error });
+        logger.emit(userId, 'error', { code: response.error });
       }
     }
   });

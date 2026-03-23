@@ -81,4 +81,22 @@ export class Room {
     this.bluePlayers = this.bluePlayers.filter((player) => player.userId !== userId);
     this.choosingPlayers = this.choosingPlayers.filter((player) => player.userId !== userId);
   }
+
+  public chooseTeam(player: Player): void {
+    this.removePlayer(player.userId);
+
+    switch (player.team) {
+      case 'red': {
+        this.redPlayers.push(player);
+        break;
+      }
+      case 'blue': {
+        this.bluePlayers.push(player);
+        break;
+      }
+      default: {
+        this.choosingPlayers.push(player);
+      }
+    }
+  }
 }
