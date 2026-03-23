@@ -46,6 +46,10 @@ class SocketClient extends BaseSocketClient {
       showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ERROR);
     }
   }
+
+  public onRoomChange(handler: (payload: { roomInfo: RoomInfo }) => void): void {
+    this.socket.on(ServerEventType.ROOM_CHANGE, handler);
+  }
 }
 
 const socketClient = new SocketClient(ServerUrl.DEPLOY_BASE);

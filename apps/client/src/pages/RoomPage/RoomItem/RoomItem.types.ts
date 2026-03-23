@@ -9,5 +9,5 @@ interface RoomPlayer {
   username: string;
   role: string;
   userId?: string;
-  command?: string;
+  team?: string;
 }

@@ -4,7 +4,7 @@ import { ClientEventType, ServerEventType } from '@repo/shared/src/socketEvents'
 
 import { socketClient } from '@SocketClientAPI';
 import { SOCKET_ERROR_MESSAGES } from '@SocketClientAPI/socket.constants';
-import { SocketActionTypes } from '@actions';
+import { RoomPageActionTypes, SocketActionTypes } from '@actions';
 import { URLS } from '@RouterAPI/router.constants';
 import { router } from '@router';
 
@@ -36,9 +36,18 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
     if (context.action.type === SocketActionTypes.SOCKET_CREATE_ROOM) {
       try {
         socketClient.onRoomCreated(({ roomPreview }) => {
-          router.navigate(URLS.ROOM(roomPreview.id));
-
           socketClient.off(ServerEventType.ROOM_CREATED);
+
+          socketClient.onRoomState(({ roomInfo }) => {
+            socketClient.off(ServerEventType.ROOM_STATE);
+
+            return context.next({
+              type: RoomPageActionTypes.SET_ROOM_DATA,
+              payload: { roomInfo },
+            });
+          });
+
+          router.navigate(URLS.ROOM(roomPreview.id));
         });
 
         const { name, maxPlayers } = context.action.payload;
@@ -67,11 +76,16 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
           socketClient.off(ServerEventType.ERROR);
         });
 
-        socketClient.onRoomState(() => {
-          router.navigate(URLS.ROOM(roomId));
-
+        socketClient.onRoomState(({ roomInfo }) => {
           socketClient.off(ServerEventType.ROOM_STATE);
+
+          return context.next({
+            type: RoomPageActionTypes.SET_ROOM_DATA,
+            payload: { roomInfo },
+          });
         });
+
+        router.navigate(URLS.ROOM(roomId));
 
         socketClient.emit(ClientEventType.ROOM_JOIN, { roomId });
       } catch (error) {

@@ -1,5 +1,5 @@
 import { ButtonComponent, ContainerComponent, TextComponent } from '@/api/ComponentsAPI';
-import type { RoomInfoProps } from './RoomInfo.types';
+import type { RoomInfoBlockProps } from './RoomInfoBlock.types';
 import { TranslationKeys } from '@/i18n/translationKeys';
 import { t } from '@/i18n';
 import type { State } from '@/store/types/state';
@@ -9,20 +9,20 @@ import { AppActionTypes } from '@/store/actions';
 
 const styles = {
   container:
-    'w-[70%] max-w-[512px] min-w-[350px] flex flex-wrap justify-center min-[1070px]:justify-between items-center gap-5 text-white text-2xl font-bold bg-white/25 px-6 py-4 rounded',
+    'w-[512px] max-[640px]:w-[350px] flex flex-wrap justify-center min-[640px]:justify-between items-center gap-5 text-white text-2xl font-bold bg-white/25 px-4 py-4 rounded',
   textContainerRow: 'w-full flex gap-2 items-center',
-  textContainerCol: 'flex flex-col self-center min-[1070px]:w-[50%]',
+  textContainerCol: 'flex flex-col self-center',
   span: 'text-brand truncate',
   button:
-    'w-34 h-14 shrink-0 bg-cyan-600 rounded-md text-base hover:cursor-pointer hover:bg-green-600 hover:transition-colors hover:duration-300',
+    'w-34 h-12 shrink-0 bg-cyan-600 rounded-md whitespace-normal leading-tight text-base hover:cursor-pointer hover:bg-green-600 hover:transition-colors hover:duration-300',
 };
 
-export default class RoomInfo extends ContainerComponent {
+export default class RoomInfoBlock extends ContainerComponent {
   private roomTitle: TextComponent;
   private playersTitle: TextComponent;
   private leaveButton: ButtonComponent;
 
-  constructor({ roomName, currentCount, totalCount }: RoomInfoProps) {
+  constructor({ roomName, currentCount, totalCount }: RoomInfoBlockProps) {
     super({ classes: styles.container });
 
     const textContainerColumn = new ContainerComponent({

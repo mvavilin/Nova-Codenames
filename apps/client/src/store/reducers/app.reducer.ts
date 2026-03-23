@@ -14,7 +14,6 @@ export default function appReducer(state: State, action: Action): State {
 
     case AppActionTypes.SWITCH_LANGUAGE: {
       const nextLanguage = state.language === Language.RU ? Language.EN : Language.RU;
-
       return {
         ...state,
         language: nextLanguage,

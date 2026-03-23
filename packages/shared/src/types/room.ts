@@ -16,14 +16,16 @@ export interface RoomPreview {
 export type Player = {
   userId: string;
   username: string;
-  command: string;
+  team: string;
   role: string;
-  // isReady: boolean;
 };
 
 export interface RoomInfo {
   id: string;
   name: string;
   maxPlayers: number;
-  players: Player[];
+  playerCount: number;
+  redPlayers: Player[];
+  bluePlayers: Player[];
+  choosingPlayers: Player[];
 }

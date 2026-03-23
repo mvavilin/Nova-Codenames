@@ -1,54 +1,68 @@
-export const choosingUsers = [
+import type { RoomInfo } from '@shared/types/room';
+
+const choosingPlayers = [
   {
     userId: '555',
     username: 'Ameli',
-    command: '',
+    team: '',
     role: '',
   },
   {
     userId: '666',
     username: 'Rino',
-    command: '',
+    team: '',
     role: '',
   },
   {
     userId: '777',
     username: 'Sydni',
-    command: '',
+    team: '',
     role: '',
   },
   {
     userId: '888',
     username: 'Alex',
-    command: '',
+    team: '',
     role: '',
   },
 ];
-export const red = [
+
+const red = [
   {
     userId: '111',
     username: 'Aliceeeee',
-    command: 'red',
+    team: 'red',
     role: 'spymaster',
   },
   {
     userId: '222',
     username: 'Sam',
-    command: 'red',
+    team: 'red',
     role: 'agent',
   },
 ];
-export const blue = [
+
+const blue = [
   {
     userId: '333',
     username: 'Nick',
-    command: 'blue',
+    team: 'blue',
     role: 'agent',
   },
   {
     userId: '444',
     username: 'Mila',
-    command: 'blue',
+    team: 'blue',
     role: 'agent',
   },
 ];
+
+export const mockCurrentRoom: RoomInfo = {
+  id: '111',
+  name: 'js-room-123',
+  maxPlayers: 8,
+  playerCount: 8,
+  redPlayers: red,
+  bluePlayers: blue,
+  choosingPlayers: choosingPlayers,
+};

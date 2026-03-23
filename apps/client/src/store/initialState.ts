@@ -1,9 +1,10 @@
+import { mockCurrentRoom } from '@/pages/RoomPage/roomMockData';
 import type { State } from '@State';
 import { Language } from '@types';
 
 export const initialState: State = {
-  id: null,
-  username: null,
+  id: '111',
+  username: 'Alice',
   email: null,
   authStatus: false,
   language: Language.RU,
@@ -24,4 +25,5 @@ export const initialState: State = {
   },
   profile: { fields: {}, isFormValid: false },
   rooms: [],
+  currentRoom: mockCurrentRoom,
 };

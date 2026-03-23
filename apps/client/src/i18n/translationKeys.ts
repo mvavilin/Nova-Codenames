@@ -74,7 +74,7 @@ export const TranslationKeys = {
   ROOM_AGENT: 'RoomAgent',
   ROOM_SPYMASTER_BTN: 'RoomSpymasterBtn',
   ROOM_AGENT_BTN: 'RoomAgentBtn',
-  ROOM_LEAVE_COMM_BTN: 'RoomLeaveCommBtn',
+  ROOM_LEAVE_TEAM_BTN: 'RoomLeaveTeamBtn',
   ROOM_PLAYERS_CHOOSING: 'RoomPlayersChoosing',
 } as const;
 

@@ -1,6 +1,6 @@
 import type { ContainerComponentProperties } from '@/api/ComponentsAPI';
 
-export interface RoomInfoProps extends ContainerComponentProperties {
+export interface RoomInfoBlockProps extends ContainerComponentProperties {
   roomName: string;
   currentCount: number;
   totalCount: number;
