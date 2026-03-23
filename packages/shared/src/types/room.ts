@@ -31,5 +31,5 @@ export interface RoomInfo {
   playerCount: number;
   redPlayers: Player[];
   bluePlayers: Player[];
-  choosingPlayer: Player[];
+  choosingPlayers: Player[];
 }
