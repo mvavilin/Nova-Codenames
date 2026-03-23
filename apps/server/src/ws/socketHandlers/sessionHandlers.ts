@@ -87,13 +87,13 @@ function setupDisconnect(
         }
 
         const response = roomManager.leaveRoom(userId);
-        if ('payload' in response) {
-          const { payload, lobbyRecipients } = response;
+        if ('roomPreviews' in response) {
+          const { roomPreview, lobbyRecipients } = response;
           for (const recipient of lobbyRecipients) {
             const socketId = socketIdMap.get(recipient);
             if (socketId) {
-              io.to(socketId).emit('room:update-review', { roomPreview: payload });
-              logger.emit(recipient, 'room:update-review', { roomPreview: payload });
+              io.to(socketId).emit('room:update-review', { roomPreview });
+              logger.emit(recipient, 'room:update-review', { roomPreview });
             }
           }
           roomManager.removePlayerFromLobby(userId);

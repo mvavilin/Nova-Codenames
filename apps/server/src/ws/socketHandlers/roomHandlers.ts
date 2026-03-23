@@ -83,26 +83,26 @@ function setupRoomJoinEvent(
         logger.emit(userId, 'error', { code: response.error });
       }
     } else {
-      const { payload, player, lobbyRecipients, roomRecipients } = response;
+      const { roomInfo, roomPreview, lobbyRecipients, roomRecipients } = response;
       const socketId = socketIdMap.get(userId);
       if (socketId) {
-        io.to(socketId).emit('room:state', { roomInfo: payload.getRoomInfo() });
-        logger.emit(userId, 'room:state', { roomInfo: payload.getRoomInfo() });
+        io.to(socketId).emit('room:state', { roomInfo });
+        logger.emit(userId, 'room:state', { roomInfo });
       }
 
       for (const recipient of lobbyRecipients) {
         const socketId = socketIdMap.get(recipient);
         if (socketId) {
-          io.to(socketId).emit('room:update-review', { roomPreview: payload.getRoomPreview() });
-          logger.emit(recipient, 'room:update-review', { roomPreview: payload.getRoomPreview() });
+          io.to(socketId).emit('room:update-review', { roomPreview });
+          logger.emit(recipient, 'room:update-review', { roomPreview });
         }
       }
 
       for (const recipient of roomRecipients) {
         const socketId = socketIdMap.get(recipient);
         if (socketId) {
-          io.to(socketId).emit('room:player-joined', { player });
-          logger.emit(recipient, 'room:player-joined', { player });
+          io.to(socketId).emit('room:player-joined', { roomInfo });
+          logger.emit(recipient, 'room:player-joined', { roomInfo });
         }
       }
     }
@@ -123,10 +123,9 @@ function setupRoomLeaveEvent(
         logger.emit(userId, 'error', { code: response.error });
       }
     } else {
-      const { payload, player, lobbyRecipients, roomRecipients } = response;
+      const { roomPreviews, roomPreview, roomInfo, lobbyRecipients, roomRecipients } = response;
 
       const socketId = socketIdMap.get(userId);
-      const roomPreviews = roomManager.getRoomPreviews();
       if (socketId && roomPreviews) {
         io.to(socketId).emit('room:send-list', { roomPreviews });
         logger.emit(userId, 'room:send-list', { roomPreviews });
@@ -135,16 +134,16 @@ function setupRoomLeaveEvent(
       for (const recipient of lobbyRecipients) {
         const socketId = socketIdMap.get(recipient);
         if (socketId) {
-          io.to(socketId).emit('room:update-review', { roomPreview: payload });
-          logger.emit(recipient, 'room:update-review', { roomPreview: payload });
+          io.to(socketId).emit('room:update-review', { roomPreview });
+          logger.emit(recipient, 'room:update-review', { roomPreview });
         }
       }
 
       for (const recipient of roomRecipients) {
         const socketId = socketIdMap.get(recipient);
         if (socketId) {
-          io.to(socketId).emit('room:player-left', { player });
-          logger.emit(recipient, 'room:player-left', { player });
+          io.to(socketId).emit('room:player-left', { roomInfo });
+          logger.emit(recipient, 'room:player-left', { roomInfo });
         }
       }
     }
