@@ -150,16 +150,13 @@ export class RoomManager {
     return;
   }
 
-  public chooseTeam(
-    player: Player
-  ): { roomInfo: RoomInfo; recipients: string[] } | { error: ErrorCode } {
+  public chooseTeam(player: Player): { room: Room; recipients: string[] } | { error: ErrorCode } {
     const room = this.rooms.find((room) => room.getPlayerIds().includes(player.userId));
 
     if (room) {
       room.chooseTeam(player);
-      const roomInfo = room.getRoomInfo();
       const recipients = room.getPlayerIds();
-      return { roomInfo, recipients };
+      return { room, recipients };
     }
 
     return { error: 'ROOM_NOT_FOUND' };

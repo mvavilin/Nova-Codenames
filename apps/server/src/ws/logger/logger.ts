@@ -8,14 +8,16 @@ class Logger {
     this.isShow = (process.env.SHOW_LOG || '') === VALUE_OF_KEY_FOR_SHOW_LOG;
   }
 
-  public emit<T extends keyof LogEmit>(recipient: string, event: T, payload: LogEmit[T]): void {
+  public emit<T extends keyof LogEmit>(recipient: string, event: T, payload?: LogEmit[T]): void {
     if (this.isShow) {
       if (event === 'error') {
         console.log(colors.red(event), colors.green('TO:'), recipient);
       } else {
         console.log(colors.yellow(event), colors.green('TO:'), recipient);
       }
-      console.log('payload:', payload);
+      if (payload) {
+        console.log('payload:', payload);
+      }
     }
   }
 

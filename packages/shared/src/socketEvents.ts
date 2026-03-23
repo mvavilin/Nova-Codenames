@@ -53,7 +53,7 @@ export type ServerEvent =
   | { type: 'room:player-joined'; payload: { roomInfo: RoomInfo } }
   | { type: 'room:player-left'; payload: { roomInfo: RoomInfo } }
   | { type: 'team:changed'; payload: { roomInfo: RoomInfo } }
-  | { type: 'game:start-timer'; payload: { count: number } }
+  | { type: 'game:start-timer'; payload: { time: number } }
   | { type: 'game:start' }
   | { type: 'error'; payload: { code: ErrorCode } };
 

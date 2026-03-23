@@ -3,7 +3,7 @@ import type {
   ClientToServerEvents,
   ServerToClientEvents,
 } from '../../../../../packages/shared/src/socketEvents.ts';
-import type { SocketData } from '../../types/types.ts';
+import { SECOND_COUNT_BEFORE_START_GAME, type SocketData } from '../../types/types.ts';
 import { roomManager, socketIdMap } from './sessionHandlers.ts';
 import { io } from '../../app.ts';
 import { logger } from '../logger/logger.ts';
@@ -181,14 +181,18 @@ function setupChooseTeam(
     logger.on(userId, 'team:change', { player });
     if (userId !== player.userId) return;
     const response = roomManager.chooseTeam(player);
-    if ('roomInfo' in response) {
-      const { roomInfo, recipients } = response;
+    if ('room' in response) {
+      const { room, recipients } = response;
       for (const recipient of recipients) {
         const socketId = socketIdMap.get(recipient);
         if (socketId) {
+          const roomInfo = room.getRoomInfo();
           io.to(socketId).emit('team:changed', { roomInfo });
-          logger.emit(userId, 'team:changed', { roomInfo });
+          logger.emit(recipient, 'team:changed', { roomInfo });
         }
+      }
+      if (room.isCompletedTeams()) {
+        startGameTimer(recipients);
       }
     } else {
       const socketId = socketIdMap.get(userId);
@@ -198,4 +202,25 @@ function setupChooseTeam(
       }
     }
   });
+}
+
+function startGameTimer(recipients: string[]): void {
+  let time = SECOND_COUNT_BEFORE_START_GAME;
+
+  const interval = setInterval(() => {
+    for (const recipient of recipients) {
+      const socketId = socketIdMap.get(recipient);
+      if (socketId) {
+        if (time > 0) {
+          io.to(socketId).emit('game:start-timer', { time });
+          logger.emit(recipient, 'game:start-timer', { time });
+        } else {
+          io.to(socketId).emit('game:start');
+          logger.emit(recipient, 'game:start');
+          clearInterval(interval);
+        }
+      }
+    }
+    time--;
+  }, 10_000);
 }

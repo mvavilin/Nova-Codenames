@@ -99,4 +99,8 @@ export class Room {
       }
     }
   }
+
+  public isCompletedTeams(): boolean {
+    return this.redPlayers.length + this.bluePlayers.length >= this.maxPlayers;
+  }
 }
