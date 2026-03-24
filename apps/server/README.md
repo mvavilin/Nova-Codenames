@@ -623,27 +623,26 @@ The main disadvantage is that socket.io requires an authentication token during 
   - **Change the player's team and role**
 
     <details>
-
     - Request to server
-  
+
     ```
       { type: 'team:change'; payload: { player: Player }
     ```
 
     - Response to all users in room
-   
+
     ```
       { type: 'team:changed'; payload: { roomInfo: RoomInfo } }
     ```
- 
+
     - If commands and roles are assigned, a timer starts. A message is sent to all users in the room every second
-   
+
     ```
       { type: 'game:start-timer'; payload: { time: number } }
     ```
- 
+
     - When the timer expires (15 seconds), a message will be sent to all users in the room
-   
+
     ```
       { type: 'game:start' }
     ```
@@ -706,7 +705,7 @@ The main disadvantage is that socket.io requires an authentication token during 
   ```
 
   - Role types
- 
+
   ```
     export type Roles = 'spymaster' | 'agent' | 'choosing';
   ```

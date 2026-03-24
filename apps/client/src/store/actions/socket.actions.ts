@@ -1,4 +1,4 @@
-import type { RoomSettings } from '@repo/shared/src/types/room';
+import type { RoomInfo, RoomSettings } from '@repo/shared/src/types/room';
 
 export enum SocketActionTypes {
   SOCKET_REQUEST_SESSION_TOKEN = 'SOCKET/REQUEST_SESSION_TOKEN',
@@ -6,6 +6,8 @@ export enum SocketActionTypes {
   SOCKET_CREATE_ROOM = 'SOCKET/CREATE_ROOM',
   SOCKET_REQUEST_ROOM_LIST = 'SOCKET/REQUEST_ROOM_LIST',
   SOCKET_JOIN_ROOM = 'SOCKET/JOIN_ROOM',
+  ROOM_ASK_ROOM_INFO = 'SOCKET/ROOM_ASK_ROOM_INFO',
+  ROOM_STATE = 'SOCKET/ROOM_STATE',
 }
 
 type SocketRequestSessionToken = {
@@ -17,6 +19,7 @@ type SocketAuthFailed = {
   type: SocketActionTypes.SOCKET_AUTH_FAILED;
   payload: { error: unknown };
 };
+
 type SocketCreateRoom = {
   type: SocketActionTypes.SOCKET_CREATE_ROOM;
   payload: RoomSettings;
@@ -31,9 +34,20 @@ type SocketJoinRoom = {
   payload: { roomId: string };
 };
 
+type SocketRoomAskRoomInfo = {
+  type: SocketActionTypes.ROOM_ASK_ROOM_INFO;
+};
+
+type SocketRoomState = {
+  type: SocketActionTypes.ROOM_STATE;
+  payload: { roomInfo: RoomInfo };
+};
+
 export type SocketActions =
   | SocketRequestSessionToken
   | SocketAuthFailed
   | SocketCreateRoom
   | SocketRequestRoomList
-  | SocketJoinRoom;
+  | SocketJoinRoom
+  | SocketRoomState
+  | SocketRoomAskRoomInfo;
