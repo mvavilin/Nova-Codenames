@@ -1,4 +1,4 @@
-import type { Player, RoomInfo, RoomPreview } from '@repo/shared/src/types/room';
+import type { RoomInfo, RoomPreview } from '@repo/shared/src/types/room';
 import { ServerEventType, type ErrorCode } from '@repo/shared/src/socketEvents';
 import { ServerUrl } from '@repo/shared/src/api.constants';
 
@@ -23,11 +23,11 @@ class SocketClient extends BaseSocketClient {
     this.socket.on(ServerEventType.ROOM_STATE, handler);
   }
 
-  public onPlayerJoined(handler: (payload: { player: Player }) => void): void {
+  public onPlayerJoined(handler: (payload: { roomInfo: RoomInfo }) => void): void {
     this.socket.on(ServerEventType.ROOM_PLAYER_JOINED, handler);
   }
 
-  public onPlayerLeft(handler: (payload: { player: Player }) => void): void {
+  public onPlayerLeft(handler: (payload: { roomInfo: RoomInfo }) => void): void {
     this.socket.on(ServerEventType.ROOM_PLAYER_LEFT, handler);
   }
 

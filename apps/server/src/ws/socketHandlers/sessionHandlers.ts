@@ -9,7 +9,7 @@ import { setupRoomHandlers } from './roomHandlers.ts';
 import { io } from '../../app.ts';
 import { logger } from '../logger/logger.ts';
 
-const timerMap = new Map<string, NodeJS.Timeout>();
+const reconnectTimerMap = new Map<string, NodeJS.Timeout>();
 export const roomManager = new RoomManager();
 export const socketIdMap = new Map<string, string>();
 
@@ -44,8 +44,8 @@ export function setupConnection(): void {
             logger.emit(recipient, 'session:player-connected', { player });
           }
         }
-        clearTimeout(timerMap.get(userId));
-        timerMap.delete(userId);
+        clearTimeout(reconnectTimerMap.get(userId));
+        reconnectTimerMap.delete(userId);
         logger.info('connect:', userId);
       }
 
@@ -75,7 +75,7 @@ function setupDisconnect(
       }
     }
 
-    timerMap.set(
+    reconnectTimerMap.set(
       userId,
       setTimeout(() => {
         for (const recipient of recipients) {
@@ -87,18 +87,18 @@ function setupDisconnect(
         }
 
         const response = roomManager.leaveRoom(userId);
-        if ('payload' in response) {
-          const { payload, lobbyRecipients } = response;
+        if ('roomPreviews' in response) {
+          const { roomPreview, lobbyRecipients } = response;
           for (const recipient of lobbyRecipients) {
             const socketId = socketIdMap.get(recipient);
             if (socketId) {
-              io.to(socketId).emit('room:update-review', { roomPreview: payload });
-              logger.emit(recipient, 'room:update-review', { roomPreview: payload });
+              io.to(socketId).emit('room:update-review', { roomPreview });
+              logger.emit(recipient, 'room:update-review', { roomPreview });
             }
           }
           roomManager.removePlayerFromLobby(userId);
         }
-        timerMap.delete(userId);
+        reconnectTimerMap.delete(userId);
       }, RECONNECT_MAX_TIME)
     );
   });

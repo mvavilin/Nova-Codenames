@@ -36,7 +36,8 @@ export type ClientEvent =
   | { type: 'room:join'; payload: { roomId: string } }
   | { type: 'room:leave' }
   | { type: 'room:ask-room-info' }
-  | { type: 'session:ask-status' };
+  | { type: 'session:ask-status' }
+  | { type: 'team:change'; payload: { player: Player } };
 
 export type ServerEvent =
   | { type: 'session:token'; payload: { sessionToken: string } }
@@ -49,8 +50,11 @@ export type ServerEvent =
   | { type: 'room:created'; payload: { roomPreview: RoomPreview } }
   | { type: 'room:state'; payload: { roomInfo: RoomInfo } }
   | { type: 'room:update-review'; payload: { roomPreview: RoomPreview } }
-  | { type: 'room:player-joined'; payload: { player: Player } }
-  | { type: 'room:player-left'; payload: { player: Player } }
+  | { type: 'room:player-joined'; payload: { roomInfo: RoomInfo } }
+  | { type: 'room:player-left'; payload: { roomInfo: RoomInfo } }
+  | { type: 'team:changed'; payload: { roomInfo: RoomInfo } }
+  | { type: 'game:start-timer'; payload: { time: number } }
+  | { type: 'game:start' }
   | { type: 'error'; payload: { code: ErrorCode } };
 
 export type ErrorCode =
