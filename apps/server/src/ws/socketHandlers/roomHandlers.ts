@@ -179,7 +179,7 @@ function setupChooseTeam(
 
   socket.on('team:change', ({ player }) => {
     logger.on(userId, 'team:change', { player });
-    if (userId !== player.userId) return;
+    if (userId !== player.id) return;
     const response = roomManager.chooseTeam(player);
     if ('room' in response) {
       const { room, recipients } = response;

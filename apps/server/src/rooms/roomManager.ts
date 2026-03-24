@@ -12,7 +12,7 @@ export class RoomManager {
   private rooms: Room[] = [];
 
   public addPlayerToLobby(newPlayer: Player): Player {
-    const player = this.lobby.find((item) => item.userId === newPlayer.userId);
+    const player = this.lobby.find((item) => item.id === newPlayer.id);
     if (!player) {
       this.lobby.push(newPlayer);
       return newPlayer;
@@ -22,15 +22,15 @@ export class RoomManager {
   }
 
   public removePlayerFromLobby(userId: string): void {
-    this.lobby = this.lobby.filter((player) => player.userId !== userId);
+    this.lobby = this.lobby.filter((player) => player.id !== userId);
   }
 
   private getLobbyIds(): string[] {
-    return this.lobby.map((player) => player.userId);
+    return this.lobby.map((player) => player.id);
   }
 
   private getPlayer(userId: string): Player | undefined {
-    return this.lobby.find((player) => player.userId === userId);
+    return this.lobby.find((player) => player.id === userId);
   }
 
   public createRoom(settings: RoomSettings): {
@@ -41,7 +41,7 @@ export class RoomManager {
     this.rooms.push(room);
 
     const roomPreview = room.getRoomPreview();
-    const recipients = this.lobby.map((player) => player.userId);
+    const recipients = this.lobby.map((player) => player.id);
     return { payload: roomPreview, recipients };
   }
 
@@ -70,7 +70,7 @@ export class RoomManager {
 
     if (room.isFull()) return { error: 'ROOM_FULL' };
 
-    const newPlayer = this.lobby.find((player) => player.userId === userId);
+    const newPlayer = this.lobby.find((player) => player.id === userId);
     if (newPlayer) {
       const roomRecipients = room.getPlayerIds();
       room.addPlayer(newPlayer);
@@ -140,7 +140,7 @@ export class RoomManager {
 
     const player =
       this.getPlayer(userId) ||
-      this.addPlayerToLobby({ userId, username, team: 'choosing', role: 'choosing' });
+      this.addPlayerToLobby({ id: userId, username, team: 'choosing', role: 'choosing' });
     return { userStatus: 'IN_LOBBY', player, recipients: [] };
   }
 
@@ -151,7 +151,7 @@ export class RoomManager {
   }
 
   public chooseTeam(player: Player): { room: Room; recipients: string[] } | { error: ErrorCode } {
-    const room = this.rooms.find((room) => room.getPlayerIds().includes(player.userId));
+    const room = this.rooms.find((room) => room.getPlayerIds().includes(player.id));
 
     if (room) {
       room.chooseTeam(player);

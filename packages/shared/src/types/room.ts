@@ -18,7 +18,7 @@ export type Teams = 'red' | 'blue' | 'choosing';
 export type Roles = 'spymaster' | 'agent' | 'choosing';
 
 export type Player = {
-  userId: string;
+  id: string;
   username: string;
   team: Teams;
   role: Roles;
