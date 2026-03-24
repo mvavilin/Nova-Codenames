@@ -6,7 +6,9 @@ import { NotFoundPage } from '@pages';
 export default class Router {
   private app: App;
   private routes = ROUTES;
+  // chore: remove in production
   // private lastAllowedPath = URLS.LOBBY();
+  // private lastAllowedPath = URLS.GAME('27626bdf-f197-4c9d-8dd5-0cd1426f1f71');
   private lastAllowedPath = URLS.WELCOME();
 
   constructor(app: App) {
@@ -15,10 +17,11 @@ export default class Router {
 
   public init(): void {
     globalThis.addEventListener('popstate', () => this.render());
-    this.render();
+    globalThis.addEventListener('load', () => this.render());
+    // this.render();
   }
 
-  private render(): void {
+  public render(): void {
     const children = this.app.children;
     for (const child of children) child.destroy();
 
@@ -40,7 +43,7 @@ export default class Router {
     this.app.setChildren(new route.page());
   }
 
-  public navigate(path: string): void {
+  public navigate(path: string = URLS.WELCOME()): void {
     if (globalThis.location.pathname === path) return;
 
     globalThis.history.pushState({}, '', path);

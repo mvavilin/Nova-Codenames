@@ -1,6 +1,6 @@
 import type { Middleware } from '@StateAPI';
 import type { AppActions } from '@AppActions';
-import { ClientEventType, ServerEventType } from '@repo/shared/src/socketEvents';
+import { ClientEventType, ServerEventType, UserStatusType } from '@repo/shared/src/socketEvents';
 
 import { socketClient } from '@SocketClientAPI';
 import { SOCKET_ERROR_MESSAGES } from '@SocketClientAPI/socket.constants';
@@ -10,6 +10,9 @@ import { router } from '@router';
 
 import TOKENS from '@constants/tokens';
 import { saveSessionStorageData, showErrorToast } from '@utils';
+import store from '@store';
+import { Toast } from '@components';
+import MessageType from '@constants/messageType';
 
 export default function socketFetcher<State>(): Middleware<State, AppActions> {
   return function middleware(context) {
@@ -21,7 +24,26 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
 
         socketClient.onSessionToken(({ sessionToken }) => {
           saveSessionStorageData(TOKENS.SESSION, sessionToken);
-          router.navigate(URLS.LOBBY());
+
+          socketClient.off(ServerEventType.SESSION_TOKEN);
+        });
+
+        socketClient.onSessionConnect(({ userStatus }) => {
+          if (userStatus === UserStatusType.IN_LOBBY) router.navigate(URLS.LOBBY());
+          if (userStatus === UserStatusType.IN_ROOM)
+            store.dispatch({
+              type: SocketActionTypes.ROOM_ASK_ROOM_INFO,
+            });
+
+          // if (userStatus === UserStatusType.IN_GAME) {
+
+          // }
+
+          socketClient.off(ServerEventType.SESSION_TOKEN);
+        });
+
+        socketClient.onError(({ code }) => {
+          showErrorToast(code, SOCKET_ERROR_MESSAGES.GENERAL_ERROR);
 
           socketClient.off(ServerEventType.SESSION_TOKEN);
         });
@@ -66,6 +88,7 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
       }
     }
 
+    // точка входа в комнату
     if (context.action.type === SocketActionTypes.SOCKET_JOIN_ROOM) {
       try {
         const { roomId } = context.action.payload;
@@ -86,8 +109,64 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
         });
 
         router.navigate(URLS.ROOM(roomId));
+        socketClient.onSessionPlayerConnected(({ player }) => {
+          new Toast({
+            type: MessageType.INFO,
+            message: `Пользователь ${player.username} присоединился к комнате`,
+          });
+        });
+
+        socketClient.onSessionPlayerDisconnected(({ player }) => {
+          new Toast({
+            type: MessageType.WARNING,
+            message: `Пользователь ${player.username} покинул комнату`,
+          });
+        });
+
+        socketClient.onSessionPlayerExit(({ player }) => {
+          new Toast({
+            type: MessageType.ERROR,
+            message: `Пользователь ${player.username} вышел из системы`,
+          });
+        });
 
         socketClient.emit(ClientEventType.ROOM_JOIN, { roomId });
+      } catch (error) {
+        showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ERROR);
+      }
+    }
+
+    // точка реконнекта пользователя, включающая запрос информации о комнате и навигацию в нее
+    if (context.action.type === SocketActionTypes.ROOM_ASK_ROOM_INFO) {
+      try {
+        socketClient.onRoomState(({ roomInfo }) => {
+          router.navigate(URLS.ROOM(roomInfo.id));
+
+          socketClient.off(ServerEventType.ROOM_STATE);
+        });
+
+        socketClient.onSessionPlayerConnected(({ player }) => {
+          new Toast({
+            type: MessageType.INFO,
+            message: `Пользователь ${player.username} переподключился к комнате`,
+          });
+        });
+
+        socketClient.onSessionPlayerDisconnected(({ player }) => {
+          new Toast({
+            type: MessageType.WARNING,
+            message: `Пользователь ${player.username} покинул комнату`,
+          });
+        });
+
+        socketClient.onSessionPlayerExit(({ player }) => {
+          new Toast({
+            type: MessageType.ERROR,
+            message: `Пользователь ${player.username} вышел из системы`,
+          });
+        });
+
+        socketClient.emit(ClientEventType.ROOM_ASK_ROOM_INFO);
       } catch (error) {
         showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ERROR);
       }

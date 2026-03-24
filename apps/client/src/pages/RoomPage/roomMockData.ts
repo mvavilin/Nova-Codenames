@@ -2,25 +2,25 @@ import type { Player, RoomInfo } from '@shared/types/room';
 
 const choosingPlayers: Player[] = [
   {
-    userId: '555',
+    id: '555',
     username: 'Ameli',
     team: 'choosing',
     role: 'choosing',
   },
   {
-    userId: '666',
+    id: '666',
     username: 'Rino',
     team: 'choosing',
     role: 'choosing',
   },
   {
-    userId: '777',
+    id: '777',
     username: 'Sydni',
     team: 'choosing',
     role: 'choosing',
   },
   {
-    userId: '888',
+    id: '888',
     username: 'Alex',
     team: 'choosing',
     role: 'choosing',
@@ -29,13 +29,13 @@ const choosingPlayers: Player[] = [
 
 const red: Player[] = [
   {
-    userId: '111',
+    id: '111',
     username: 'Aliceeeee',
     team: 'red',
     role: 'spymaster',
   },
   {
-    userId: '222',
+    id: '222',
     username: 'Sam',
     team: 'red',
     role: 'agent',
@@ -44,13 +44,13 @@ const red: Player[] = [
 
 const blue: Player[] = [
   {
-    userId: '333',
+    id: '333',
     username: 'Nick',
     team: 'blue',
     role: 'agent',
   },
   {
-    userId: '444',
+    id: '444',
     username: 'Mila',
     team: 'blue',
     role: 'agent',

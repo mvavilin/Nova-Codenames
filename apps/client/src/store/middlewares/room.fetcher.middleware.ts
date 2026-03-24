@@ -54,7 +54,7 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
           socketClient.off(ServerEventType.ERROR);
         });
 
-        socketClient.emit(ClientEventType.LEAVE_ROOM);
+        socketClient.emit(ClientEventType.ROOM_LEAVE);
       } catch (error) {
         showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ERROR);
       }

@@ -5,24 +5,30 @@ export enum ClientEventType {
   ROOM_ASK_LIST = 'room:ask-list',
   ROOM_SEARCH = 'room:search',
   ROOM_JOIN = 'room:join',
-  LEAVE_ROOM = 'room:leave',
+  ROOM_LEAVE = 'room:leave',
+  ROOM_ASK_ROOM_INFO = 'room:ask-room-info',
+  SESSION_PLAYER_EXIT = 'session:player-exit',
   TEAM_CHANGE = 'team:change',
 }
 
 export enum ServerEventType {
   SESSION_TOKEN = 'session:token',
+  SESSION_CONNECT = 'session:connect',
+  SESSION_PLAYER_CONNECTED = 'session:player-connected',
+  SESSION_PLAYER_DISCONNECTED = 'session:player-disconnected',
+  SESSION_PLAYER_EXIT = 'session:player-exit',
   ROOM_SEND_LIST = 'room:send-list',
   ROOM_CREATED = 'room:created',
   ROOM_STATE = 'room:state',
   ROOM_UPDATE_PREVIEW = 'room:update-review',
   ROOM_PLAYER_JOINED = 'room:player-joined',
   ROOM_PLAYER_LEFT = 'room:player-left',
+  TEAM_CHANGED = 'team:changed',
+  GAME_START_TIMER = 'game:start-timer',
+  GAME_START = 'game:start',
   ERROR = 'error',
   CONNECT_ERROR = 'connect_error',
   CONNECT = 'connect',
-  TEAM_CHANGED = 'team:changed',
-  START_TIMER_GAME = 'start:timer-game',
-  START_GAME = 'start:game',
 }
 
 export enum SocketErrorCode {
@@ -31,9 +37,15 @@ export enum SocketErrorCode {
   INVALID_ACTION = 'INVALID_ACTION',
 }
 
+export enum UserStatusType {
+  IN_LOBBY = 'IN_LOBBY',
+  IN_ROOM = 'IN_ROOM',
+  IN_GAME = 'IN_GAME',
+}
+
 export type UserStatus = 'IN_LOBBY' | 'IN_ROOM' | 'IN_GAME';
 
-type ClientEvent =
+export type ClientEvent =
   | { type: 'room:create'; payload: { settings: RoomSettings } }
   | { type: 'room:ask-list' }
   | { type: 'room:search'; payload: { name: string | undefined } }
@@ -43,7 +55,7 @@ type ClientEvent =
   | { type: 'session:ask-status' }
   | { type: 'team:change'; payload: { player: Player } };
 
-type ServerEvent =
+export type ServerEvent =
   | { type: 'session:token'; payload: { sessionToken: string } }
   | { type: 'session:connect'; payload: { userStatus: UserStatus } }
   | { type: 'session:player-connected'; payload: { player: Player } }
@@ -57,7 +69,7 @@ type ServerEvent =
   | { type: 'room:player-joined'; payload: { roomInfo: RoomInfo } }
   | { type: 'room:player-left'; payload: { roomInfo: RoomInfo } }
   | { type: 'team:changed'; payload: { roomInfo: RoomInfo } }
-  | { type: 'game:start-timer'; payload: { count: number } }
+  | { type: 'game:start-timer'; payload: { time: number } }
   | { type: 'game:start' }
   | { type: 'error'; payload: { code: ErrorCode } };
 

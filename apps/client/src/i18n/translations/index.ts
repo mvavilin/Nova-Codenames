@@ -7,6 +7,7 @@ import loginPageLanguage from './loginPage';
 import gameRules from './gameRules';
 import appLanguage from './app';
 import roomPageLanguage from './roomPage';
+import aboutUs from './aboutUs';
 
 export const translations: Record<Language, Record<TranslationKey, string>> = {
   [Language.EN]: {
@@ -17,6 +18,7 @@ export const translations: Record<Language, Record<TranslationKey, string>> = {
     ...loginPageLanguage[Language.EN],
     ...gameRules[Language.EN],
     ...roomPageLanguage[Language.EN],
+    ...aboutUs[Language.EN],
   },
   [Language.RU]: {
     ...appLanguage[Language.RU],
@@ -26,5 +28,6 @@ export const translations: Record<Language, Record<TranslationKey, string>> = {
     ...loginPageLanguage[Language.RU],
     ...gameRules[Language.RU],
     ...roomPageLanguage[Language.RU],
+    ...aboutUs[Language.RU],
   },
 };

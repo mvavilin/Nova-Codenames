@@ -75,7 +75,7 @@ export default class RoomTeamButtons extends ContainerComponent {
     const currentPlayers = this.teamName === 'red' ? room.redPlayers : room.bluePlayers;
 
     const allPlayers = [...room.redPlayers, ...room.bluePlayers, ...room.choosingPlayers];
-    const me = allPlayers.find((player) => player.userId === myId);
+    const me = allPlayers.find((player) => player.id === myId);
 
     const myTeam = me ? me.team : null;
     this.update(myTeam, this.teamName, currentPlayers);
@@ -95,7 +95,7 @@ export default class RoomTeamButtons extends ContainerComponent {
     if (!this.userId || !this.userName) return;
 
     const player: Player = {
-      userId: this.userId,
+      id: this.userId,
       username: this.userName,
       team: teamName,
       role: 'spymaster',
@@ -111,7 +111,7 @@ export default class RoomTeamButtons extends ContainerComponent {
     if (!this.userId || !this.userName) return;
 
     const player: Player = {
-      userId: this.userId,
+      id: this.userId,
       username: this.userName,
       team: teamName,
       role: 'agent',
@@ -127,7 +127,7 @@ export default class RoomTeamButtons extends ContainerComponent {
     if (!this.userId || !this.userName) return;
 
     const player: Player = {
-      userId: this.userId,
+      id: this.userId,
       username: this.userName,
       team: teamName,
       role: 'choosing',

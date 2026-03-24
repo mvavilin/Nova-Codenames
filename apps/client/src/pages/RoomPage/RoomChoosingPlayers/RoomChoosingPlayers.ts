@@ -39,7 +39,7 @@ export default class RoomChoosingPlayers extends ContainerComponent {
     for (const player of players) {
       const item = new RoomUser({
         username: player.username,
-        userId: player.userId,
+        userId: player.id,
       });
       this.usersList.push(item);
     }

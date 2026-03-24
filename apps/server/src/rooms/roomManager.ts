@@ -45,20 +45,25 @@ export class RoomManager {
     return { payload: roomPreview, recipients };
   }
 
-  public getRoomPreviews(name?: string): { payload: RoomPreview[] } {
+  public getRoomPreviews(name?: string): RoomPreview[] {
     let roomPreviews = this.rooms.map((room) => room.getRoomPreview());
     if (name) {
       const regExp = new RegExp(name, 'i');
       roomPreviews = roomPreviews.filter((preview) => regExp.test(preview.name));
     }
-    return { payload: roomPreviews };
+    return roomPreviews;
   }
 
   public joinToRoom(
     userId: string,
     roomId: string
   ):
-    | { payload: Room; player: Player; lobbyRecipients: string[]; roomRecipients: string[] }
+    | {
+        roomInfo: RoomInfo;
+        roomPreview: RoomPreview;
+        lobbyRecipients: string[];
+        roomRecipients: string[];
+      }
     | { error: ErrorCode } {
     const room = this.rooms.find((room) => room.getId() === roomId);
     if (!room) return { error: 'ROOM_NOT_FOUND' };
@@ -72,7 +77,12 @@ export class RoomManager {
       this.removePlayerFromLobby(userId);
       const lobbyRecipients = this.getLobbyIds();
 
-      return { payload: room, player: newPlayer, lobbyRecipients, roomRecipients };
+      return {
+        roomInfo: room.getRoomInfo(),
+        roomPreview: room.getRoomPreview(),
+        lobbyRecipients,
+        roomRecipients,
+      };
     }
 
     return { error: 'INVALID_ACTION' };
@@ -80,8 +90,9 @@ export class RoomManager {
 
   public leaveRoom(userId: string):
     | {
-        payload: RoomPreview;
-        player: Player;
+        roomPreviews: RoomPreview[];
+        roomPreview: RoomPreview;
+        roomInfo: RoomInfo;
         lobbyRecipients: string[];
         roomRecipients: string[];
       }
@@ -96,7 +107,13 @@ export class RoomManager {
         const roomRecipients = room.getPlayerIds();
         const lobbyRecipients = this.getLobbyIds();
 
-        return { payload: room.getRoomPreview(), player, lobbyRecipients, roomRecipients };
+        return {
+          roomPreviews: this.getRoomPreviews(),
+          roomPreview: room.getRoomPreview(),
+          roomInfo: room.getRoomInfo(),
+          lobbyRecipients,
+          roomRecipients,
+        };
       }
     }
 
@@ -121,7 +138,9 @@ export class RoomManager {
       }
     }
 
-    const player = this.getPlayer(userId) || this.addPlayerToLobby({ userId, username });
+    const player =
+      this.getPlayer(userId) ||
+      this.addPlayerToLobby({ userId, username, team: 'choosing', role: 'choosing' });
     return { userStatus: 'IN_LOBBY', player, recipients: [] };
   }
 
@@ -129,5 +148,17 @@ export class RoomManager {
     const room = this.rooms.find((room) => room.getPlayerIds().includes(userId));
     if (room) return room.getRoomInfo();
     return;
+  }
+
+  public chooseTeam(player: Player): { room: Room; recipients: string[] } | { error: ErrorCode } {
+    const room = this.rooms.find((room) => room.getPlayerIds().includes(player.userId));
+
+    if (room) {
+      room.chooseTeam(player);
+      const recipients = room.getPlayerIds();
+      return { room, recipients };
+    }
+
+    return { error: 'ROOM_NOT_FOUND' };
   }
 }
