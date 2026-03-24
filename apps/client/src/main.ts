@@ -22,7 +22,7 @@ if (authToken) {
     type: SocketActionTypes.SOCKET_REQUEST_SESSION_TOKEN,
     payload: { authToken },
   });
-}
+} else router.render();
 
 export { app, router };
 

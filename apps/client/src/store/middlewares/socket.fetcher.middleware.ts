@@ -35,6 +35,10 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
               type: SocketActionTypes.ROOM_ASK_ROOM_INFO,
             });
 
+          // if (userStatus === UserStatusType.IN_GAME) {
+
+          // }
+
           socketClient.off(ServerEventType.SESSION_TOKEN);
         });
 
