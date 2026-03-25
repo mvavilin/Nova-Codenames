@@ -26,11 +26,11 @@ test('The getPlayer method should return the previously added player by its id',
 
   const room = new Room(roomSettings);
 
-  const userId = uuid();
-  const player: Player = { userId, username: 'John Doe' };
+  const id = uuid();
+  const player: Player = { id, username: 'John Doe', team: 'choosing', role: 'choosing' };
   room.addPlayer(player);
 
-  const result = room.getPlayer(userId);
+  const result = room.getPlayer(id);
 
   expect(result).toEqual(player);
 });
@@ -41,8 +41,8 @@ test('The getPlayerIds method should return a list of player IDs', () => {
   const room = new Room(roomSettings);
 
   const players: Player[] = [
-    { userId: uuid(), username: 'player1' },
-    { userId: uuid(), username: 'player2' },
+    { id: uuid(), username: 'player1', team: 'choosing', role: 'choosing' },
+    { id: uuid(), username: 'player2', team: 'choosing', role: 'choosing' },
   ];
 
   for (const player of players) {
@@ -53,7 +53,7 @@ test('The getPlayerIds method should return a list of player IDs', () => {
 
   expect(result.length).toBe(2);
   for (const player of players) {
-    expect(result).toContain(player.userId);
+    expect(result).toContain(player.id);
   }
 });
 
@@ -62,19 +62,19 @@ test('The removePlayer method should remove a previously added player from the r
 
   const room = new Room(roomSettings);
 
-  const userId = uuid();
-  const player: Player = { userId, username: 'John Doe' };
+  const id = uuid();
+  const player: Player = { id, username: 'John Doe', team: 'choosing', role: 'choosing' };
   room.addPlayer(player);
 
   let result = room.getPlayerIds();
 
-  expect(result).toContain(userId);
+  expect(result).toContain(id);
 
-  room.removePlayer(userId);
+  room.removePlayer(id);
 
   result = room.getPlayerIds();
 
-  expect(result).not.toContain(userId);
+  expect(result).not.toContain(id);
 });
 
 test('The isFull method should indicate whether the room is full or not', () => {
@@ -83,7 +83,12 @@ test('The isFull method should indicate whether the room is full or not', () => 
   const room = new Room(roomSettings);
 
   for (let i = 0; i < 3; i++) {
-    const player: Player = { userId: uuid(), username: 'John Doe' };
+    const player: Player = {
+      id: uuid(),
+      username: 'John Doe',
+      team: 'choosing',
+      role: 'choosing',
+    };
     room.addPlayer(player);
   }
 
@@ -91,14 +96,14 @@ test('The isFull method should indicate whether the room is full or not', () => 
 
   expect(result).toBeFalsy();
 
-  const userId = uuid();
-  room.addPlayer({ userId, username: 'John Doe' });
+  const id = uuid();
+  room.addPlayer({ id, username: 'John Doe', team: 'choosing', role: 'choosing' });
 
   result = room.isFull();
 
   expect(result).toBeTruthy();
 
-  room.removePlayer(userId);
+  room.removePlayer(id);
 
   result = room.isFull();
 
@@ -111,8 +116,8 @@ test('The getRoomInfo method should return detailed information about the room',
   const room = new Room(roomSettings);
 
   const players: Player[] = [
-    { userId: uuid(), username: 'player1' },
-    { userId: uuid(), username: 'player2' },
+    { id: uuid(), username: 'player1', team: 'choosing', role: 'choosing' },
+    { id: uuid(), username: 'player2', team: 'choosing', role: 'choosing' },
   ];
 
   for (const player of players) {
@@ -121,7 +126,14 @@ test('The getRoomInfo method should return detailed information about the room',
 
   const id = room.getId();
 
-  const resultExample: RoomInfo = { ...roomSettings, id, players };
+  const resultExample: RoomInfo = {
+    ...roomSettings,
+    id,
+    redPlayers: [],
+    bluePlayers: [],
+    choosingPlayers: players,
+    playerCount: players.length,
+  };
 
   const result = room.getRoomInfo();
 

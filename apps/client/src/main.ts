@@ -5,6 +5,8 @@ import store from '@store';
 import { SocketActionTypes } from '@actions';
 import { getSessionStorageData } from '@utils';
 import TOKENS from '@constants/tokens';
+import SoundManager from './sound/SoundManager';
+import { soundPaths } from './sound/soundKeys';
 
 const app = new App();
 const router = new Router(app);
@@ -14,6 +16,9 @@ if (app.element) document.body.append(app.element);
 router.init();
 app.hide(false);
 
+const soundManager = new SoundManager();
+soundManager.loadSounds(soundPaths);
+
 window.addEventListener('load', () => app.show(true, 500));
 
 const authToken = getSessionStorageData<string>(TOKENS.AUTH);
@@ -22,7 +27,7 @@ if (authToken) {
     type: SocketActionTypes.SOCKET_REQUEST_SESSION_TOKEN,
     payload: { authToken },
   });
-}
+} else router.render();
 
 export { app, router };
 

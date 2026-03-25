@@ -17,10 +17,11 @@ export default class Router {
 
   public init(): void {
     globalThis.addEventListener('popstate', () => this.render());
-    this.render();
+    globalThis.addEventListener('load', () => this.render());
+    // this.render();
   }
 
-  private render(): void {
+  public render(): void {
     const children = this.app.children;
     for (const child of children) child.destroy();
 

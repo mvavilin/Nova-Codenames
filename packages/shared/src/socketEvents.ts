@@ -1,3 +1,4 @@
+import type { GameInfo } from './types/game.ts';
 import type { Player, RoomInfo, RoomPreview, RoomSettings } from './types/room.ts';
 
 export enum ClientEventType {
@@ -6,10 +7,16 @@ export enum ClientEventType {
   ROOM_SEARCH = 'room:search',
   ROOM_JOIN = 'room:join',
   ROOM_LEAVE = 'room:leave',
+  ROOM_ASK_ROOM_INFO = 'room:ask-room-info',
+  SESSION_PLAYER_EXIT = 'session:player-exit',
 }
 
 export enum ServerEventType {
   SESSION_TOKEN = 'session:token',
+  SESSION_CONNECT = 'session:connect',
+  SESSION_PLAYER_CONNECTED = 'session:player-connected',
+  SESSION_PLAYER_DISCONNECTED = 'session:player-disconnected',
+  SESSION_PLAYER_EXIT = 'session:player-exit',
   ROOM_SEND_LIST = 'room:send-list',
   ROOM_CREATED = 'room:created',
   ROOM_STATE = 'room:state',
@@ -27,6 +34,12 @@ export enum SocketErrorCode {
   INVALID_ACTION = 'INVALID_ACTION',
 }
 
+export enum UserStatusType {
+  IN_LOBBY = 'IN_LOBBY',
+  IN_ROOM = 'IN_ROOM',
+  IN_GAME = 'IN_GAME',
+}
+
 export type UserStatus = 'IN_LOBBY' | 'IN_ROOM' | 'IN_GAME';
 
 export type ClientEvent =
@@ -36,7 +49,9 @@ export type ClientEvent =
   | { type: 'room:join'; payload: { roomId: string } }
   | { type: 'room:leave' }
   | { type: 'room:ask-room-info' }
-  | { type: 'session:ask-status' };
+  | { type: 'session:ask-status' }
+  | { type: 'team:change'; payload: { player: Player } }
+  | { type: 'game:add-player' };
 
 export type ServerEvent =
   | { type: 'session:token'; payload: { sessionToken: string } }
@@ -49,8 +64,11 @@ export type ServerEvent =
   | { type: 'room:created'; payload: { roomPreview: RoomPreview } }
   | { type: 'room:state'; payload: { roomInfo: RoomInfo } }
   | { type: 'room:update-review'; payload: { roomPreview: RoomPreview } }
-  | { type: 'room:player-joined'; payload: { player: Player } }
-  | { type: 'room:player-left'; payload: { player: Player } }
+  | { type: 'room:player-joined'; payload: { roomInfo: RoomInfo } }
+  | { type: 'room:player-left'; payload: { roomInfo: RoomInfo } }
+  | { type: 'team:changed'; payload: { roomInfo: RoomInfo } }
+  | { type: 'game:start-timer' }
+  | { type: 'game:start'; payload: { gameInfo: GameInfo } }
   | { type: 'error'; payload: { code: ErrorCode } };
 
 export type ErrorCode =
@@ -58,7 +76,8 @@ export type ErrorCode =
   | 'ROOM_FULL'
   | 'INVALID_ACTION'
   | 'AUTH_REQUIRED'
-  | 'ALREADY_ONLINE';
+  | 'ALREADY_ONLINE'
+  | 'GAME_IS_NOT_FULL';
 
 type EventName<T> = T extends { type: infer K } ? K : never;
 

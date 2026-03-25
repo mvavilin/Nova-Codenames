@@ -9,6 +9,7 @@ vi.mock('@store/store', () => ({
 vi.mock('@/api/RouterAPI/router', () => ({
   default: class {
     public init(): void {}
+    public render(): void {}
   },
 }));
 

@@ -11,7 +11,9 @@ export class Room {
   private id: string;
   private name: string;
   private maxPlayers: number;
-  private players: Player[] = [];
+  private redPlayers: Player[] = [];
+  private bluePlayers: Player[] = [];
+  private choosingPlayers: Player[] = [];
   private status: RoomStatus = 'waiting';
 
   constructor(settings: RoomSettings) {
@@ -22,13 +24,17 @@ export class Room {
     this.maxPlayers = maxPlayers;
   }
 
+  private getPlayerCount(): number {
+    return this.redPlayers.length + this.bluePlayers.length + this.choosingPlayers.length;
+  }
+
   public getRoomPreview(): RoomPreview {
     const { id, name, maxPlayers, status } = this;
     return {
       id,
       name,
       maxPlayers,
-      playerCount: this.players.length,
+      playerCount: this.getPlayerCount(),
       status,
     };
   }
@@ -38,27 +44,67 @@ export class Room {
   }
 
   public getRoomInfo(): RoomInfo {
-    const { id, name, maxPlayers } = this;
-    return { id, name, maxPlayers, players: this.players };
+    const { id, name, maxPlayers, redPlayers, bluePlayers, choosingPlayers } = this;
+    return {
+      id,
+      name,
+      maxPlayers,
+      redPlayers,
+      bluePlayers,
+      choosingPlayers,
+      playerCount: this.getPlayerCount(),
+    };
   }
 
   public isFull(): boolean {
-    return this.players.length >= this.maxPlayers;
+    return this.getPlayerCount() >= this.maxPlayers;
   }
 
   public getPlayerIds(): string[] {
-    return this.players.map((player) => player.userId);
+    return this.getAllPlayers().map((player) => player.id);
   }
 
   public addPlayer(player: Player): void {
-    this.players.push(player);
+    this.choosingPlayers.push(player);
   }
 
   public getPlayer(userId: string): Player | undefined {
-    return this.players.find((player) => player.userId === userId);
+    return this.getAllPlayers().find((player) => player.id === userId);
+  }
+
+  private getAllPlayers(): Player[] {
+    return [...this.redPlayers, ...this.bluePlayers, ...this.choosingPlayers];
   }
 
   public removePlayer(userId: string): void {
-    this.players = this.players.filter((player) => player.userId !== userId);
+    this.redPlayers = this.redPlayers.filter((player) => player.id !== userId);
+    this.bluePlayers = this.bluePlayers.filter((player) => player.id !== userId);
+    this.choosingPlayers = this.choosingPlayers.filter((player) => player.id !== userId);
+  }
+
+  public chooseTeam(player: Player): void {
+    this.removePlayer(player.id);
+
+    switch (player.team) {
+      case 'red': {
+        this.redPlayers.push(player);
+        break;
+      }
+      case 'blue': {
+        this.bluePlayers.push(player);
+        break;
+      }
+      default: {
+        this.choosingPlayers.push(player);
+      }
+    }
+  }
+
+  public isCompletedTeams(): boolean {
+    return this.redPlayers.length + this.bluePlayers.length >= this.maxPlayers;
+  }
+
+  public getMaxPlayers(): number {
+    return this.maxPlayers;
   }
 }

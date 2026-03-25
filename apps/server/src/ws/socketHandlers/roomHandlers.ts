@@ -3,7 +3,7 @@ import type {
   ClientToServerEvents,
   ServerToClientEvents,
 } from '../../../../../packages/shared/src/socketEvents.ts';
-import type { SocketData } from '../../types/types.ts';
+import { type SocketData } from '../../types/types.ts';
 import { roomManager, socketIdMap } from './sessionHandlers.ts';
 import { io } from '../../app.ts';
 import { logger } from '../logger/logger.ts';
@@ -17,6 +17,8 @@ export function setupRoomHandlers(
   setupRoomJoinEvent(socket);
   setupRoomLeaveEvent(socket);
   setupSendRoomInfoEvent(socket);
+  setupChooseTeam(socket);
+  setupGameAddPlayer(socket);
 }
 
 function setupCreateRoomHandlers(
@@ -83,26 +85,26 @@ function setupRoomJoinEvent(
         logger.emit(userId, 'error', { code: response.error });
       }
     } else {
-      const { payload, player, lobbyRecipients, roomRecipients } = response;
+      const { roomInfo, roomPreview, lobbyRecipients, roomRecipients } = response;
       const socketId = socketIdMap.get(userId);
       if (socketId) {
-        io.to(socketId).emit('room:state', { roomInfo: payload.getRoomInfo() });
-        logger.emit(userId, 'room:state', { roomInfo: payload.getRoomInfo() });
+        io.to(socketId).emit('room:state', { roomInfo });
+        logger.emit(userId, 'room:state', { roomInfo });
       }
 
       for (const recipient of lobbyRecipients) {
         const socketId = socketIdMap.get(recipient);
         if (socketId) {
-          io.to(socketId).emit('room:update-review', { roomPreview: payload.getRoomPreview() });
-          logger.emit(recipient, 'room:update-review', { roomPreview: payload.getRoomPreview() });
+          io.to(socketId).emit('room:update-review', { roomPreview });
+          logger.emit(recipient, 'room:update-review', { roomPreview });
         }
       }
 
       for (const recipient of roomRecipients) {
         const socketId = socketIdMap.get(recipient);
         if (socketId) {
-          io.to(socketId).emit('room:player-joined', { player });
-          logger.emit(recipient, 'room:player-joined', { player });
+          io.to(socketId).emit('room:player-joined', { roomInfo });
+          logger.emit(recipient, 'room:player-joined', { roomInfo });
         }
       }
     }
@@ -123,10 +125,9 @@ function setupRoomLeaveEvent(
         logger.emit(userId, 'error', { code: response.error });
       }
     } else {
-      const { payload, player, lobbyRecipients, roomRecipients } = response;
+      const { roomPreviews, roomPreview, roomInfo, lobbyRecipients, roomRecipients } = response;
 
       const socketId = socketIdMap.get(userId);
-      const roomPreviews = roomManager.getRoomPreviews();
       if (socketId && roomPreviews) {
         io.to(socketId).emit('room:send-list', { roomPreviews });
         logger.emit(userId, 'room:send-list', { roomPreviews });
@@ -135,16 +136,16 @@ function setupRoomLeaveEvent(
       for (const recipient of lobbyRecipients) {
         const socketId = socketIdMap.get(recipient);
         if (socketId) {
-          io.to(socketId).emit('room:update-review', { roomPreview: payload });
-          logger.emit(recipient, 'room:update-review', { roomPreview: payload });
+          io.to(socketId).emit('room:update-review', { roomPreview });
+          logger.emit(recipient, 'room:update-review', { roomPreview });
         }
       }
 
       for (const recipient of roomRecipients) {
         const socketId = socketIdMap.get(recipient);
         if (socketId) {
-          io.to(socketId).emit('room:player-left', { player });
-          logger.emit(recipient, 'room:player-left', { player });
+          io.to(socketId).emit('room:player-left', { roomInfo });
+          logger.emit(recipient, 'room:player-left', { roomInfo });
         }
       }
     }
@@ -167,6 +168,81 @@ function setupSendRoomInfoEvent(
       } else {
         io.to(socketId).emit('error', { code: 'ROOM_NOT_FOUND' });
         logger.emit(userId, 'error', { code: 'ROOM_NOT_FOUND' });
+      }
+    }
+  });
+}
+
+function setupChooseTeam(
+  socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
+): void {
+  const userId = socket.data.userId;
+
+  socket.on('team:change', ({ player }) => {
+    logger.on(userId, 'team:change', { player });
+    if (userId !== player.id) return;
+    const response = roomManager.chooseTeam(player);
+    if ('room' in response) {
+      const { room, recipients } = response;
+      for (const recipient of recipients) {
+        const socketId = socketIdMap.get(recipient);
+        if (socketId) {
+          const roomInfo = room.getRoomInfo();
+          io.to(socketId).emit('team:changed', { roomInfo });
+          logger.emit(recipient, 'team:changed', { roomInfo });
+        }
+      }
+      if (room.isCompletedTeams()) {
+        sendGameStartTimer(recipients);
+      }
+    } else {
+      const socketId = socketIdMap.get(userId);
+      if (socketId) {
+        io.to(socketId).emit('error', { code: response.error });
+        logger.emit(userId, 'error', { code: response.error });
+      }
+    }
+  });
+}
+
+function sendGameStartTimer(recipients: string[]): void {
+  for (const recipient of recipients) {
+    const socketId = socketIdMap.get(recipient);
+    if (socketId) {
+      io.to(socketId).emit('game:start-timer');
+      logger.emit(recipient, 'game:start-timer');
+    }
+  }
+}
+
+function setupGameAddPlayer(
+  socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
+): void {
+  const { userId } = socket.data;
+
+  socket.on('game:add-player', () => {
+    const response = roomManager.addPlayerToGame(userId);
+    if ('error' in response) {
+      const socketId = socketIdMap.get(userId);
+      if (socketId) {
+        io.to(socketId).emit('error', { code: response.error });
+        logger.emit(userId, 'error', { code: response.error });
+      }
+    } else {
+      const { gameInfo, cutGameInfo, spymasterIds, agentIds } = response;
+
+      for (const spymasterId of spymasterIds) {
+        const socketId = socketIdMap.get(spymasterId);
+        if (socketId) {
+          io.to(socketId).emit('game:start', { gameInfo });
+        }
+      }
+
+      for (const agentId of agentIds) {
+        const socketId = socketIdMap.get(agentId);
+        if (socketId) {
+          io.to(socketId).emit('game:start', { gameInfo: cutGameInfo });
+        }
       }
     }
   });

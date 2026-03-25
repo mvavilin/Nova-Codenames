@@ -1,5 +1,5 @@
 import type { Player, RoomInfo, RoomPreview } from '@repo/shared/src/types/room';
-import { ServerEventType, type ErrorCode } from '@repo/shared/src/socketEvents';
+import { ServerEventType, type ErrorCode, type UserStatus } from '@repo/shared/src/socketEvents';
 import { ServerUrl } from '@repo/shared/src/api.constants';
 
 import { BaseSocketClient } from '@SocketClientAPI';
@@ -23,11 +23,11 @@ class SocketClient extends BaseSocketClient {
     this.socket.on(ServerEventType.ROOM_STATE, handler);
   }
 
-  public onPlayerJoined(handler: (payload: { player: Player }) => void): void {
+  public onPlayerJoined(handler: (payload: { roomInfo: RoomInfo }) => void): void {
     this.socket.on(ServerEventType.ROOM_PLAYER_JOINED, handler);
   }
 
-  public onPlayerLeft(handler: (payload: { player: Player }) => void): void {
+  public onPlayerLeft(handler: (payload: { roomInfo: RoomInfo }) => void): void {
     this.socket.on(ServerEventType.ROOM_PLAYER_LEFT, handler);
   }
 
@@ -45,6 +45,22 @@ class SocketClient extends BaseSocketClient {
     } catch (error) {
       showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ERROR);
     }
+  }
+
+  public onSessionConnect(handler: (payload: { userStatus: UserStatus }) => void): void {
+    this.socket.on(ServerEventType.SESSION_CONNECT, handler);
+  }
+
+  public onSessionPlayerConnected(handler: (payload: { player: Player }) => void): void {
+    this.socket.on(ServerEventType.SESSION_PLAYER_CONNECTED, handler);
+  }
+
+  public onSessionPlayerDisconnected(handler: (payload: { player: Player }) => void): void {
+    this.socket.on(ServerEventType.SESSION_PLAYER_DISCONNECTED, handler);
+  }
+
+  public onSessionPlayerExit(handler: (payload: { player: Player }) => void): void {
+    this.socket.on(ServerEventType.SESSION_PLAYER_EXIT, handler);
   }
 }
 

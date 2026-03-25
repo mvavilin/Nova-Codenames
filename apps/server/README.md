@@ -577,7 +577,7 @@ The main disadvantage is that socket.io requires an authentication token during 
     - Response to all users in room
 
     ```
-      { type: 'room:player-joined'; payload: { player: Player } }
+      { type: 'room:player-joined'; payload: { roomInfo: RoomInfo } }
     ```
 
     - Response in case of an error
@@ -600,6 +600,12 @@ The main disadvantage is that socket.io requires an authentication token during 
       { type: 'room:leave' }
     ```
 
+    - Response to the user who sent the request
+
+    ```
+      { type: 'room:state'; payload: { roomPreviews: RoomPreview[] } }
+    ```
+
     - Response to all users in lobby
 
     ```
@@ -609,9 +615,52 @@ The main disadvantage is that socket.io requires an authentication token during 
     - Response to all users in room
 
     ```
-      { type: 'room:player-left'; payload: { player: Player } }
+      { type: 'room:player-left'; payload: { roomInfo: RoomInfo } }
     ```
 
+    </details>
+
+  - **Change the player's team and role**
+
+    <details>
+    - Request to server
+
+    ```
+      { type: 'team:change'; payload: { player: Player }
+    ```
+
+    - Response to all users in room
+
+    ```
+      { type: 'team:changed'; payload: { roomInfo: RoomInfo } }
+    ```
+
+    </details>
+
+  - **Start game**
+ 
+    <details>
+ 
+    - After each change in the composition of the teams in the room, the server checks the number of players in the teams. If the teams are fully staffed, the server sends a message to all users in the room
+ 
+    ```
+      { type: 'game:start-timer' }
+    ```
+ 
+    - After receiving `game:start-timer` message, each user starts a countdown timer until the game begins. After 15 seconds have passed, each user sends a message
+   
+    ```
+      { type: 'game:add-player' }
+    ```
+ 
+    - When receiving a `game:add-player` message, the server adds the user to the upcoming game. After each addition, the server checks the number of players in the game. If the game is full, the server sends a message with the game details to all participants in the game
+   
+    ```
+      { type: 'game:start'; payload: { gameInfo: GameInfo } }
+    ```
+ 
+    - If the game is not full after adding a user to the game, the user will receive a `GAME_IS_NOT_FULL` error message. However, this error can be ignored and the `game:start` message can be expected
+  
     </details>
 
   - **Possible error codes**
@@ -619,7 +668,7 @@ The main disadvantage is that socket.io requires an authentication token during 
     <details>
 
     ```
-      type ErrorCode = 'ROOM_NOT_FOUND' | 'ROOM_FULL' | 'INVALID_ACTION' | 'ALREADY_ONLINE';
+      type ErrorCode = 'ROOM_NOT_FOUND' | 'ROOM_FULL' | 'INVALID_ACTION' | 'ALREADY_ONLINE' | 'GAME_IS_NOT_FULL';
     ```
 
     </details>
@@ -663,12 +712,26 @@ The main disadvantage is that socket.io requires an authentication token during 
     }
   ```
 
+  - Team types
+
+  ```
+    export type Teams = 'red' | 'blue' | 'choosing';
+  ```
+
+  - Role types
+
+  ```
+    export type Roles = 'spymaster' | 'agent' | 'choosing';
+  ```
+
   - Player information for display on the Room page
 
   ```
     export type Player = {
       userId: string;
       username: string;
+      team: Team;
+      rome: Role;
     };
   ```
 
@@ -679,7 +742,20 @@ The main disadvantage is that socket.io requires an authentication token during 
       id: string;
       name: string;
       maxPlayers: number;
-      players: Player[];
+      playerCount: number;
+      redPlayers: Player[];
+      bluePlayers: Player[];
+      choosingPlayers: Player[];
+    }
+  ```
+
+  - Game information
+ 
+  ```
+    export interface GameInfo {
+      redTeam: Player[];
+      blueTeam: Player[];
+      currentTeam: Teams;
     }
   ```
 
