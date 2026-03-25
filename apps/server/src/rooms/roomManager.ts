@@ -32,20 +32,35 @@ export class RoomManager {
     return this.lobby.map((player) => player.id);
   }
 
-  private getPlayer(userId: string): Player | undefined {
+  private getPlayerFromLobby(userId: string): Player | undefined {
     return this.lobby.find((player) => player.id === userId);
   }
 
-  public createRoom(settings: RoomSettings): {
-    payload: RoomPreview;
-    recipients: string[];
-  } {
+  public createRoom(
+    userId: string,
+    settings: RoomSettings
+  ):
+    | {
+        roomPreview: RoomPreview;
+        roomInfo: RoomInfo;
+        lobbyRecipients: string[];
+      }
+    | { error: ErrorCode } {
     const room = new Room(settings);
     this.rooms.push(room);
 
-    const roomPreview = room.getRoomPreview();
-    const recipients = this.lobby.map((player) => player.id);
-    return { payload: roomPreview, recipients };
+    const player = this.getPlayerFromLobby(userId);
+    if (player) {
+      room.addPlayer(player);
+      this.removePlayerFromLobby(userId);
+
+      const roomPreview = room.getRoomPreview();
+      const roomInfo = room.getRoomInfo();
+      const lobbyRecipients = this.lobby.map((player) => player.id);
+      return { roomPreview, roomInfo, lobbyRecipients };
+    }
+
+    return { error: 'PLAYER_NOT_FOUND' };
   }
 
   public getRoomPreviews(name?: string): RoomPreview[] {
@@ -195,7 +210,7 @@ export class RoomManager {
     }
 
     const player =
-      this.getPlayer(userId) ||
+      this.getPlayerFromLobby(userId) ||
       this.addPlayerToLobby({ id: userId, username, team: 'choosing', role: 'choosing' });
     return { userStatus: 'IN_LOBBY', player, recipients: [] };
   }

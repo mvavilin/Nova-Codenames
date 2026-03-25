@@ -73,6 +73,7 @@ export type ServerEvent =
   | { type: 'error'; payload: { code: ErrorCode } };
 
 export type ErrorCode =
+  | 'PLAYER_NOT_FOUND'
   | 'ROOM_NOT_FOUND'
   | 'GAME_NOT_FOUND'
   | 'ROOM_FULL'
