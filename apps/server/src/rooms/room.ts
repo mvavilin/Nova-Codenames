@@ -103,4 +103,8 @@ export class Room {
   public isCompletedTeams(): boolean {
     return this.redPlayers.length + this.bluePlayers.length >= this.maxPlayers;
   }
+
+  public getMaxPlayers(): number {
+    return this.maxPlayers;
+  }
 }

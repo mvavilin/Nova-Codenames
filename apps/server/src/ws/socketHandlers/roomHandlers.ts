@@ -3,7 +3,7 @@ import type {
   ClientToServerEvents,
   ServerToClientEvents,
 } from '../../../../../packages/shared/src/socketEvents.ts';
-import { SECOND_COUNT_BEFORE_START_GAME, type SocketData } from '../../types/types.ts';
+import { type SocketData } from '../../types/types.ts';
 import { roomManager, socketIdMap } from './sessionHandlers.ts';
 import { io } from '../../app.ts';
 import { logger } from '../logger/logger.ts';
@@ -18,6 +18,7 @@ export function setupRoomHandlers(
   setupRoomLeaveEvent(socket);
   setupSendRoomInfoEvent(socket);
   setupChooseTeam(socket);
+  setupGameAddPlayer(socket);
 }
 
 function setupCreateRoomHandlers(
@@ -192,7 +193,7 @@ function setupChooseTeam(
         }
       }
       if (room.isCompletedTeams()) {
-        startGameTimer(recipients);
+        sendGameStartTimer(recipients);
       }
     } else {
       const socketId = socketIdMap.get(userId);
@@ -204,23 +205,45 @@ function setupChooseTeam(
   });
 }
 
-function startGameTimer(recipients: string[]): void {
-  let time = SECOND_COUNT_BEFORE_START_GAME;
+function sendGameStartTimer(recipients: string[]): void {
+  for (const recipient of recipients) {
+    const socketId = socketIdMap.get(recipient);
+    if (socketId) {
+      io.to(socketId).emit('game:start-timer');
+      logger.emit(recipient, 'game:start-timer');
+    }
+  }
+}
 
-  const interval = setInterval(() => {
-    for (const recipient of recipients) {
-      const socketId = socketIdMap.get(recipient);
+function setupGameAddPlayer(
+  socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
+): void {
+  const { userId } = socket.data;
+
+  socket.on('game:add-player', () => {
+    const response = roomManager.addPlayerToGame(userId);
+    if ('error' in response) {
+      const socketId = socketIdMap.get(userId);
       if (socketId) {
-        if (time > 0) {
-          io.to(socketId).emit('game:start-timer', { time });
-          logger.emit(recipient, 'game:start-timer', { time });
-        } else {
-          io.to(socketId).emit('game:start');
-          logger.emit(recipient, 'game:start');
-          clearInterval(interval);
+        io.to(socketId).emit('error', { code: response.error });
+        logger.emit(userId, 'error', { code: response.error });
+      }
+    } else {
+      const { gameInfo, cutGameInfo, spymasterIds, agentIds } = response;
+
+      for (const spymasterId of spymasterIds) {
+        const socketId = socketIdMap.get(spymasterId);
+        if (socketId) {
+          io.to(socketId).emit('game:start', { gameInfo });
+        }
+      }
+
+      for (const agentId of agentIds) {
+        const socketId = socketIdMap.get(agentId);
+        if (socketId) {
+          io.to(socketId).emit('game:start', { gameInfo: cutGameInfo });
         }
       }
     }
-    time--;
-  }, 10_000);
+  });
 }
