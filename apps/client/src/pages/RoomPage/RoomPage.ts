@@ -26,6 +26,7 @@ export default class RoomPage extends ContainerComponent {
 
     if (!roomDate) {
       //Loader
+      console.log(1111);
       return;
     }
 

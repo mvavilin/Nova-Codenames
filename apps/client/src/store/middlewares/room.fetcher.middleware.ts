@@ -29,6 +29,13 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
     });
   });
 
+  // socketClient.onRoomState(({ roomInfo }) => {
+  //   store.dispatch({
+  //     type: RoomPageActionTypes.SET_ROOM_DATA,
+  //     payload: { roomInfo },
+  //   });
+  // });
+
   return function middleware(context) {
     if (context.action.type === RoomPageActionTypes.TEAM_CHANGE) {
       try {

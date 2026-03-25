@@ -63,13 +63,13 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
           socketClient.onRoomState(({ roomInfo }) => {
             socketClient.off(ServerEventType.ROOM_STATE);
 
-            return context.next({
+            context.next({
               type: RoomPageActionTypes.SET_ROOM_DATA,
               payload: { roomInfo },
             });
-          });
 
-          router.navigate(URLS.ROOM(roomPreview.id));
+            router.navigate(URLS.ROOM(roomPreview.id));
+          });
         });
 
         const { name, maxPlayers } = context.action.payload;
@@ -102,13 +102,14 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
         socketClient.onRoomState(({ roomInfo }) => {
           socketClient.off(ServerEventType.ROOM_STATE);
 
-          return context.next({
+          context.next({
             type: RoomPageActionTypes.SET_ROOM_DATA,
             payload: { roomInfo },
           });
+
+          router.navigate(URLS.ROOM(roomId));
         });
 
-        router.navigate(URLS.ROOM(roomId));
         socketClient.onSessionPlayerConnected(({ player }) => {
           new Toast({
             type: MessageType.INFO,
@@ -140,9 +141,16 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
     if (context.action.type === SocketActionTypes.ROOM_ASK_ROOM_INFO) {
       try {
         socketClient.onRoomState(({ roomInfo }) => {
+          socketClient.off(ServerEventType.ROOM_STATE);
+
+          context.next({
+            type: RoomPageActionTypes.SET_ROOM_DATA,
+            payload: { roomInfo },
+          });
+
           router.navigate(URLS.ROOM(roomInfo.id));
 
-          socketClient.off(ServerEventType.ROOM_STATE);
+          // socketClient.off(ServerEventType.ROOM_STATE);
         });
 
         socketClient.onSessionPlayerConnected(({ player }) => {
