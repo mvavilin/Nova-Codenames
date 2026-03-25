@@ -8,6 +8,7 @@ import { RECONNECT_MAX_TIME, type SocketData } from '../../types/types.ts';
 import { setupRoomHandlers } from './roomHandlers.ts';
 import { io } from '../../app.ts';
 import { logger } from '../logger/logger.ts';
+import type { Player } from '../../../../../packages/shared/src/types/room.ts';
 
 const reconnectTimerMap = new Map<string, NodeJS.Timeout>();
 export const roomManager = new RoomManager();
@@ -54,6 +55,7 @@ export function setupConnection(): void {
       setupDisconnect(socket);
       setupAskStatusHandler(socket);
       setupRoomHandlers(socket);
+      setupLogoutHandler(socket);
     }
   );
 }
@@ -78,26 +80,7 @@ function setupDisconnect(
     reconnectTimerMap.set(
       userId,
       setTimeout(() => {
-        for (const recipient of recipients) {
-          const socketId = socketIdMap.get(recipient);
-          if (socketId) {
-            io.to(socketId).emit('session:player-exit', { player });
-            logger.emit(recipient, 'session:player-exit', { player });
-          }
-        }
-
-        const response = roomManager.leaveRoom(userId);
-        if ('roomPreviews' in response) {
-          const { roomPreview, lobbyRecipients } = response;
-          for (const recipient of lobbyRecipients) {
-            const socketId = socketIdMap.get(recipient);
-            if (socketId) {
-              io.to(socketId).emit('room:update-review', { roomPreview });
-              logger.emit(recipient, 'room:update-review', { roomPreview });
-            }
-          }
-          roomManager.removePlayerFromLobby(userId);
-        }
+        exitPlayer(userId, player, recipients);
         reconnectTimerMap.delete(userId);
       }, RECONNECT_MAX_TIME)
     );
@@ -117,4 +100,40 @@ function setupAskStatusHandler(
       logger.emit(userId, 'session:send-status', { userStatus });
     }
   });
+}
+
+function setupLogoutHandler(
+  socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
+): void {
+  const { userId, username } = socket.data;
+
+  socket.on('session:logout', () => {
+    const status = roomManager.getStatus(userId, username);
+    const { player, recipients } = status;
+
+    exitPlayer(userId, player, recipients);
+  });
+}
+
+function exitPlayer(userId: string, player: Player, recipients: string[]): void {
+  for (const recipient of recipients) {
+    const socketId = socketIdMap.get(recipient);
+    if (socketId) {
+      io.to(socketId).emit('session:player-exit', { player });
+      logger.emit(recipient, 'session:player-exit', { player });
+    }
+  }
+
+  const response = roomManager.leaveRoom(userId);
+  if ('roomPreviews' in response) {
+    const { roomPreview, lobbyRecipients } = response;
+    for (const recipient of lobbyRecipients) {
+      const socketId = socketIdMap.get(recipient);
+      if (socketId) {
+        io.to(socketId).emit('room:update-review', { roomPreview });
+        logger.emit(recipient, 'room:update-review', { roomPreview });
+      }
+    }
+    roomManager.removePlayerFromLobby(userId);
+  }
 }

@@ -51,7 +51,8 @@ export type ClientEvent =
   | { type: 'room:ask-room-info' }
   | { type: 'session:ask-status' }
   | { type: 'team:change'; payload: { player: Player } }
-  | { type: 'game:add-player' };
+  | { type: 'game:add-player' }
+  | { type: 'session:logout' };
 
 export type ServerEvent =
   | { type: 'session:token'; payload: { sessionToken: string } }
