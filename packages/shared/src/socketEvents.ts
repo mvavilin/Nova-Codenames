@@ -1,3 +1,4 @@
+import type { GameInfo } from './types/game.ts';
 import type { Player, RoomInfo, RoomPreview, RoomSettings } from './types/room.ts';
 
 export enum ClientEventType {
@@ -53,7 +54,8 @@ export type ClientEvent =
   | { type: 'room:leave' }
   | { type: 'room:ask-room-info' }
   | { type: 'session:ask-status' }
-  | { type: 'team:change'; payload: { player: Player } };
+  | { type: 'team:change'; payload: { player: Player } }
+  | { type: 'game:add-player' };
 
 export type ServerEvent =
   | { type: 'session:token'; payload: { sessionToken: string } }
@@ -69,8 +71,8 @@ export type ServerEvent =
   | { type: 'room:player-joined'; payload: { roomInfo: RoomInfo } }
   | { type: 'room:player-left'; payload: { roomInfo: RoomInfo } }
   | { type: 'team:changed'; payload: { roomInfo: RoomInfo } }
-  | { type: 'game:start-timer'; payload: { time: number } }
-  | { type: 'game:start' }
+  | { type: 'game:start-timer' }
+  | { type: 'game:start'; payload: { gameInfo: GameInfo } }
   | { type: 'error'; payload: { code: ErrorCode } };
 
 export type ErrorCode =
@@ -78,7 +80,8 @@ export type ErrorCode =
   | 'ROOM_FULL'
   | 'INVALID_ACTION'
   | 'AUTH_REQUIRED'
-  | 'ALREADY_ONLINE';
+  | 'ALREADY_ONLINE'
+  | 'GAME_IS_NOT_FULL';
 
 type EventName<T> = T extends { type: infer K } ? K : never;
 

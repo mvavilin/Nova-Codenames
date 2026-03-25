@@ -61,7 +61,7 @@ export class Room {
   }
 
   public getPlayerIds(): string[] {
-    return this.getAllPlayers().map((player) => player.userId);
+    return this.getAllPlayers().map((player) => player.id);
   }
 
   public addPlayer(player: Player): void {
@@ -69,7 +69,7 @@ export class Room {
   }
 
   public getPlayer(userId: string): Player | undefined {
-    return this.getAllPlayers().find((player) => player.userId === userId);
+    return this.getAllPlayers().find((player) => player.id === userId);
   }
 
   private getAllPlayers(): Player[] {
@@ -77,13 +77,13 @@ export class Room {
   }
 
   public removePlayer(userId: string): void {
-    this.redPlayers = this.redPlayers.filter((player) => player.userId !== userId);
-    this.bluePlayers = this.bluePlayers.filter((player) => player.userId !== userId);
-    this.choosingPlayers = this.choosingPlayers.filter((player) => player.userId !== userId);
+    this.redPlayers = this.redPlayers.filter((player) => player.id !== userId);
+    this.bluePlayers = this.bluePlayers.filter((player) => player.id !== userId);
+    this.choosingPlayers = this.choosingPlayers.filter((player) => player.id !== userId);
   }
 
   public chooseTeam(player: Player): void {
-    this.removePlayer(player.userId);
+    this.removePlayer(player.id);
 
     switch (player.team) {
       case 'red': {
@@ -102,5 +102,9 @@ export class Room {
 
   public isCompletedTeams(): boolean {
     return this.redPlayers.length + this.bluePlayers.length >= this.maxPlayers;
+  }
+
+  public getMaxPlayers(): number {
+    return this.maxPlayers;
   }
 }
