@@ -1,18 +1,21 @@
 import type { ErrorCode, UserStatus } from '../../../../packages/shared/src/socketEvents.ts';
+import type { GameInfo } from '../../../../packages/shared/src/types/game.ts';
 import type {
   Player,
   RoomInfo,
   RoomPreview,
   RoomSettings,
 } from '../../../../packages/shared/src/types/room.ts';
+import { Game } from './game.ts';
 import { Room } from './room.ts';
 
 export class RoomManager {
   private lobby: Player[] = [];
   private rooms: Room[] = [];
+  private games: Game[] = [];
 
   public addPlayerToLobby(newPlayer: Player): Player {
-    const player = this.lobby.find((item) => item.userId === newPlayer.userId);
+    const player = this.lobby.find((item) => item.id === newPlayer.id);
     if (!player) {
       this.lobby.push(newPlayer);
       return newPlayer;
@@ -22,15 +25,15 @@ export class RoomManager {
   }
 
   public removePlayerFromLobby(userId: string): void {
-    this.lobby = this.lobby.filter((player) => player.userId !== userId);
+    this.lobby = this.lobby.filter((player) => player.id !== userId);
   }
 
   private getLobbyIds(): string[] {
-    return this.lobby.map((player) => player.userId);
+    return this.lobby.map((player) => player.id);
   }
 
   private getPlayer(userId: string): Player | undefined {
-    return this.lobby.find((player) => player.userId === userId);
+    return this.lobby.find((player) => player.id === userId);
   }
 
   public createRoom(settings: RoomSettings): {
@@ -41,7 +44,7 @@ export class RoomManager {
     this.rooms.push(room);
 
     const roomPreview = room.getRoomPreview();
-    const recipients = this.lobby.map((player) => player.userId);
+    const recipients = this.lobby.map((player) => player.id);
     return { payload: roomPreview, recipients };
   }
 
@@ -52,6 +55,10 @@ export class RoomManager {
       roomPreviews = roomPreviews.filter((preview) => regExp.test(preview.name));
     }
     return roomPreviews;
+  }
+
+  private getRoomByUserId(userId: string): Room | undefined {
+    return this.rooms.find((room) => room.getPlayerIds().includes(userId));
   }
 
   public joinToRoom(
@@ -70,7 +77,7 @@ export class RoomManager {
 
     if (room.isFull()) return { error: 'ROOM_FULL' };
 
-    const newPlayer = this.lobby.find((player) => player.userId === userId);
+    const newPlayer = this.lobby.find((player) => player.id === userId);
     if (newPlayer) {
       const roomRecipients = room.getPlayerIds();
       room.addPlayer(newPlayer);
@@ -97,7 +104,7 @@ export class RoomManager {
         roomRecipients: string[];
       }
     | { error: ErrorCode } {
-    const room = this.rooms.find((room) => room.getPlayerIds().includes(userId));
+    const room = this.getRoomByUserId(userId);
 
     if (room) {
       const player = room.getPlayer(userId);
@@ -140,7 +147,7 @@ export class RoomManager {
 
     const player =
       this.getPlayer(userId) ||
-      this.addPlayerToLobby({ userId, username, team: 'choosing', role: 'choosing' });
+      this.addPlayerToLobby({ id: userId, username, team: 'choosing', role: 'choosing' });
     return { userStatus: 'IN_LOBBY', player, recipients: [] };
   }
 
@@ -151,12 +158,51 @@ export class RoomManager {
   }
 
   public chooseTeam(player: Player): { room: Room; recipients: string[] } | { error: ErrorCode } {
-    const room = this.rooms.find((room) => room.getPlayerIds().includes(player.userId));
+    const room = this.getRoomByUserId(player.id);
 
     if (room) {
       room.chooseTeam(player);
       const recipients = room.getPlayerIds();
       return { room, recipients };
+    }
+
+    return { error: 'ROOM_NOT_FOUND' };
+  }
+
+  private getGameByRoomId(roomId: string): Game | undefined {
+    return this.games.find((game) => game.getRoomId() === roomId);
+  }
+
+  private createGame(roomId: string, maxPlayers: number): Game {
+    const game = new Game(roomId, maxPlayers);
+    this.games.push(game);
+    return game;
+  }
+
+  public addPlayerToGame(
+    userId: string
+  ):
+    | { gameInfo: GameInfo; cutGameInfo: GameInfo; spymasterIds: string[]; agentIds: string[] }
+    | { error: ErrorCode } {
+    const room = this.getRoomByUserId(userId);
+
+    if (room) {
+      const roomId = room.getId();
+      const maxPlayers = room.getMaxPlayers();
+      const game = this.getGameByRoomId(roomId) || this.createGame(roomId, maxPlayers);
+      const player = room.getPlayer(userId);
+      if (player) {
+        game.addPlayer(player);
+        if (game.isFull()) {
+          const gameInfo = game.getGameInfo();
+          const cutGameInfo = game.getGameInfo();
+          const spymasterIds = game.getSpymasterIds();
+          const agentIds = game.getAgentIds();
+          return { gameInfo, cutGameInfo, spymasterIds, agentIds };
+        } else {
+          return { error: 'GAME_IS_NOT_FULL' };
+        }
+      }
     }
 
     return { error: 'ROOM_NOT_FOUND' };
