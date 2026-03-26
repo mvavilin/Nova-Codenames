@@ -80,7 +80,7 @@ export class RoomManager {
     return this.rooms.find((room) => room.getPlayerIds().includes(userId));
   }
 
-  private getGameByUserId(userId: string): Game | undefined {
+  public getGameByUserId(userId: string): Game | undefined {
     return this.games.find((game) => game.getPlayerIds().includes(userId));
   }
 

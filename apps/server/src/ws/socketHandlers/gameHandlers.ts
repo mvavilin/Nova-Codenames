@@ -28,19 +28,24 @@ function setupGameAddPlayer(
         logger.emit(userId, 'error', { code: response.error });
       }
     } else {
-      const { gameInfo, cutGameInfo, spymasterIds, agentIds } = response;
+      const game = roomManager.getGameByUserId(userId);
+      if (game) {
+        game.initial();
 
-      for (const spymasterId of spymasterIds) {
-        const socketId = socketIdMap.get(spymasterId);
-        if (socketId) {
-          io.to(socketId).emit('game:start', { gameInfo });
+        const { gameInfo, cutGameInfo, spymasterIds, agentIds } = response;
+
+        for (const spymasterId of spymasterIds) {
+          const socketId = socketIdMap.get(spymasterId);
+          if (socketId) {
+            io.to(socketId).emit('game:start', { gameInfo });
+          }
         }
-      }
 
-      for (const agentId of agentIds) {
-        const socketId = socketIdMap.get(agentId);
-        if (socketId) {
-          io.to(socketId).emit('game:start', { gameInfo: cutGameInfo });
+        for (const agentId of agentIds) {
+          const socketId = socketIdMap.get(agentId);
+          if (socketId) {
+            io.to(socketId).emit('game:start', { gameInfo: cutGameInfo });
+          }
         }
       }
     }
