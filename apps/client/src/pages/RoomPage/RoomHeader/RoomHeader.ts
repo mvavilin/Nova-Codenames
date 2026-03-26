@@ -5,25 +5,27 @@ import RoomUser from '../RoomUser/RoomUser';
 import LanguageButton from '@/components/LanguageButton/LanguageButton';
 import { TranslationKeys } from '@/i18n/translationKeys';
 import { t } from '@/i18n';
-import type { State } from '@/store/types/state';
-import type { Action } from '@/api/StateAPI';
-import { AppActionTypes } from '@/store/actions';
 
 const styles = {
   header:
-    'w-full max-w-7xl grid grid grid-cols-3 gap-2 p-4 items-center p-4 bg-white/25 text-white rounded place-items-center',
-
+    'w-full min-w-[350px] max-w-7xl grid grid-cols-1 min-w-[650px]:grid-cols-[1fr_1fr_2fr] md:grid-cols-[1fr_1fr_1fr] gap-2 p-4 items-center bg-white/25 text-white rounded place-items-center',
   title: 'text-2xl text-center font-bold',
   container: 'flex justify-between items-center',
   userMenu: 'flex items-center justify-end gap-4 justify-self-end',
 };
 
 export default class RoomHeader extends ContainerComponent {
-  private userMenu = new BaseComponent({ classes: styles.userMenu });
-  private title: HeadingComponent;
+  private userMenu: BaseComponent | null = null;
+  private title: HeadingComponent | null = null;
 
   constructor() {
     super({ tag: 'header', classes: styles.header });
+
+    this.render();
+  }
+
+  private render(): void {
+    const container = new ContainerComponent({ classes: styles.container });
 
     this.title = new HeadingComponent({
       level: 1,
@@ -31,13 +33,8 @@ export default class RoomHeader extends ContainerComponent {
       classes: styles.title,
     });
 
-    this.render();
+    this.userMenu = new BaseComponent({ classes: styles.userMenu });
 
-    this.addSubscriptions([store.subscribe((state, action) => this.switchLanguage(state, action))]);
-  }
-
-  private render(): void {
-    const container = new ContainerComponent({ classes: styles.container });
     const username = store.getState().username;
     const userId = store.getState().id;
     if (username && userId) {
@@ -49,9 +46,16 @@ export default class RoomHeader extends ContainerComponent {
     this.appendChildren([new Logo(), this.title, container]);
   }
 
-  private switchLanguage(_state: State, action: Action): void {
-    if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
-      this.title.setContent(t(TranslationKeys.ROOM_TITLE));
-    }
+  public switchLanguage(): void {
+    if (!this.title) return;
+    this.title.setContent(t(TranslationKeys.ROOM_TITLE));
+  }
+
+  public destroyComponent(): void {
+    this.userMenu = null;
+    this.title = null;
+
+    this.destroyChildren();
+    super.destroy();
   }
 }
