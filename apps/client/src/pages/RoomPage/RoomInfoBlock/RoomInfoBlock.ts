@@ -2,11 +2,9 @@ import { ButtonComponent, ContainerComponent, TextComponent } from '@/api/Compon
 import type { RoomInfoBlockProps } from './RoomInfoBlock.types';
 import { TranslationKeys } from '@/i18n/translationKeys';
 import { t } from '@/i18n';
-import type { State } from '@/store/types/state';
-import type { Action } from '@/api/StateAPI';
 import store from '@/store/store';
-import { AppActionTypes, RoomPageActionTypes } from '@/store/actions';
-import { socketClient } from '@SocketClientAPI';
+import { RoomPageActionTypes } from '@/store/actions';
+import type { RoomInfo } from '@shared/types/room';
 
 const styles = {
   container:
@@ -28,11 +26,6 @@ export default class RoomInfoBlock extends ContainerComponent {
     super({ classes: styles.container });
 
     this.render({ roomName, currentCount, totalCount });
-    this.addSubscriptions([store.subscribe((state, action) => this.switchLanguage(state, action))]);
-    this.addSubscriptions([
-      store.subscribe((state, action) => this.handleStateChange(state, action)),
-    ]);
-    this.subscribeToSocket();
   }
 
   private render({ roomName, currentCount, totalCount }: RoomInfoBlockProps): void {
@@ -84,42 +77,33 @@ export default class RoomInfoBlock extends ContainerComponent {
     this.appendChildren([textContainerColumn, this.leaveButton]);
   }
 
-  private handleStateChange(_state: State, action: Action): void {
-    if (action.type === RoomPageActionTypes.SET_ROOM_DATA) {
-      const room = store.getState().currentRoom;
-      if (!room || !this.playersCount) return;
-
-      this.playersCount.setContent(room.playerCount);
-    }
-  }
-
   private leaveRoom(): void {
     store.dispatch({
       type: RoomPageActionTypes.LEAVE_ROOM,
     });
   }
 
-  private subscribeToSocket(): void {
-    socketClient.onPlayerJoined(({ roomInfo }) => {
-      if (!this.playersCount) return;
-
-      this.playersCount.setContent(roomInfo.playerCount);
-    });
-
-    socketClient.onPlayerLeft(({ roomInfo }) => {
-      if (!this.playersCount) return;
-
-      this.playersCount.setContent(roomInfo.playerCount);
-    });
+  public handlePlayerCounts(room: RoomInfo): void {
+    if (!this.playersCount) return;
+    this.playersCount.setContent(room.playerCount);
   }
 
-  private switchLanguage(_state: State, action: Action): void {
+  public switchLanguage(): void {
     if (!this.roomTitle || !this.playersTitle || !this.leaveButton) return;
 
-    if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
-      this.roomTitle.setContent(t(TranslationKeys.ROOM_INFO_TITLE));
-      this.playersTitle.setContent(t(TranslationKeys.ROOM_INFO_PLAYERS));
-      this.leaveButton.setContent(t(TranslationKeys.ROOM_LEAVE_ROOM_BTN));
-    }
+    this.roomTitle.setContent(t(TranslationKeys.ROOM_INFO_TITLE));
+    this.playersTitle.setContent(t(TranslationKeys.ROOM_INFO_PLAYERS));
+    this.leaveButton.setContent(t(TranslationKeys.ROOM_LEAVE_ROOM_BTN));
+  }
+
+  public destroyComponent(): void {
+    this.roomTitle = null;
+    this.playersTitle = null;
+    this.playersCount = null;
+    this.leaveButton = null;
+
+    this.destroyChildren();
+
+    super.destroy();
   }
 }

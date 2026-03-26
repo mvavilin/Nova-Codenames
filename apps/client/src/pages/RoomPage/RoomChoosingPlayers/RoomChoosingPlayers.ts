@@ -57,6 +57,8 @@ export default class RoomChoosingPlayers extends ContainerComponent {
 
   public destroyComponent(): void {
     this.listContainer = null;
+    this.title = null;
+
     this.destroyChildren();
     super.destroy();
   }

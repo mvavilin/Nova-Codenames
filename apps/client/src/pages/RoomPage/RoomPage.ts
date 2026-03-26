@@ -24,6 +24,7 @@ export default class RoomPage extends ContainerComponent {
   private redTeamSection: RoomTeamSection | null = null;
   private blueTeamSection: RoomTeamSection | null = null;
   private choosingSection: RoomChoosingPlayers | null = null;
+  private roomInfoBlock: RoomInfoBlock | null = null;
 
   constructor() {
     if (RoomPage.currentUnsubscribe) {
@@ -53,12 +54,14 @@ export default class RoomPage extends ContainerComponent {
       this.redTeamSection?.handleStateChange(roomInfo);
       this.blueTeamSection?.handleStateChange(roomInfo);
       this.choosingSection?.updatePlayersList(roomInfo.choosingPlayers);
+      this.roomInfoBlock?.handlePlayerCounts(roomInfo);
     }
 
     if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
       this.redTeamSection?.switchLanguage();
       this.blueTeamSection?.switchLanguage();
       this.choosingSection?.switchLanguage();
+      this.roomInfoBlock?.switchLanguage();
     }
   }
 
@@ -109,25 +112,28 @@ export default class RoomPage extends ContainerComponent {
 
     this.choosingSection = new RoomChoosingPlayers({ players: roomInfo.choosingPlayers });
 
-    main.appendChildren([
-      new RoomInfoBlock({
-        roomName: roomInfo.name,
-        currentCount: roomInfo.playerCount,
-        totalCount: roomInfo.maxPlayers,
-      }),
-      teamContainer,
-      this.choosingSection,
-    ]);
+    this.roomInfoBlock = new RoomInfoBlock({
+      roomName: roomInfo.name,
+      currentCount: roomInfo.playerCount,
+      totalCount: roomInfo.maxPlayers,
+    });
+
+    main.appendChildren([this.roomInfoBlock, teamContainer, this.choosingSection]);
 
     this.appendChildren([new RoomHeader(), main]);
   }
+
   public destroyPage(): void {
     this.redTeamSection?.destroyComponent();
     this.blueTeamSection?.destroyComponent();
+    this.choosingSection?.destroyComponent();
+    this.roomInfoBlock?.destroyComponent();
 
     this.blueTeamSection = null;
     this.redTeamSection = null;
     this.choosingSection = null;
+    this.roomInfoBlock = null;
+
     super.destroy();
 
     if (RoomPage.currentUnsubscribe) {

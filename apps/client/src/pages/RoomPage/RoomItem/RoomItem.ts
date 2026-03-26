@@ -13,8 +13,8 @@ const styles = {
 export default class RoomItem extends BaseComponent {
   private isHeader: boolean;
   private isAgent: boolean;
-  private role: TextComponent;
-  private user: RoomUser;
+  private role: TextComponent | null;
+  private user: RoomUser | null;
 
   constructor({ number, player }: RoomItemProps) {
     super({ tag: 'li' });
@@ -48,6 +48,8 @@ export default class RoomItem extends BaseComponent {
   }
 
   public switchLanguage(): void {
+    if (!this.role || !this.user) return;
+
     if (this.isHeader) {
       this.role.setContent(t(TranslationKeys.ROOM_ROLE));
       this.user.setContent(t(TranslationKeys.ROOM_PLAYER));
@@ -60,6 +62,8 @@ export default class RoomItem extends BaseComponent {
     }
   }
   public destroyComponent(): void {
+    this.role = null;
+    this.user = null;
     this.destroyChildren();
     super.destroy();
   }
