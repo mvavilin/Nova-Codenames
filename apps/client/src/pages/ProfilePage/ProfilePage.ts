@@ -12,7 +12,7 @@ export default class ProfilePage extends ContainerComponent {
   constructor({ ...rest }: ProfilePageProperties = {}) {
     super({
       id: 'profile-page',
-      classes: `min-h-screen w-full py-[20px] px-[80px] bg-cover bg-center font-text`,
+      classes: `flex flex-col gap-5 min-h-screen w-full py-[20px] px-[80px] bg-cover bg-center font-text`,
       ...rest,
     });
 

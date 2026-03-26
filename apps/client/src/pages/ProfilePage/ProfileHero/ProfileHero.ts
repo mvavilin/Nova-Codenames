@@ -1,3 +1,4 @@
+import LangButton from '@/pages/WelcomePage/LangButton/LangButton';
 import type { ProfileHeroProperties } from './ProfileHero.types';
 
 import { ContainerComponent, HeadingComponent, TextComponent } from '@ComponentsAPI';
@@ -6,29 +7,45 @@ export default class ProfileHero extends ContainerComponent {
   constructor({ ...rest }: ProfileHeroProperties = {}) {
     super({
       id: 'profile-hero',
-      classes: `bg-white/10 backdrop-blur border border-white/20 rounded-xl p-6 mb-6`,
+      classes: `flex justify-between bg-white/25 text-white rounded p-4`,
       ...rest,
     });
 
-    this.setChildren([this.createTop(), this.createStats()]);
+    this.setChildren([this.createUser(), this.createStats()]);
   }
 
-  private createTop(): ContainerComponent {
+  private createUser(): ContainerComponent {
     return new ContainerComponent({
+      id: 'profile-user',
       classes: 'flex items-center gap-4',
       children: [
         new ContainerComponent({
           classes: 'w-16 h-16 rounded-full bg-gray-300',
         }),
         new ContainerComponent({
+          classes: 'flex flex-col self-start',
           children: [
             new HeadingComponent({
-              content: 'StarLeader26',
+              level: 2,
+              content: `${'StarLeader26'}`,
               classes: 'text-2xl font-bold',
+            }),
+            new ContainerComponent({
+              classes: 'flex',
+              children: [
+                new TextComponent({
+                  classes: 'text-sm font-main font-normal',
+                  content: '🌐 Language:',
+                }),
+                new LangButton({
+                  classes:
+                    'font-main font-normal text-sm md:text-sm leading-[0.83] text-center text-[var(--color-light)] cursor-pointer transition-colors duration-200 hover:text-[var(--color-brand)] p-0 min-h-0 w-fit',
+                }),
+              ],
             }),
             new TextComponent({
               content: '🟢 Online',
-              classes: 'text-sm text-gray-300',
+              classes: 'text-sm font-main font-normal',
             }),
           ],
         }),
@@ -38,7 +55,7 @@ export default class ProfileHero extends ContainerComponent {
 
   private createStats(): ContainerComponent {
     return new ContainerComponent({
-      classes: 'flex gap-8 mt-4',
+      classes: 'flex flex-col mr-4',
       children: [
         this.stat('🏆 Level', '12'),
         this.stat('📊 Winrate', '68%'),
