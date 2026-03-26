@@ -9,6 +9,7 @@ import { socketClient } from '@/api/SocketClientAPI';
 import { AppActionTypes, RoomPageActionTypes } from '@/store/actions';
 import type { State } from '@/store/types/state';
 import type { Action } from '@/api/StateAPI';
+// import RoomTimer from './RoomTimer/RoomTimer';
 
 const styles = {
   pageContainer:
@@ -25,6 +26,7 @@ export default class RoomPage extends ContainerComponent {
   private blueTeamSection: RoomTeamSection | null = null;
   private choosingSection: RoomChoosingPlayers | null = null;
   private roomInfoBlock: RoomInfoBlock | null = null;
+  // private timer: RoomTimer | null = null;
 
   constructor() {
     if (RoomPage.currentUnsubscribe) {
@@ -77,6 +79,7 @@ export default class RoomPage extends ContainerComponent {
     socketClient.onPlayerJoined(this.handleRoomUpdate);
     socketClient.onPlayerLeft(this.handleRoomUpdate);
     socketClient.onTeamChanged(this.handleRoomUpdate);
+    // socketClient.onGameStartTimer(this.showTimer);
   }
 
   private unsubscribeFromSocket(): void {
@@ -84,6 +87,7 @@ export default class RoomPage extends ContainerComponent {
     socketClient.offPlayerJoined(this.handleRoomUpdate);
     socketClient.offPlayerLeft(this.handleRoomUpdate);
     socketClient.offTeamChanged(this.handleRoomUpdate);
+    // socketClient.offGameStartTimer(this.showTimer);
   }
 
   private render(): void {
@@ -122,6 +126,11 @@ export default class RoomPage extends ContainerComponent {
 
     this.appendChildren([new RoomHeader(), main]);
   }
+
+  // private showTimer(): void {
+  //   const timer = new RoomTimer();
+  //   this.appendChildren([timer]);
+  // }
 
   public destroyPage(): void {
     this.redTeamSection?.destroyComponent();
