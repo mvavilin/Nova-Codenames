@@ -1,4 +1,4 @@
-import BaseComponent from '@/api/ComponentsAPI/base/BaseComponent';
+import { ContainerComponent } from '@ComponentsAPI';
 import Card from './Card';
 
 export default class AchievementsCard extends Card {
@@ -11,10 +11,9 @@ export default class AchievementsCard extends Card {
   }
 }
 
-function ach(text: string): BaseComponent {
-  return new BaseComponent({
-    tag: 'div',
+function ach(text: string): ContainerComponent {
+  return new ContainerComponent({
     content: text,
-    classes: 'text-sm',
+    classes: 'text-sm text-gray-300',
   });
 }

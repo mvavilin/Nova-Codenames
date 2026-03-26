@@ -1,13 +1,12 @@
-import BaseComponent from '@/api/ComponentsAPI/base/BaseComponent';
+import { ContainerComponent, HeadingComponent, TextComponent } from '@ComponentsAPI';
 
-export default class Card extends BaseComponent {
-  constructor(title: string, children: BaseComponent[]) {
+export default class Card extends ContainerComponent {
+  constructor(title: string, children: ContainerComponent[] | TextComponent[]) {
     super({
-      tag: 'div',
-      classes: `bg-white/10 backdrop-blur border border-white/20 rounded-xl p-4`,
+      classes: `bg-white/25 backdrop-blur border border-white/20 text-white rounded p-4`,
       children: [
-        new BaseComponent({
-          tag: 'h2',
+        new HeadingComponent({
+          level: 2,
           content: title,
           classes: 'text-lg font-semibold mb-3',
         }),

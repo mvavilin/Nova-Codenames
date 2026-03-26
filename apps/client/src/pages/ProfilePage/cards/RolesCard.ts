@@ -1,4 +1,4 @@
-import BaseComponent from '@/api/ComponentsAPI/base/BaseComponent';
+import { ContainerComponent } from '@ComponentsAPI';
 import Card from './Card';
 
 export default class RolesCard extends Card {
@@ -10,19 +10,19 @@ export default class RolesCard extends Card {
   }
 }
 
-function role(title: string, stats: string[]): BaseComponent {
-  return new BaseComponent({
+function role(title: string, stats: string[]): ContainerComponent {
+  return new ContainerComponent({
     tag: 'div',
     classes: 'mb-3',
     children: [
-      new BaseComponent({
+      new ContainerComponent({
         tag: 'div',
         content: title,
         classes: 'font-medium',
       }),
       ...stats.map(
         (s) =>
-          new BaseComponent({
+          new ContainerComponent({
             tag: 'div',
             content: s,
             classes: 'text-sm text-gray-300',

@@ -10,7 +10,7 @@ export default class ProfileGrid extends ContainerComponent {
   constructor({ ...rest }: ProfileGridProperties = {}) {
     super({
       tag: 'main',
-      classes: 'grid grid-cols-2 gap-6',
+      classes: 'grid grid-cols-1 md:grid-cols-2 gap-5',
       ...rest,
     });
 
@@ -20,7 +20,7 @@ export default class ProfileGrid extends ContainerComponent {
   private createLeft(): ContainerComponent {
     return new ContainerComponent({
       tag: 'section',
-      classes: 'flex flex-col gap-6',
+      classes: 'flex flex-col gap-5',
       children: [new StatsCard(), new RolesCard()],
     });
   }
@@ -28,7 +28,7 @@ export default class ProfileGrid extends ContainerComponent {
   private createRight(): ContainerComponent {
     return new ContainerComponent({
       tag: 'section',
-      classes: 'flex flex-col gap-6',
+      classes: 'flex flex-col gap-5',
       children: [new MatchHistoryCard(), new AchievementsCard()],
     });
   }

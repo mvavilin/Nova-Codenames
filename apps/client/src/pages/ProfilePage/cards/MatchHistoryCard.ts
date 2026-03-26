@@ -1,4 +1,4 @@
-import BaseComponent from '@/api/ComponentsAPI/base/BaseComponent';
+import { TextComponent } from '@ComponentsAPI';
 import Card from './Card';
 
 export default class MatchHistoryCard extends Card {
@@ -11,14 +11,14 @@ export default class MatchHistoryCard extends Card {
   }
 }
 
-function match(result: string, score: string, role: string): BaseComponent {
-  return new BaseComponent({
+function match(result: string, score: string, role: string): TextComponent {
+  return new TextComponent({
     tag: 'div',
-    classes: 'flex justify-between text-sm',
+    classes: 'flex justify-between text-sm text-gray-300',
     children: [
-      new BaseComponent({ tag: 'span', content: result }),
-      new BaseComponent({ tag: 'span', content: score }),
-      new BaseComponent({ tag: 'span', content: role }),
+      new TextComponent({ tag: 'span', content: result }),
+      new TextComponent({ tag: 'span', content: score }),
+      new TextComponent({ tag: 'span', content: role }),
     ],
   });
 }

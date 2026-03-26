@@ -34,18 +34,18 @@ export default class ProfileHero extends ContainerComponent {
               classes: 'flex',
               children: [
                 new TextComponent({
-                  classes: 'text-sm font-main font-normal',
+                  classes: 'text-sm font-main font-normal text-gray-300',
                   content: '🌐 Language:',
                 }),
                 new LangButton({
                   classes:
-                    'font-main font-normal text-sm md:text-sm leading-[0.83] text-center text-[var(--color-light)] cursor-pointer transition-colors duration-200 hover:text-[var(--color-brand)] p-0 min-h-0 w-fit',
+                    'font-main font-normal text-sm md:text-sm leading-[0.83] text-center text-[var(--color-light)] cursor-pointer transition-colors duration-200 hover:text-[var(--color-brand)] p-0 min-h-0 w-fit text-gray-300',
                 }),
               ],
             }),
             new TextComponent({
               content: '🟢 Online',
-              classes: 'text-sm font-main font-normal',
+              classes: 'text-sm font-main font-normal text-gray-300',
             }),
           ],
         }),

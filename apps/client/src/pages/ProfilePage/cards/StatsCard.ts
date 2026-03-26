@@ -1,4 +1,4 @@
-import BaseComponent from '@/api/ComponentsAPI/base/BaseComponent';
+import { ContainerComponent, TextComponent } from '@ComponentsAPI';
 import Card from './Card';
 
 export default class StatsCard extends Card {
@@ -12,13 +12,13 @@ export default class StatsCard extends Card {
   }
 }
 
-function item(label: string, value: string): BaseComponent {
-  return new BaseComponent({
+function item(label: string, value: string): ContainerComponent {
+  return new ContainerComponent({
     tag: 'div',
-    classes: 'flex justify-between text-sm',
+    classes: 'flex justify-between text-sm text-gray-300',
     children: [
-      new BaseComponent({ tag: 'span', content: label }),
-      new BaseComponent({ tag: 'span', content: value }),
+      new TextComponent({ tag: 'span', content: label }),
+      new TextComponent({ tag: 'span', content: value }),
     ],
   });
 }
