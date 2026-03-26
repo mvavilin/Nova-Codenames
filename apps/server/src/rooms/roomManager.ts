@@ -131,6 +131,8 @@ export class RoomManager {
     if (room) {
       const player = room.getPlayer(userId);
       if (player) {
+        player.team = 'choosing';
+        player.role = 'choosing';
         this.addPlayerToLobby(player);
         room.removePlayer(userId);
         const roomRecipients = room.getPlayerIds();
