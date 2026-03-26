@@ -18,9 +18,6 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
   return function middleware(context) {
     if (context.action.type === SocketActionTypes.SOCKET_REQUEST_SESSION_TOKEN) {
       try {
-        // chore: remove in production
-        router.navigate(URLS.GAME('27626bdf-f197-4c9d-8dd5-0cd1426f1f71'));
-
         const authToken = context.action.payload.authToken;
 
         if (authToken === null) throw new Error('Authorization token not found');
@@ -32,7 +29,7 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
         });
 
         socketClient.onSessionConnect(({ userStatus }) => {
-          if (userStatus === UserStatusType.IN_LOBBY) router.navigate(URLS.LOBBY());
+          if (userStatus === UserStatusType.IN_LOBBY) router.init(URLS.LOBBY());
           if (userStatus === UserStatusType.IN_ROOM)
             store.dispatch({
               type: SocketActionTypes.ROOM_ASK_ROOM_INFO,
@@ -51,7 +48,7 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
           socketClient.off(ServerEventType.SESSION_TOKEN);
         });
 
-        // socketClient.connect(authToken);
+        socketClient.connect(authToken);
       } catch (error) {
         router.navigate(URLS.LOGIN());
         showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_SESSION_TOKEN);
@@ -130,7 +127,7 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
     if (context.action.type === SocketActionTypes.ROOM_ASK_ROOM_INFO) {
       try {
         socketClient.onRoomState(({ roomInfo }) => {
-          router.navigate(URLS.ROOM(roomInfo.id));
+          router.init(URLS.ROOM(roomInfo.id));
 
           socketClient.off(ServerEventType.ROOM_STATE);
         });

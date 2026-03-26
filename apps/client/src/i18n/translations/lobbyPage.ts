@@ -32,6 +32,8 @@ const lobbyPage = {
     [TranslationKeys.ROOM_ROW_STATUS_FINISHING]: 'Finishing',
 
     [TranslationKeys.ROOM_ROW_JOIN_BUTTON]: 'Join',
+
+    [TranslationKeys.FORM_EMPTY_FIELD_WARNING]: 'The field cannot be empty',
   },
   [Language.RU]: {
     [TranslationKeys.LOBBY_TITLE]: 'Лобби',
@@ -63,6 +65,8 @@ const lobbyPage = {
     [TranslationKeys.ROOM_ROW_STATUS_FINISHING]: 'Завершение',
 
     [TranslationKeys.ROOM_ROW_JOIN_BUTTON]: 'Вступить',
+
+    [TranslationKeys.FORM_EMPTY_FIELD_WARNING]: 'Поле не может быть пустым',
   },
 } as const;
 

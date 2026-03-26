@@ -14,7 +14,7 @@ export default function appAfterware<State>(): Afterware<State, AppActions> {
     if (context.action.type === AppActionTypes.EXIT_APP) {
       try {
         removeSessionStorageData(TOKENS.AUTH);
-        // removeSessionStorageData(TOKENS.SESSION);
+        removeSessionStorageData(TOKENS.SESSION);
         removeLocalStorageData(LOCAL_STORAGE_KEYS.STORE);
 
         router.navigate(URLS.LOGIN());

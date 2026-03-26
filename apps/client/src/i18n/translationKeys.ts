@@ -136,6 +136,41 @@ export const TranslationKeys = {
   [LogMessageKeys.LOG_ANSWER_COUNTED_RED]: 'logAnswerCountedRed',
   [LogMessageKeys.LOG_ANSWER_COUNTED_BLUE]: 'logAnswerCountedBlue',
   [LogMessageKeys.LOG_SCORE_POINT]: 'logScorePoint',
+
+  UNDO_LABEL: 'undoLabel',
+
+  KNOWLEDGE_CHECK_TITLE: 'knowledgeCheckTitle',
+  QUESTION_TOPIC: 'questionTopic',
+  ENTER_ANSWER: 'enterAnswer',
+  ANSWER_EMPTY_WARNING: 'answerEmptyWarning',
+  SEND_BUTTON: 'sendButton',
+
+  ANSWER_RATING_TITLE: 'answerRatingTitle',
+  OPPONENT_ANSWER: 'opponentAnswer',
+  POSSIBLE_ANSWER: 'possibleAnswer',
+  PASS_BUTTON: 'passButton',
+  FAIL_BUTTON: 'failButton',
+
+  GAME_RESULTS_TITLE: 'gameResultsTitle',
+  WINNING_TEAM_PREFIX: 'winningTeamPrefix',
+  WINNING_TEAM_SUFFIX: 'winningTeamSuffix',
+  TEAM_RED: 'teamRed',
+  TEAM_BLUE: 'teamBlue',
+  GAME_STATS_TITLE: 'gameStatsTitle',
+  SCORE_LABEL: 'scoreLabel',
+  TIME_LABEL: 'timeLabel',
+  PLAYER_COLUMN: 'playerColumn',
+  ROLE_COLUMN: 'roleColumn',
+  QUESTIONS_COLUMN: 'questionsColumn',
+  CORRECT_ANSWERS_COLUMN: 'correctAnswersColumn',
+  RED_TEAM_TITLE: 'redTeamTitle',
+  BLUE_TEAM_TITLE: 'blueTeamTitle',
+  LOBBY_BUTTON: 'lobbyButton',
+  ROOM_BUTTON: 'roomButton',
+  ROLE_SPYMASTER: 'roleSpymaster',
+  ROLE_OPERATIVE: 'roleOperative',
+
+  FORM_EMPTY_FIELD_WARNING: 'formEmptyFieldWarning',
 } as const;
 
 export type TranslationKey = (typeof TranslationKeys)[keyof typeof TranslationKeys];
