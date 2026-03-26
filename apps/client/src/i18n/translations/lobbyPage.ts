@@ -1,5 +1,5 @@
 import { Language } from '@types';
-import { TranslationKeys } from '../translationKeys';
+import { TranslationKeys } from '@i18n/translationKeys';
 
 const lobbyPage = {
   [Language.EN]: {

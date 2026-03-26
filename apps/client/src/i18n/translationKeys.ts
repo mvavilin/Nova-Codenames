@@ -1,3 +1,5 @@
+import { LogMessageKeys } from '@repo/shared/src/types/logMessage';
+
 export const TranslationKeys = {
   WELCOME_RULES: 'welcome-rules',
   WELCOME_ABOUT: 'welcome-about',
@@ -108,6 +110,32 @@ export const TranslationKeys = {
   ROOM_ROW_STATUS_PLAYING: 'roomRowStatusPlaying',
   ROOM_ROW_STATUS_FINISHING: 'roomRowStatusFinishing',
   ROOM_ROW_JOIN_BUTTON: 'roomRowJoinButton',
+
+  GAME_TITLE: 'gameTitle',
+
+  RED_TURN: 'redTurn',
+  BLUE_TURN: 'blueTurn',
+
+  RED_TEAM: 'redTeam',
+  BLUE_TEAM: 'blueTeam',
+
+  CHAT_LOG_TITLE: 'chatLogTitle',
+  CHAT_INPUT_PLACEHOLDER: 'chatInputPlaceholder',
+
+  [LogMessageKeys.LOG_START_GAME]: 'logStartGame',
+  [LogMessageKeys.LOG_HINT_RED]: 'logHintRed',
+  [LogMessageKeys.LOG_HINT_BLUE]: 'logHintBlue',
+  [LogMessageKeys.LOG_VOTE_STARTED]: 'logVoteStarted',
+  [LogMessageKeys.LOG_VOTE_ENDED]: 'logVoteEnded',
+  [LogMessageKeys.LOG_OWN_CARD_CHOSEN_RED]: 'logOwnCardChosenRed',
+  [LogMessageKeys.LOG_OWN_CARD_CHOSEN_BLUE]: 'logOwnCardChosenBlue',
+  [LogMessageKeys.LOG_OTHER_CARD_CHOSEN_RED]: 'logOtherCardChosenRed',
+  [LogMessageKeys.LOG_OTHER_CARD_CHOSEN_BLUE]: 'logOtherCardChosenBlue',
+  [LogMessageKeys.LOG_CHECKING_ANSWER_RED]: 'logCheckingAnswerRed',
+  [LogMessageKeys.LOG_CHECKING_ANSWER_BLUE]: 'logCheckingAnswerBlue',
+  [LogMessageKeys.LOG_ANSWER_COUNTED_RED]: 'logAnswerCountedRed',
+  [LogMessageKeys.LOG_ANSWER_COUNTED_BLUE]: 'logAnswerCountedBlue',
+  [LogMessageKeys.LOG_SCORE_POINT]: 'logScorePoint',
 } as const;
 
 export type TranslationKey = (typeof TranslationKeys)[keyof typeof TranslationKeys];

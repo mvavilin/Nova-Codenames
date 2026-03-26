@@ -1,6 +1,3 @@
-import { TranslationKeys } from '@i18n/translationKeys';
-import { t } from '@i18n';
-
 export const CREATE_ROOM_FORM_CONFIG = {
   PLAYERS: {
     NAME: 'playerCount',
@@ -18,6 +15,5 @@ export const CREATE_ROOM_FORM_CONFIG = {
   LOG_CHAT: {
     INPUT_ID: 'tooltip',
     INPUT_NAME: 'tooltip',
-    PLACEHOLDER: t(TranslationKeys.ROOM_NAME_FIELD_TITLE),
   },
 } as const;

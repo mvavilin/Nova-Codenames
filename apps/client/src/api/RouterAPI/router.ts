@@ -6,10 +6,9 @@ import { NotFoundPage } from '@pages';
 export default class Router {
   private app: App;
   private routes = ROUTES;
+  // private lastAllowedPath = URLS.WELCOME();
   // chore: remove in production
-  // private lastAllowedPath = URLS.LOBBY();
-  // private lastAllowedPath = URLS.GAME('27626bdf-f197-4c9d-8dd5-0cd1426f1f71');
-  private lastAllowedPath = URLS.WELCOME();
+  private lastAllowedPath = URLS.GAME('27626bdf-f197-4c9d-8dd5-0cd1426f1f71');
 
   constructor(app: App) {
     this.app = app;
@@ -18,7 +17,6 @@ export default class Router {
   public init(): void {
     globalThis.addEventListener('popstate', () => this.render());
     globalThis.addEventListener('load', () => this.render());
-    // this.render();
   }
 
   public render(): void {

@@ -18,6 +18,9 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
   return function middleware(context) {
     if (context.action.type === SocketActionTypes.SOCKET_REQUEST_SESSION_TOKEN) {
       try {
+        // chore: remove in production
+        router.navigate(URLS.GAME('27626bdf-f197-4c9d-8dd5-0cd1426f1f71'));
+
         const authToken = context.action.payload.authToken;
 
         if (authToken === null) throw new Error('Authorization token not found');
@@ -48,7 +51,7 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
           socketClient.off(ServerEventType.SESSION_TOKEN);
         });
 
-        socketClient.connect(authToken);
+        // socketClient.connect(authToken);
       } catch (error) {
         router.navigate(URLS.LOGIN());
         showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_SESSION_TOKEN);
