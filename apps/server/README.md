@@ -785,7 +785,17 @@ The main disadvantage is that socket.io requires an authentication token during 
     <details>
 
     ```
-      type ErrorCode = 'ROOM_NOT_FOUND' | 'ROOM_FULL' | 'INVALID_ACTION' | 'ALREADY_ONLINE' | 'GAME_IS_NOT_FULL';
+      export type ErrorCode =
+        | 'PLAYER_NOT_FOUND'
+        | 'ROOM_NOT_FOUND'
+        | 'GAME_NOT_FOUND'
+        | 'ROOM_FULL'
+        | 'THERE_IS_ALREADY_SPYMASTER'
+        | 'THERE_ARE_ALREADY_AGENTS'
+        | 'INVALID_ACTION'
+        | 'AUTH_REQUIRED'
+        | 'ALREADY_ONLINE'
+        | 'GAME_IS_NOT_FULL';
     ```
 
     </details>
