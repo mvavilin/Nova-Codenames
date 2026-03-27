@@ -230,10 +230,10 @@ link.setRel('noopener noreferrer');
 
 ### Методы:
 
-- [ ] `setItems(items: (string | number)[]): this` --- полностью заменяет элементы списка.
-- [ ] `addItem(item: string | number): this` --- добавляет новый элемент.
-- [ ] `removeItem(index: number): this` --- удаляет элемент по индексу.
-- [ ] `clearItems(): this` --- очищает список.
+- [x] `setItems(items: (string | number)[]): this` --- полностью заменяет элементы списка.
+- [x] `addItem(item: string | number): this` --- добавляет новый элемент.
+- [x] `removeItem(index: number): this` --- удаляет элемент по индексу.
+- [x] `clearItems(): this` --- очищает список.
 
 **Пример:**
 
