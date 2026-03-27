@@ -57,19 +57,21 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
 
     if (context.action.type === SocketActionTypes.SOCKET_CREATE_ROOM) {
       try {
-        socketClient.onRoomCreated(({ roomPreview }) => {
-          socketClient.off(ServerEventType.ROOM_CREATED);
+        socketClient.onRoomState(({ roomInfo }) => {
+          socketClient.off(ServerEventType.ROOM_STATE);
 
-          socketClient.onRoomState(({ roomInfo }) => {
-            socketClient.off(ServerEventType.ROOM_STATE);
+          socketClient.onError(({ code }) => {
+            showErrorToast(code, SOCKET_ERROR_MESSAGES.ON_ERROR);
 
-            context.next({
-              type: RoomPageActionTypes.SET_ROOM_DATA,
-              payload: { roomInfo },
-            });
-
-            router.navigate(URLS.ROOM(roomPreview.id));
+            socketClient.off(ServerEventType.ERROR);
           });
+
+          context.next({
+            type: RoomPageActionTypes.SET_ROOM_DATA,
+            payload: { roomInfo },
+          });
+
+          router.navigate(URLS.ROOM(roomInfo.id));
         });
 
         const { name, maxPlayers } = context.action.payload;
@@ -149,8 +151,6 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
           });
 
           router.navigate(URLS.ROOM(roomInfo.id));
-
-          // socketClient.off(ServerEventType.ROOM_STATE);
         });
 
         socketClient.onSessionPlayerConnected(({ player }) => {

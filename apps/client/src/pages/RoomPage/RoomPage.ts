@@ -9,12 +9,12 @@ import { socketClient } from '@/api/SocketClientAPI';
 import { AppActionTypes, RoomPageActionTypes } from '@/store/actions';
 import type { State } from '@/store/types/state';
 import type { Action } from '@/api/StateAPI';
-// import RoomTimer from './RoomTimer/RoomTimer';
 
+const START_GAME_TIMER = 15;
 const styles = {
   pageContainer:
     'w-full min-h-screen px-20 py-10 flex flex-col gap-10 items-center bg-[url(/src/assets/backgrounds/lobby-page-background.jpg)] bg-center bg-cover bg-no-repeat',
-  main: 'w-full max-w-7xl flex-1 flex flex-col justify-start items-center gap-10',
+  main: 'w-full max-w-7xl flex-1 flex flex-col justify-start items-center gap-8',
   teamContainer:
     'w-full h-full flex flex-col min-[950px]:flex-row justify-center min-[950px]:justify-between items-center min-[950px]:items-start gap-10',
 };
@@ -26,7 +26,6 @@ export default class RoomPage extends ContainerComponent {
   private blueTeamSection: RoomTeamSection | null = null;
   private choosingSection: RoomChoosingPlayers | null = null;
   private roomInfoBlock: RoomInfoBlock | null = null;
-  // private timer: RoomTimer | null = null;
 
   constructor() {
     if (RoomPage.currentUnsubscribe) {
@@ -79,7 +78,7 @@ export default class RoomPage extends ContainerComponent {
     socketClient.onPlayerJoined(this.handleRoomUpdate);
     socketClient.onPlayerLeft(this.handleRoomUpdate);
     socketClient.onTeamChanged(this.handleRoomUpdate);
-    // socketClient.onGameStartTimer(this.showTimer);
+    socketClient.onGameStartTimer(this.boundShowTimer);
   }
 
   private unsubscribeFromSocket(): void {
@@ -87,15 +86,26 @@ export default class RoomPage extends ContainerComponent {
     socketClient.offPlayerJoined(this.handleRoomUpdate);
     socketClient.offPlayerLeft(this.handleRoomUpdate);
     socketClient.offTeamChanged(this.handleRoomUpdate);
-    // socketClient.offGameStartTimer(this.showTimer);
+    socketClient.offGameStartTimer(this.boundShowTimer);
   }
+
+  private boundShowTimer = this.showTimer.bind(this);
+
+  private showTimer(): void {
+    if (!this.roomInfoBlock) return;
+    this.roomInfoBlock.showTimer(START_GAME_TIMER);
+  }
+
+  // private hideTimer(): void {
+  //  if (!this.roomInfoBlock) return;
+  //   this.roomInfoBlock.hideTimer();
+  // }
 
   private render(): void {
     const roomInfo = store.getState().currentRoom;
 
     if (!roomInfo) {
       //Loader
-      console.log(1111);
       return;
     }
 
@@ -126,11 +136,6 @@ export default class RoomPage extends ContainerComponent {
 
     this.appendChildren([new RoomHeader(), main]);
   }
-
-  // private showTimer(): void {
-  //   const timer = new RoomTimer();
-  //   this.appendChildren([timer]);
-  // }
 
   public destroyPage(): void {
     this.redTeamSection?.destroyComponent();

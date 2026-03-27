@@ -55,7 +55,7 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
           socketClient.off(ServerEventType.GAME_START);
           const gameId = gameInfo.id;
 
-          router.navigate(URLS.ROOM(gameId));
+          router.navigate(URLS.GAME(gameId));
         });
 
         context.next({

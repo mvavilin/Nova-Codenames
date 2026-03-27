@@ -17,6 +17,7 @@ const roomPageLanguage = {
     [TranslationKeys.ROOM_AGENT_BTN]: 'Play as Agent',
     [TranslationKeys.ROOM_LEAVE_TEAM_BTN]: 'Leave team',
     [TranslationKeys.ROOM_PLAYERS_CHOOSING]: 'Players choosing team',
+    [TranslationKeys.ROOM_TIMER_MESSAGE]: 'The game starts in',
   },
   [Language.RU]: {
     [TranslationKeys.ROOM_TITLE]: 'Комната',
@@ -33,6 +34,7 @@ const roomPageLanguage = {
     [TranslationKeys.ROOM_AGENT_BTN]: 'Играть за Агента',
     [TranslationKeys.ROOM_LEAVE_TEAM_BTN]: 'Покинуть команду',
     [TranslationKeys.ROOM_PLAYERS_CHOOSING]: 'Игроки выбирающие команду',
+    [TranslationKeys.ROOM_TIMER_MESSAGE]: 'Игра начнется через',
   },
 };
 

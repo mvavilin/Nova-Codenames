@@ -8,7 +8,7 @@ import { t } from '@/i18n';
 
 const styles = {
   header:
-    'w-full min-w-[350px] max-w-7xl grid grid-cols-1 min-w-[650px]:grid-cols-[1fr_1fr_2fr] md:grid-cols-[1fr_1fr_1fr] gap-2 p-4 items-center bg-white/25 text-white rounded place-items-center',
+    'w-full min-w-[350px] max-w-7xl grid grid-cols-1 min-w-[650px]:grid-cols-[1fr_1fr_2fr] md:grid-cols-[1fr_1fr_1fr] gap-4 p-4 items-center bg-white/25 text-white rounded place-items-center',
   title: 'text-2xl text-center font-bold',
   container: 'flex justify-between items-center',
   userMenu: 'flex items-center justify-end gap-4 justify-self-end',

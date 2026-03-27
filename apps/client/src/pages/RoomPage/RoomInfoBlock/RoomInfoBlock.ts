@@ -5,15 +5,19 @@ import { t } from '@/i18n';
 import store from '@/store/store';
 import { SocketActionTypes } from '@/store/actions';
 import type { RoomInfo } from '@shared/types/room';
+import { Timer } from '@/pages/GamePage/components';
 
 const styles = {
   container:
-    'w-[512px] max-[640px]:w-[350px] flex flex-wrap justify-center min-[640px]:justify-between items-center gap-5 text-white text-2xl font-bold bg-white/25 px-4 py-4 rounded',
+    'min-w-[350px] flex justify-center max-[950px]:flex-col max-[950px]:justify-between items-center gap-8 text-white text-2xl font-bold bg-white/25 px-4 py-4 rounded',
   textContainerRow: 'w-full flex gap-2 items-center',
   textContainerCol: 'flex flex-col self-center',
   span: 'text-brand truncate',
   button:
     'w-34 h-12 shrink-0 bg-cyan-600 rounded-md whitespace-normal leading-tight text-base hover:cursor-pointer hover:bg-green-600 hover:transition-colors hover:duration-300',
+  timerContainer:
+    'h-full p-2 bg-green-600/70 flex flex-col justify-center items-center gap-5 text-brand text-2xl font-bold transition-all duration-500 opacity-0 scale-95 -> opacity-100 scale-100 rounded hidden',
+  timerMessage: 'text-center',
 };
 
 export default class RoomInfoBlock extends ContainerComponent {
@@ -21,6 +25,9 @@ export default class RoomInfoBlock extends ContainerComponent {
   private playersTitle: TextComponent | null = null;
   private playersCount: TextComponent | null = null;
   private leaveButton: ButtonComponent | null = null;
+  private timerContainer: ContainerComponent | null = null;
+  private timer: Timer | null = null;
+  private timerMessage: TextComponent | null = null;
 
   constructor({ roomName, currentCount, totalCount }: RoomInfoBlockProps) {
     super({ classes: styles.container });
@@ -74,13 +81,48 @@ export default class RoomInfoBlock extends ContainerComponent {
       },
     });
 
-    this.appendChildren([textContainerColumn, this.leaveButton]);
+    this.timerContainer = new ContainerComponent({ classes: styles.timerContainer });
+    this.timer = new Timer(0, true);
+    this.timerMessage = new TextComponent({
+      classes: styles.timerMessage,
+      content: t(TranslationKeys.ROOM_TIMER_MESSAGE),
+    });
+    this.timerContainer.appendChildren([this.timerMessage, this.timer]);
+
+    this.appendChildren([textContainerColumn, this.timerContainer, this.leaveButton]);
   }
 
   private leaveRoom(): void {
+    this.timer?.stop();
+    this.hideTimer();
+
     store.dispatch({
       type: SocketActionTypes.LEAVE_ROOM,
     });
+  }
+
+  public showTimer(duration: number): void {
+    if (!this.timerContainer || !this.timer) return;
+
+    this.timerContainer.removeClasses('hidden');
+    this.timer.reset(duration, true);
+    this.timer.onEnd = (): void => {
+      this.sendReadyStatus();
+    };
+  }
+
+  private sendReadyStatus(): void {
+    store.dispatch({
+      type: SocketActionTypes.GAME_ADD_PLAYER,
+    });
+
+    this.hideTimer();
+  }
+
+  public hideTimer(): void {
+    if (!this.timerContainer || !this.timer) return;
+    this.timerContainer.setClasses('hidden');
+    this.timer.stop();
   }
 
   public handlePlayerCounts(room: RoomInfo): void {
@@ -89,11 +131,12 @@ export default class RoomInfoBlock extends ContainerComponent {
   }
 
   public switchLanguage(): void {
-    if (!this.roomTitle || !this.playersTitle || !this.leaveButton) return;
+    if (!this.roomTitle || !this.playersTitle || !this.leaveButton || !this.timerMessage) return;
 
     this.roomTitle.setContent(t(TranslationKeys.ROOM_INFO_TITLE));
     this.playersTitle.setContent(t(TranslationKeys.ROOM_INFO_PLAYERS));
     this.leaveButton.setContent(t(TranslationKeys.ROOM_LEAVE_ROOM_BTN));
+    this.timerMessage.setContent(t(TranslationKeys.ROOM_TIMER_MESSAGE));
   }
 
   public destroyComponent(): void {
@@ -101,6 +144,9 @@ export default class RoomInfoBlock extends ContainerComponent {
     this.playersTitle = null;
     this.playersCount = null;
     this.leaveButton = null;
+    this.timerContainer = null;
+    this.timer = null;
+    this.timerMessage = null;
 
     this.destroyChildren();
 

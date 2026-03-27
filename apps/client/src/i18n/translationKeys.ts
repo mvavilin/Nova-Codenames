@@ -94,6 +94,7 @@ export const TranslationKeys = {
   ROOM_AGENT_BTN: 'RoomAgentBtn',
   ROOM_LEAVE_TEAM_BTN: 'RoomLeaveTeamBtn',
   ROOM_PLAYERS_CHOOSING: 'RoomPlayersChoosing',
+  ROOM_TIMER_MESSAGE: 'RoomTimerMessage',
 
   LOBBY_TITLE: 'lobbyTitle',
 
