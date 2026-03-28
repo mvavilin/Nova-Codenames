@@ -4,6 +4,10 @@ import { InputText, Button, FieldLabel } from '@components/ui';
 import { RoomsTable } from '@pages/LobbyPage/components';
 import { t } from '@i18n';
 import { TranslationKeys } from '@i18n/translationKeys';
+import type { State } from '@/store/types/state';
+import type { Action } from '@/api/StateAPI';
+import store from '@/store/store';
+import { AppActionTypes } from '@/store/actions';
 
 export default class SearchRoomForm extends FormComponent {
   private roomLabel: FieldLabel;
@@ -11,6 +15,7 @@ export default class SearchRoomForm extends FormComponent {
   private roomInput: InputText;
   private searchRoomButton: Button;
   private roomsTable: RoomsTable;
+  private unsubscribe: () => void;
 
   constructor(roomsTable: RoomsTable) {
     super({ classes: FORM_CLASSES.FORM });
@@ -51,6 +56,8 @@ export default class SearchRoomForm extends FormComponent {
     });
 
     this.render();
+
+    this.unsubscribe = store.subscribe((state, action) => this.switchLanguage(state, action));
   }
 
   private render(): void {
@@ -84,5 +91,17 @@ export default class SearchRoomForm extends FormComponent {
         row.show();
       }
     }
+  }
+  private switchLanguage(_state: State, action: Action): void {
+    if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
+      this.roomLabel.setContent(t(TranslationKeys.SEARCH_ROOM_FIELD_TITLE));
+      this.roomInput.setPlaceholder(t(TranslationKeys.SEARCH_ROOM_FIELD_PLACEHOLDER));
+      this.searchRoomButton.setLabel(t(TranslationKeys.SEARCH_ROOM_FIELD_FIND_BUTTON_LABEL));
+    }
+  }
+
+  public override destroy(): this {
+    this.unsubscribe();
+    return this;
   }
 }

@@ -7,7 +7,7 @@ const lobbyPage = {
 
     [TranslationKeys.JOIN_ROOM_SECTION_TITLE]: 'Join room',
     [TranslationKeys.CREATE_ROOM_SECTION_TITLE]: 'Create room',
-    [TranslationKeys.PUBLIC_ROOMS_SECTION_TITLE]: 'Public Rooms',
+    [TranslationKeys.PUBLIC_ROOMS_SECTION_TITLE]: 'Public rooms',
 
     [TranslationKeys.PLAYER_COUNT_FIELD_TITLE]: 'Select number of players',
 
@@ -19,7 +19,7 @@ const lobbyPage = {
     [TranslationKeys.JOIN_ROOM_FIELD_PLACEHOLDER]: 'Enter room ID',
     [TranslationKeys.JOIN_ROOM_FIELD_JOIN_BUTTON_LABEL]: 'Join',
 
-    [TranslationKeys.SEARCH_ROOM_FIELD_TITLE]: 'Search Room',
+    [TranslationKeys.SEARCH_ROOM_FIELD_TITLE]: 'Search room',
     [TranslationKeys.SEARCH_ROOM_FIELD_PLACEHOLDER]: 'Enter room name',
     [TranslationKeys.SEARCH_ROOM_FIELD_FIND_BUTTON_LABEL]: 'Find',
 
