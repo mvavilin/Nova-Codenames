@@ -5,12 +5,16 @@ import { FORM_CLASSES } from '@constants/styles';
 import { InputText, Button, FieldLabel } from '@components/ui';
 import { t } from '@i18n';
 import { TranslationKeys } from '@i18n/translationKeys';
+import type { State } from '@/store/types/state';
+import type { Action } from '@/api/StateAPI';
+import { AppActionTypes } from '@/store/actions';
 
 export default class JoinRoomForm extends FormComponent {
   private roomLabel: FieldLabel;
   private inputContainer: ContainerComponent;
   private roomInput: InputText;
   private joinRoomButton: Button;
+  private unsubscribe: () => void;
 
   constructor() {
     super({ classes: FORM_CLASSES.FORM });
@@ -53,6 +57,8 @@ export default class JoinRoomForm extends FormComponent {
     });
 
     this.render();
+
+    this.unsubscribe = store.subscribe((state, action) => this.switchLanguage(state, action));
   }
 
   private render(): void {
@@ -69,5 +75,18 @@ export default class JoinRoomForm extends FormComponent {
       type: SocketActionTypes.SOCKET_JOIN_ROOM,
       payload: { roomId },
     });
+  }
+
+  private switchLanguage(_state: State, action: Action): void {
+    if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
+      this.roomLabel.setContent(t(TranslationKeys.JOIN_ROOM_FIELD_TITLE));
+      this.roomInput.setPlaceholder(t(TranslationKeys.JOIN_ROOM_FIELD_PLACEHOLDER));
+      this.joinRoomButton.setLabel(t(TranslationKeys.JOIN_ROOM_FIELD_JOIN_BUTTON_LABEL));
+    }
+  }
+
+  public override destroy(): this {
+    this.unsubscribe();
+    return this;
   }
 }

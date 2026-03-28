@@ -5,7 +5,7 @@ const lobbyPage = {
   [Language.EN]: {
     [TranslationKeys.LOBBY_TITLE]: 'Lobby',
 
-    [TranslationKeys.JOIN_ROOM_SECTION_TITLE]: 'Join Room',
+    [TranslationKeys.JOIN_ROOM_SECTION_TITLE]: 'Join room',
     [TranslationKeys.CREATE_ROOM_SECTION_TITLE]: 'Create room',
     [TranslationKeys.PUBLIC_ROOMS_SECTION_TITLE]: 'Public Rooms',
 
@@ -15,7 +15,7 @@ const lobbyPage = {
     [TranslationKeys.ROOM_NAME_FIELD_PLACEHOLDER]: 'Enter room name',
     [TranslationKeys.ROOM_NAME_FIELD_CREATE_BUTTON_LABEL]: 'Create',
 
-    [TranslationKeys.JOIN_ROOM_FIELD_TITLE]: 'Join Room',
+    [TranslationKeys.JOIN_ROOM_FIELD_TITLE]: 'Join room',
     [TranslationKeys.JOIN_ROOM_FIELD_PLACEHOLDER]: 'Enter room ID',
     [TranslationKeys.JOIN_ROOM_FIELD_JOIN_BUTTON_LABEL]: 'Join',
 
