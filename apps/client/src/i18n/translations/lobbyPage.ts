@@ -6,12 +6,12 @@ const lobbyPage = {
     [TranslationKeys.LOBBY_TITLE]: 'Lobby',
 
     [TranslationKeys.JOIN_ROOM_SECTION_TITLE]: 'Join Room',
-    [TranslationKeys.CREATE_ROOM_SECTION_TITLE]: 'Create Room',
+    [TranslationKeys.CREATE_ROOM_SECTION_TITLE]: 'Create room',
     [TranslationKeys.PUBLIC_ROOMS_SECTION_TITLE]: 'Public Rooms',
 
-    [TranslationKeys.PLAYER_COUNT_FIELD_TITLE]: 'Select Number of Players',
+    [TranslationKeys.PLAYER_COUNT_FIELD_TITLE]: 'Select number of players',
 
-    [TranslationKeys.ROOM_NAME_FIELD_TITLE]: 'Room Name',
+    [TranslationKeys.ROOM_NAME_FIELD_TITLE]: 'Room name',
     [TranslationKeys.ROOM_NAME_FIELD_PLACEHOLDER]: 'Enter room name',
     [TranslationKeys.ROOM_NAME_FIELD_CREATE_BUTTON_LABEL]: 'Create',
 
