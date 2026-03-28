@@ -7,7 +7,7 @@ import type { State } from '@/store/types/state';
 import type { Action } from '@/api/StateAPI';
 import { AppActionTypes } from '@/store/actions';
 
-const JOIN_BUTTON_CLASSES = 'w-[78px] text-xs bg-green-600 hover:bg-green-700 mx-auto';
+const JOIN_BUTTON_CLASSES = 'min-w-[78px] text-xs bg-green-600 hover:bg-green-700 mx-auto';
 
 interface JoinButtonProperties {
   roomId: string;

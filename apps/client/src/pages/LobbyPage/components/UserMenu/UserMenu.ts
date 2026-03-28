@@ -4,7 +4,7 @@ import { ProfileSection } from '@pages/LobbyPage/components';
 import { ExitButton } from '@components';
 import LanguageButton from '@/components/LanguageButton/LanguageButton';
 
-const USER_MENU_CLASSES = `flex items-center justify-end gap-4 justify-self-end`;
+const USER_MENU_CLASSES = `flex items-center justify-between gap-8`;
 
 export default class UserMenu extends BaseComponent {
   constructor() {
