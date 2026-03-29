@@ -13,6 +13,7 @@ export function setupGameHandlers(
 ): void {
   setupGameAddPlayerHandler(socket);
   setupClueGiveHandler(socket);
+  setupCardChooseHandler(socket);
 }
 
 function setupGameAddPlayerHandler(
@@ -37,6 +38,7 @@ function setupGameAddPlayerHandler(
         const socketId = socketIdMap.get(playerId);
         if (socketId) {
           io.to(socketId).emit('game:start', { gameInfo: game.getGameInfo(playerId) });
+          logger.emit(playerId, 'game:start', { gameInfo: game.getGameInfo(playerId) });
         }
       }
 
@@ -45,6 +47,7 @@ function setupGameAddPlayerHandler(
           const socketId = socketIdMap.get(spymasterId);
           if (socketId) {
             io.to(socketId).emit('game:clue-timeout');
+            logger.emit(spymasterId, 'game:clue-timeout');
           }
         }
       });
@@ -52,6 +55,7 @@ function setupGameAddPlayerHandler(
         const socketId = socketIdMap.get(spymasterId);
         if (socketId) {
           io.to(socketId).emit('game:ask-clue');
+          logger.emit(spymasterId, 'game:ask-clue');
         }
       }
     }
@@ -74,6 +78,28 @@ function setupClueGiveHandler(
           if (socketId) {
             io.to(socketId).emit('game:clue-given', { clue });
             logger.emit(agentId, 'game:clue-given', { clue });
+          }
+        }
+      }
+    }
+  });
+}
+
+function setupCardChooseHandler(
+  socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
+): void {
+  const { userId } = socket.data;
+  socket.on('game:card-choose', ({ cardId }) => {
+    const game = roomManager.getGameByUserId(userId);
+    if (game) {
+      const response = game.chooseCard(userId, cardId);
+      if (!('error' in response)) {
+        const { players, recipients } = response;
+        for (const recipient of recipients) {
+          const socketId = socketIdMap.get(recipient);
+          if (socketId) {
+            io.to(socketId).emit('game:card-chosen', { cardId, players });
+            logger.emit(recipient, 'game:card-chosen', { cardId, players });
           }
         }
       }

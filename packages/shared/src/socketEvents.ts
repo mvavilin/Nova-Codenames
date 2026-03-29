@@ -61,6 +61,7 @@ export type ClientEvent =
   | { type: 'team:change'; payload: { player: Player } }
   | { type: 'game:add-player' }
   | { type: 'game:clue-give'; payload: { clue: string } }
+  | { type: 'game:card-choose'; payload: { cardId: string } }
   | { type: 'profile:enter' }
   | { type: 'profile:leave' }
   | { type: 'profile:ask-info' };
@@ -84,6 +85,7 @@ export type ServerEvent =
   | { type: 'game:ask-clue' }
   | { type: 'game:clue-timeout' }
   | { type: 'game:clue-given'; payload: { clue: string } }
+  | { type: 'game:card-chosen'; payload: { cardId: string; players: Player[] } }
   | { type: 'profile:entered'; payload: { profileInfo: ProfileInfo } }
   | { type: 'profile:left'; payload: { roomPreviews: RoomPreview[] } }
   | { type: 'error'; payload: { code: ErrorCode } };

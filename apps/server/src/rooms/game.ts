@@ -22,6 +22,7 @@ export class Game {
   private currentTeam: Teams = 'red';
   private clueTimer: NodeJS.Timeout | null = null;
   private gamePhase: GAME_PHASE = 'clue';
+  private chosenCards: Map<string, string[]> = new Map();
 
   constructor(roomId: string, maxPlayers: number) {
     this.roomId = roomId;
@@ -144,8 +145,37 @@ export class Game {
       this.gamePhase = 'guess';
       const agentIds = team.filter((player) => player.role === 'agent').map((player) => player.id);
       return { clue, agentIds };
-    } else {
-      return { error: 'ACTION_IS_PROHIBITED' };
     }
+    return { error: 'ACTION_IS_PROHIBITED' };
+  }
+
+  public chooseCard(
+    userId: string,
+    cardId: string
+  ): { players: Player[]; recipients: string[] } | { error: ErrorCode } {
+    const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
+    const agent = team.find((player) => player.role === 'agent' && player.id === userId);
+
+    if (agent && this.gamePhase === 'guess') {
+      const card = this.cards.find((card) => card.id === cardId);
+
+      if (card && card.status === 'hidden') {
+        let choice = this.chosenCards.get(this.roomId);
+        if (choice) {
+          if (choice.includes(userId)) {
+            choice = choice.filter((id) => id !== userId);
+          } else {
+            choice.push(userId);
+          }
+        } else {
+          choice = [userId];
+        }
+        this.chosenCards.set(this.roomId, choice);
+        const players = team.filter((player) => choice.includes(player.id));
+        const recipients = team.map((player) => player.id);
+        return { players, recipients };
+      }
+    }
+    return { error: 'ACTION_IS_PROHIBITED' };
   }
 }

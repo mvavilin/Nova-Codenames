@@ -261,3 +261,110 @@ test('The giveClue method should clear the clue timer', () => {
   game.giveClue(spymasterId, clue);
   expect(game['clueTimer']).toBeNull();
 });
+
+test('The chooseCard method should return the players and recipients if the player is an agent and the game phase is guess', () => {
+  const game = new Game('', 4);
+  const agentId = uuid();
+  const agent: Player = { id: agentId, username: 'agent', team: 'red', role: 'agent' };
+  game.addPlayer(agent);
+  game.initial();
+  game['gamePhase'] = 'guess';
+  const cardId = uuid();
+  game['cards'] = [{ id: cardId, word: 'word', color: 'unknown', status: 'hidden' }];
+  const result = game.chooseCard(agentId, cardId);
+  expect(result).toEqual({ players: [agent], recipients: [agentId] });
+});
+
+test('The chooseCard method should return the players and recipients if current team is blue', () => {
+  const game = new Game('', 4);
+  const agentId = uuid();
+  const agent: Player = { id: agentId, username: 'agent', team: 'blue', role: 'agent' };
+  game.addPlayer(agent);
+  game.initial();
+  game['currentTeam'] = 'blue';
+  game['gamePhase'] = 'guess';
+  const cardId = uuid();
+  game['cards'] = [{ id: cardId, word: 'word', color: 'unknown', status: 'hidden' }];
+  const result = game.chooseCard(agentId, cardId);
+  expect(result).toEqual({ players: [agent], recipients: [agentId] });
+});
+
+test('The chooseCard method should return an error if the player is not an agent', () => {
+  const game = new Game('', 4);
+  const spymasterId = uuid();
+  const spymaster: Player = {
+    id: spymasterId,
+    username: 'spymaster',
+    team: 'red',
+    role: 'spymaster',
+  };
+  game.addPlayer(spymaster);
+  game.initial();
+  game['gamePhase'] = 'guess';
+  const cardId = uuid();
+  game['cards'] = [{ id: cardId, word: 'word', color: 'unknown', status: 'hidden' }];
+  const result = game.chooseCard(spymasterId, cardId);
+  expect(result).toEqual({ error: 'ACTION_IS_PROHIBITED' });
+});
+
+test('The chooseCard method should return an error if the game phase is not guess', () => {
+  const game = new Game('', 4);
+  const agentId = uuid();
+  const agent: Player = { id: agentId, username: 'agent', team: 'red', role: 'agent' };
+  game.addPlayer(agent);
+  game.initial();
+  const cardId = uuid();
+  game['cards'] = [{ id: cardId, word: 'word', color: 'unknown', status: 'hidden' }];
+  const result = game.chooseCard(agentId, cardId);
+  expect(result).toEqual({ error: 'ACTION_IS_PROHIBITED' });
+});
+
+test('The chooseCard method should update the chosen cards', () => {
+  const game = new Game('', 4);
+  const agentId = uuid();
+  const agent: Player = { id: agentId, username: 'agent', team: 'red', role: 'agent' };
+  game.addPlayer(agent);
+  game.initial();
+  game['gamePhase'] = 'guess';
+  const cardId = uuid();
+  game['cards'] = [{ id: cardId, word: 'word', color: 'unknown', status: 'hidden' }];
+  game.chooseCard(agentId, cardId);
+  let chosenCards = game['chosenCards'].get(game.getRoomId());
+  expect(chosenCards).toEqual([agentId]);
+  game.chooseCard(agentId, cardId);
+  chosenCards = game['chosenCards'].get(game.getRoomId());
+  expect(chosenCards).toEqual([]);
+  game.chooseCard(agentId, cardId);
+  chosenCards = game['chosenCards'].get(game.getRoomId());
+  expect(chosenCards).toEqual([agentId]);
+});
+
+test('The chooseCard method should toggle the chosen card for the player', () => {
+  const game = new Game('', 4);
+  const agentId = uuid();
+  const agent: Player = { id: agentId, username: 'agent', team: 'red', role: 'agent' };
+  game.addPlayer(agent);
+  game.initial();
+  game['gamePhase'] = 'guess';
+  const cardId = uuid();
+  game['cards'] = [{ id: cardId, word: 'word', color: 'unknown', status: 'hidden' }];
+  game.chooseCard(agentId, cardId);
+  let chosenCards = game['chosenCards'].get(game.getRoomId());
+  expect(chosenCards).toEqual([agentId]);
+  game.chooseCard(agentId, cardId);
+  chosenCards = game['chosenCards'].get(game.getRoomId());
+  expect(chosenCards).toEqual([]);
+});
+
+test('The chooseCard method should return error if card is not hidden', () => {
+  const game = new Game('', 4);
+  const agentId = uuid();
+  const agent: Player = { id: agentId, username: 'agent', team: 'red', role: 'agent' };
+  game.addPlayer(agent);
+  game.initial();
+  game['gamePhase'] = 'guess';
+  const cardId = uuid();
+  game['cards'] = [{ id: cardId, word: 'word', color: 'unknown', status: 'revealed' }];
+  const result = game.chooseCard(agentId, cardId);
+  expect(result).toEqual({ error: 'ACTION_IS_PROHIBITED' });
+});
