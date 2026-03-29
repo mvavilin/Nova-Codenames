@@ -52,6 +52,80 @@ test('The agent does not see the color of the cards', () => {
   expect(unknownCards).toHaveLength(CardCounts.ALL);
 });
 
+test('The addPlayer method should add a player to the game', () => {
+  const game = new Game('', 4);
+
+  const player1: Player = { id: uuid(), username: 'username', team: 'red', role: 'agent' };
+  game.addPlayer(player1);
+  const result1 = game.getPlayer(player1.id);
+  expect(result1).toEqual(player1);
+
+  const player2: Player = { id: uuid(), username: 'username', team: 'blue', role: 'agent' };
+  game.addPlayer(player2);
+  const result2 = game.getPlayer(player2.id);
+  expect(result2).toEqual(player2);
+
+  const player3: Player = { id: uuid(), username: 'username', team: 'choosing', role: 'agent' };
+  game.addPlayer(player3);
+  const result3 = game.getPlayer(player3.id);
+  expect(result3).toBeUndefined();
+});
+
+test('The getRoomId should return roomId', () => {
+  const roomId = 'roomId';
+  const game = new Game(roomId, 4);
+
+  const result = game.getRoomId();
+  expect(result).toBe(roomId);
+});
+
+test('The isFull method should return true if the game has the maximum number of players', () => {
+  const game = new Game('', 2);
+  const player1: Player = { id: uuid(), username: 'player1', team: 'red', role: 'agent' };
+  const player2: Player = { id: uuid(), username: 'player2', team: 'red', role: 'agent' };
+
+  game.addPlayer(player1);
+  let result = game.isFull();
+  expect(result).toBeFalsy();
+
+  game.addPlayer(player2);
+  result = game.isFull();
+  expect(result).toBeTruthy();
+});
+
+test('The getPlayerIds method should return the ids of the players in the game', () => {
+  const game = new Game('', 4);
+  const player1: Player = { id: uuid(), username: 'player1', team: 'red', role: 'agent' };
+  const player2: Player = { id: uuid(), username: 'player2', team: 'red', role: 'agent' };
+  game.addPlayer(player1);
+  game.addPlayer(player2);
+  const result = game.getPlayerIds();
+
+  expect(result).toHaveLength(2);
+  expect(result).toContain(player1.id);
+  expect(result).toContain(player2.id);
+});
+
+test('The removePlayer method should remove a player from the game using its id', () => {
+  const game = new Game('', 4);
+  const player1: Player = { id: uuid(), username: 'player1', team: 'red', role: 'agent' };
+  const player2: Player = { id: uuid(), username: 'player2', team: 'red', role: 'agent' };
+  game.addPlayer(player1);
+  game.addPlayer(player2);
+  let result = game.getPlayerIds();
+
+  expect(result).toHaveLength(2);
+  expect(result).toContain(player1.id);
+  expect(result).toContain(player2.id);
+
+  game.removePlayer(player1.id);
+
+  result = game.getPlayerIds();
+  expect(result).toHaveLength(1);
+  expect(result).not.toContain(player1.id);
+  expect(result).toContain(player2.id);
+});
+
 test('The askClue method should return the id of a spymaster', () => {
   const game = new Game('', 4);
   const spymasterId = uuid();
@@ -97,7 +171,7 @@ test('The askClue method should clear the timer after the time is up', () => {
   expect(game['clueTimer']).toBeNull();
 });
 
-test('The giveClue method should return the clue and the agent ids', () => {
+test('The giveClue method should return the clue and the agent ids if current team is red', () => {
   const game = new Game('', 4);
   const spymasterId = uuid();
   const agentId1 = uuid();
@@ -110,6 +184,29 @@ test('The giveClue method should return the clue and the agent ids', () => {
   };
   const agent1: Player = { id: agentId1, username: 'agent1', team: 'red', role: 'agent' };
   const agent2: Player = { id: agentId2, username: 'agent2', team: 'red', role: 'agent' };
+  game.addPlayer(spymaster);
+  game.addPlayer(agent1);
+  game.addPlayer(agent2);
+  game.initial();
+  const clue = 'clue';
+  const result = game.giveClue(spymasterId, clue);
+  expect(result).toEqual({ clue, agentIds: [agentId1, agentId2] });
+});
+
+test('The giveClue method should return the clue and the agent ids if current team is blue', () => {
+  const game = new Game('', 4);
+  game['currentTeam'] = 'blue';
+  const spymasterId = uuid();
+  const agentId1 = uuid();
+  const agentId2 = uuid();
+  const spymaster: Player = {
+    id: spymasterId,
+    username: 'spymaster',
+    team: 'blue',
+    role: 'spymaster',
+  };
+  const agent1: Player = { id: agentId1, username: 'agent1', team: 'blue', role: 'agent' };
+  const agent2: Player = { id: agentId2, username: 'agent2', team: 'blue', role: 'agent' };
   game.addPlayer(spymaster);
   game.addPlayer(agent1);
   game.addPlayer(agent2);

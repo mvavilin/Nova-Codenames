@@ -60,17 +60,17 @@ export class Game {
     };
   }
 
-  public getSpymasterIds(): string[] {
-    return this.getAllPlayers()
-      .filter((player) => player.role === 'spymaster')
-      .map((player) => player.id);
-  }
+  // public getSpymasterIds(): string[] {
+  //   return this.getAllPlayers()
+  //     .filter((player) => player.role === 'spymaster')
+  //     .map((player) => player.id);
+  // }
 
-  public getAgentIds(): string[] {
-    return this.getAllPlayers()
-      .filter((player) => player.role === 'agent')
-      .map((player) => player.id);
-  }
+  // public getAgentIds(): string[] {
+  //   return this.getAllPlayers()
+  //     .filter((player) => player.role === 'agent')
+  //     .map((player) => player.id);
+  // }
 
   private getAllPlayers(): Player[] {
     return [...this.redTeam, ...this.blueTeam];
