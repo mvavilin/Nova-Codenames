@@ -11,10 +11,11 @@ import type { SocketData } from '../../types/types.ts';
 export function setupGameHandlers(
   socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
 ): void {
-  setupGameAddPlayer(socket);
+  setupGameAddPlayerHandler(socket);
+  setupClueGiveHandler(socket);
 }
 
-function setupGameAddPlayer(
+function setupGameAddPlayerHandler(
   socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
 ): void {
   const { userId } = socket.data;
@@ -51,6 +52,29 @@ function setupGameAddPlayer(
         const socketId = socketIdMap.get(spymasterId);
         if (socketId) {
           io.to(socketId).emit('game:ask-clue');
+        }
+      }
+    }
+  });
+}
+
+function setupClueGiveHandler(
+  socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
+): void {
+  const { userId } = socket.data;
+  socket.on('game:clue-give', ({ clue }) => {
+    const game = roomManager.getGameByUserId(userId);
+
+    if (game) {
+      const response = game.giveClue(userId, clue);
+      if (!('error' in response)) {
+        const { clue, agentIds } = response;
+        for (const agentId of agentIds) {
+          const socketId = socketIdMap.get(agentId);
+          if (socketId) {
+            io.to(socketId).emit('game:clue-given', { clue });
+            logger.emit(agentId, 'game:clue-given', { clue });
+          }
         }
       }
     }

@@ -3,7 +3,7 @@ import { CardCounts } from '../../../../packages/shared/src/types/game.ts';
 import type { Player } from '../../../../packages/shared/src/types/room.ts';
 import { v4 as uuid } from 'uuid';
 import { Game } from '../rooms/game.ts';
-import { SECOND_COUNT_FOR_ASK_CLUE } from '../types/types.ts';
+import { SECOND_COUNT_FOR_ASK_CLUE } from '../../../../packages/shared/src/socketEvents.ts';
 
 test('The game should create 25 cards', () => {
   const game = new Game('', 4);
@@ -94,5 +94,73 @@ test('The askClue method should clear the timer after the time is up', () => {
   expect(game['clueTimer']).not.toBeNull();
 
   vi.advanceTimersByTime(SECOND_COUNT_FOR_ASK_CLUE * 1000);
+  expect(game['clueTimer']).toBeNull();
+});
+
+test('The giveClue method should return the clue and the agent ids', () => {
+  const game = new Game('', 4);
+  const spymasterId = uuid();
+  const agentId1 = uuid();
+  const agentId2 = uuid();
+  const spymaster: Player = {
+    id: spymasterId,
+    username: 'spymaster',
+    team: 'red',
+    role: 'spymaster',
+  };
+  const agent1: Player = { id: agentId1, username: 'agent1', team: 'red', role: 'agent' };
+  const agent2: Player = { id: agentId2, username: 'agent2', team: 'red', role: 'agent' };
+  game.addPlayer(spymaster);
+  game.addPlayer(agent1);
+  game.addPlayer(agent2);
+  game.initial();
+  const clue = 'clue';
+  const result = game.giveClue(spymasterId, clue);
+  expect(result).toEqual({ clue, agentIds: [agentId1, agentId2] });
+});
+
+test('The giveClue method should return an error if the player is not a spymaster', () => {
+  const game = new Game('', 4);
+  const agentId = uuid();
+  const agent: Player = { id: agentId, username: 'agent', team: 'red', role: 'agent' };
+  game.addPlayer(agent);
+  game.initial();
+  const clue = 'clue';
+  const result = game.giveClue(agentId, clue);
+  expect(result).toEqual({ error: 'ACTION_IS_PROHIBITED' });
+});
+
+test('The giveClue method should return an error if the game phase is not clue', () => {
+  const game = new Game('', 4);
+  const spymasterId = uuid();
+  const spymaster: Player = {
+    id: spymasterId,
+    username: 'spymaster',
+    team: 'red',
+    role: 'spymaster',
+  };
+  game.addPlayer(spymaster);
+  game.initial();
+  game['gamePhase'] = 'guess';
+  const clue = 'clue';
+  const result = game.giveClue(spymasterId, clue);
+  expect(result).toEqual({ error: 'ACTION_IS_PROHIBITED' });
+});
+
+test('The giveClue method should clear the clue timer', () => {
+  const game = new Game('', 4);
+  const spymasterId = uuid();
+  const spymaster: Player = {
+    id: spymasterId,
+    username: 'spymaster',
+    team: 'red',
+    role: 'spymaster',
+  };
+  game.addPlayer(spymaster);
+  game.initial();
+  game.askClue(() => {});
+  expect(game['clueTimer']).not.toBeNull();
+  const clue = 'clue';
+  game.giveClue(spymasterId, clue);
   expect(game['clueTimer']).toBeNull();
 });

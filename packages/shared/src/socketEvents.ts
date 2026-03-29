@@ -43,6 +43,12 @@ export enum UserStatusType {
 
 export type UserStatus = 'IN_LOBBY' | 'IN_ROOM' | 'IN_GAME' | 'IN_PROFILE';
 
+export type GAME_PHASE = 'clue' | 'guess' | 'check' | 'finish';
+
+export const RECONNECT_MAX_TIME = 60_000;
+export const SECOND_COUNT_BEFORE_START_GAME = 15;
+export const SECOND_COUNT_FOR_ASK_CLUE = 30;
+
 export type ClientEvent =
   | { type: 'session:ask-status' }
   | { type: 'session:logout' }
@@ -54,7 +60,7 @@ export type ClientEvent =
   | { type: 'room:ask-room-info' }
   | { type: 'team:change'; payload: { player: Player } }
   | { type: 'game:add-player' }
-  | { type: 'game:give-clue'; payload: { clue: string } }
+  | { type: 'game:clue-give'; payload: { clue: string } }
   | { type: 'profile:enter' }
   | { type: 'profile:leave' }
   | { type: 'profile:ask-info' };
@@ -77,6 +83,7 @@ export type ServerEvent =
   | { type: 'game:start'; payload: { gameInfo: GameInfo } }
   | { type: 'game:ask-clue' }
   | { type: 'game:clue-timeout' }
+  | { type: 'game:clue-given'; payload: { clue: string } }
   | { type: 'profile:entered'; payload: { profileInfo: ProfileInfo } }
   | { type: 'profile:left'; payload: { roomPreviews: RoomPreview[] } }
   | { type: 'error'; payload: { code: ErrorCode } };
@@ -91,7 +98,8 @@ export type ErrorCode =
   | 'INVALID_ACTION'
   | 'AUTH_REQUIRED'
   | 'ALREADY_ONLINE'
-  | 'GAME_IS_NOT_FULL';
+  | 'GAME_IS_NOT_FULL'
+  | 'ACTION_IS_PROHIBITED';
 
 type EventName<T> = T extends { type: infer K } ? K : never;
 

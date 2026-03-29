@@ -1,10 +1,11 @@
 import type { Socket } from 'socket.io';
-import type {
-  ClientToServerEvents,
-  ServerToClientEvents,
+import {
+  RECONNECT_MAX_TIME,
+  type ClientToServerEvents,
+  type ServerToClientEvents,
 } from '../../../../../packages/shared/src/socketEvents.ts';
 import { RoomManager } from '../../rooms/roomManager.ts';
-import { RECONNECT_MAX_TIME, type SocketData } from '../../types/types.ts';
+import { type SocketData } from '../../types/types.ts';
 import { setupRoomHandlers } from './roomHandlers.ts';
 import { io } from '../../app.ts';
 import { logger } from '../logger/logger.ts';
