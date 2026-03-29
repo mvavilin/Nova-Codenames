@@ -39,7 +39,14 @@ function setupGameAddPlayer(
         }
       }
 
-      const spymasterId = game.askClue();
+      const spymasterId = game.askClue(() => {
+        if (spymasterId) {
+          const socketId = socketIdMap.get(spymasterId);
+          if (socketId) {
+            io.to(socketId).emit('game:clue-timeout');
+          }
+        }
+      });
       if (spymasterId) {
         const socketId = socketIdMap.get(spymasterId);
         if (socketId) {

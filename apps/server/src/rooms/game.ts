@@ -7,6 +7,7 @@ import {
 import type { Player, Teams } from '../../../../packages/shared/src/types/room.ts';
 import jsonData from '../../../../packages/shared/src/question-bank.json' with { type: 'json' };
 import { v4 as uuid } from 'uuid';
+import { SECOND_COUNT_FOR_ASK_CLUE } from '../types/types.ts';
 
 export class Game {
   private roomId: string;
@@ -15,6 +16,7 @@ export class Game {
   private maxPlayers: number;
   private cards: Card[] = [];
   private currentTeam: Teams = 'red';
+  private clueTimer: NodeJS.Timeout | null = null;
 
   constructor(roomId: string, maxPlayers: number) {
     this.roomId = roomId;
@@ -107,11 +109,15 @@ export class Game {
     }
   }
 
-  public askClue(): string | undefined {
+  public askClue(callback: () => void): string | undefined {
     const currentTeam = this.currentTeam;
     const team = currentTeam === 'red' ? this.redTeam : this.blueTeam;
     const spymaster = team.find((player) => player.role === 'spymaster');
     if (spymaster) {
+      this.clueTimer = setTimeout(() => {
+        this.clueTimer = null;
+        callback();
+      }, SECOND_COUNT_FOR_ASK_CLUE * 1000);
       return spymaster.id;
     }
 

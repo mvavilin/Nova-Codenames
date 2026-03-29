@@ -1,8 +1,9 @@
-import { expect, test } from 'vitest';
+import { expect, test, vi } from 'vitest';
 import { CardCounts } from '../../../../packages/shared/src/types/game.ts';
 import type { Player } from '../../../../packages/shared/src/types/room.ts';
 import { v4 as uuid } from 'uuid';
 import { Game } from '../rooms/game.ts';
+import { SECOND_COUNT_FOR_ASK_CLUE } from '../types/types.ts';
 
 test('The game should create 25 cards', () => {
   const game = new Game('', 4);
@@ -57,7 +58,7 @@ test('The askClue method should return the id of a spymaster', () => {
   const player: Player = { id: spymasterId, username: 'username', team: 'red', role: 'spymaster' };
   game.addPlayer(player);
   game.initial();
-  const result = game.askClue();
+  const result = game.askClue(() => {});
 
   expect(result).toBe(spymasterId);
 });
@@ -67,6 +68,31 @@ test('The askClue method should return undefined if there is no spymaster', () =
   const player: Player = { id: uuid(), username: 'username', team: 'red', role: 'agent' };
   game.addPlayer(player);
   game.initial();
-  const result = game.askClue();
+  const result = game.askClue(() => {});
   expect(result).toBeUndefined();
+});
+
+test('The askClue method should set a timer for the clue', () => {
+  const game = new Game('', 4);
+  const spymasterId = uuid();
+  const player: Player = { id: spymasterId, username: 'username', team: 'red', role: 'spymaster' };
+  game.addPlayer(player);
+  game.initial();
+  game.askClue(() => {});
+
+  expect(game['clueTimer']).not.toBeNull();
+});
+
+test('The askClue method should clear the timer after the time is up', () => {
+  vi.useFakeTimers();
+  const game = new Game('', 4);
+  const spymasterId = uuid();
+  const player: Player = { id: spymasterId, username: 'username', team: 'red', role: 'spymaster' };
+  game.addPlayer(player);
+  game.initial();
+  game.askClue(() => {});
+  expect(game['clueTimer']).not.toBeNull();
+
+  vi.advanceTimersByTime(SECOND_COUNT_FOR_ASK_CLUE * 1000);
+  expect(game['clueTimer']).toBeNull();
 });

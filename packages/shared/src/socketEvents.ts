@@ -76,6 +76,7 @@ export type ServerEvent =
   | { type: 'game:start-timer' }
   | { type: 'game:start'; payload: { gameInfo: GameInfo } }
   | { type: 'game:ask-clue' }
+  | { type: 'game:clue-timeout' }
   | { type: 'profile:entered'; payload: { profileInfo: ProfileInfo } }
   | { type: 'profile:left'; payload: { roomPreviews: RoomPreview[] } }
   | { type: 'error'; payload: { code: ErrorCode } };
