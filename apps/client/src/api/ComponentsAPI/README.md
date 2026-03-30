@@ -211,9 +211,9 @@ img.setSrc('/new-logo.png');
 
 ### Методы:
 
-- [ ] `setHref(href: string): this` --- устанавливает адрес ссылки.
-- [ ] `setTarget(target: HTMLAnchorElement['target']): this` --- задает способ открытия ссылки.
-- [ ] `setRel(related: string): this` --- устанавливает атрибут rel.
+- [x] `setHref(href: string): this` --- устанавливает адрес ссылки.
+- [x] `setTarget(target: HTMLAnchorElement['target']): this` --- задает способ открытия ссылки.
+- [x] `setRel(related: string): this` --- устанавливает атрибут rel.
 
 **Пример:**
 
