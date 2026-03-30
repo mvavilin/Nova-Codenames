@@ -8,6 +8,9 @@ import { sessionStorageProps } from '@/constants/sessionStorage.constants';
 import { SocketActionTypes } from '../actions/socket.actions';
 import { AppActionTypes } from '../actions';
 import type { AppActions } from '../types';
+import { getLocalStorageData, saveLocalStorageData } from '@utils';
+import { isObject } from '@/utils/isObject';
+import { LOCAL_STORAGE_KEYS } from '@/constants/localStorageKeys';
 
 export default function formReducer(state: State, action: AppActions): State {
   switch (action.type) {
@@ -38,6 +41,16 @@ export default function formReducer(state: State, action: AppActions): State {
     case FormActionTypes.FETCH_SUCCESS: {
       if (action.payload.token) {
         saveSessionStorageData(sessionStorageProps.authToken, action.payload.token);
+
+        const storeLS = getLocalStorageData(LOCAL_STORAGE_KEYS.STORE);
+        if (isObject(action.payload.user)) {
+          if (isObject(storeLS))
+            saveLocalStorageData(LOCAL_STORAGE_KEYS.STORE, {
+              ...storeLS,
+              ...action.payload.user,
+            });
+          else saveLocalStorageData(LOCAL_STORAGE_KEYS.STORE, { ...action.payload.user });
+        }
 
         store.dispatch({
           type: SocketActionTypes.SOCKET_REQUEST_SESSION_TOKEN,

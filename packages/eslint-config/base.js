@@ -61,7 +61,7 @@ export default [
       'prettier/prettier': 'error',
 
       // ограничивает функции максимум 40 строками (исключая пустые строки и комментарии)
-      'max-lines-per-function': ['error', { max: 70, skipBlankLines: true, skipComments: true }],
+      'max-lines-per-function': ['error', { max: 40, skipBlankLines: true, skipComments: true }],
       'unicorn/filename-case': [
         'error',
         {
@@ -105,14 +105,19 @@ export default [
 
   {
     files: [
-      '**src/api/ComponentsAPI/base/managers/core/ChildrenManager.test.ts',
-      '**src/api/ComponentsAPI/base/managers/core/HierarchyManager.test.ts',
-      '**src/components/BaseForm/BaseForm.test.ts',
-      '**src/components/InputForm/InputForm.test.ts',
-      '**src/store/reducers/form.reducer.ts',
-      '**src/store/middlewares/socket.fetcher.middleware.ts',
-      '**src/store/middlewares/form.fetcher.middleware.ts',
+      '**/src/api/ComponentsAPI/base/managers/core/ChildrenManager.test.ts',
+      '**/src/api/ComponentsAPI/base/managers/core/HierarchyManager.test.ts',
+      '**/src/components/BaseForm/BaseForm.test.ts',
+      '**/src/components/InputForm/InputForm.test.ts',
+      '**/src/store/reducers/form.reducer.ts',
+      '**/src/store/middlewares/socket.fetcher.middleware.ts',
+      '**/src/store/middlewares/form.fetcher.middleware.ts',
+      '**/src/store/middlewares/room.fetcher.middleware.ts',
       '**/src/app.ts',
+      '**/src/pages/GamePage/components/modals/GameResultsModal/GameResultsModal.ts',
+      '**/src/pages/GamePage/components/modals/KnowledgeCheckModal/KnowledgeCheckModal.ts',
+      '**/src/pages/RoomPage/RoomInfoBlock/RoomInfoBlock.ts',
+      '**/src/pages/WelcomePage/AboutUs/AboutUs.ts',
     ],
     rules: {
       'max-lines-per-function': 'off',
