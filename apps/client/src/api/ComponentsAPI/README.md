@@ -315,9 +315,9 @@ radio.setChecked(false);
 
 ### Методы:
 
-- [ ] `isChecked(): boolean` --- проверяет, отмечен ли чекбокс.
-- [ ] `setChecked(state: boolean): this` --- устанавливает состояние.
-- [ ] `toggle(): this` --- переключает состояние чекбокса.
+- [x] `isChecked(): boolean` --- проверяет, отмечен ли чекбокс.
+- [x] `setChecked(state: boolean): this` --- устанавливает состояние.
+- [x] `toggle(): this` --- переключает состояние чекбокса.
 
 **Пример:**
 
