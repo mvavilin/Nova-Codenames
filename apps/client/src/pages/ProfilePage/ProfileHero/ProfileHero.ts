@@ -30,7 +30,7 @@ export default class ProfileHero extends ContainerComponent {
   constructor({ ...rest }: ProfileHeroProperties = {}) {
     super({
       id: 'profile-hero',
-      classes: `flex justify-between bg-white/25 text-white rounded p-4`,
+      classes: `flex justify-between w-full bg-white/25 text-white rounded p-4 max-w-7xl`,
       ...rest,
     });
 
