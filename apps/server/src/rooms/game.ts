@@ -301,10 +301,6 @@ export class Game {
   }
 
   public startAnswerPhase(callback: (team: Teams) => void): void {
-    if (this.phaseTimer) {
-      clearInterval(this.phaseTimer);
-      this.phaseTimer = null;
-    }
     this.gamePhase = 'answer';
     this.phaseTime = 0;
     this.phaseTimer = setInterval(() => {

@@ -4,10 +4,12 @@ import type { Player } from '../../../../packages/shared/src/types/room.ts';
 import { v4 as uuid } from 'uuid';
 import { Game } from '../rooms/game.ts';
 import {
+  SECOND_COUNT_FOR_ANSWER,
   SECOND_COUNT_FOR_ASK_CLUE,
   SECOND_COUNT_FOR_GUESS,
   type CardTestResult,
 } from '../../../../packages/shared/src/socketEvents.ts';
+import type { CheckQuestion } from '../../../../packages/shared/src/types/question.ts';
 
 test('The game should create 25 cards', () => {
   const game = new Game('', 4);
@@ -592,4 +594,132 @@ test('The giveClue method called the callback function with alien type if questi
     };
     expect(callback).toHaveBeenCalledWith(result);
   }
+});
+
+test('The startAnswerPhase method should set a timer for the answer', () => {
+  const game = new Game('', 4);
+  const callback = vi.fn();
+  game.startAnswerPhase(callback);
+  expect(game['phaseTimer']).not.toBeNull();
+});
+
+test('The startAnswerPhase method should clear the timer after the time is up', () => {
+  vi.useFakeTimers();
+  const game = new Game('', 4);
+  const callback = vi.fn();
+  game.startAnswerPhase(callback);
+  expect(game['phaseTimer']).not.toBeNull();
+  vi.advanceTimersByTime(SECOND_COUNT_FOR_ANSWER * 1000);
+  expect(game['phaseTimer']).toBeNull();
+});
+
+test('The startAnswerPhase method should call the callback function after the time is up', () => {
+  vi.useFakeTimers();
+  const game = new Game('', 4);
+  const callback = vi.fn();
+  game.startAnswerPhase(callback);
+  expect(callback).not.toHaveBeenCalled();
+  vi.advanceTimersByTime(SECOND_COUNT_FOR_ANSWER * 1000);
+  expect(callback).toHaveBeenCalledWith('blue');
+});
+
+test('The giveAnswer method should return the answer and the check question if the player give answer', () => {
+  const game = new Game('', 4);
+  const agentId = uuid();
+  const agent: Player = { id: agentId, username: 'agent', team: 'red', role: 'agent' };
+  const opponentSpymasterId = uuid();
+  const opponentSpymaster: Player = {
+    id: opponentSpymasterId,
+    username: 'spymaster',
+    team: 'blue',
+    role: 'spymaster',
+  };
+  game.addPlayer(agent);
+  game.addPlayer(opponentSpymaster);
+  game.initial();
+  game['gamePhase'] = 'answer';
+  game['answerUserId'] = agentId;
+  const checkQuestion: CheckQuestion = {
+    id: uuid(),
+    word: 'word',
+    question: 'question',
+    question_en: 'question_en',
+    referenceAnswer: 'answer',
+    referenceAnswer_en: 'answer_en',
+    difficulty: 1,
+    tags: ['tag1', 'tag2'],
+  };
+  game['checkQuestion'] = checkQuestion;
+  const result = game.giveAnswer(agentId, 'answer');
+  expect(result).toEqual({
+    answer: 'answer',
+    checkQuestion,
+    spymasterId: opponentSpymasterId,
+    playerIds: [opponentSpymasterId],
+  });
+});
+
+test('The giveAnswer method should return error if opponent spymaster is not find', () => {
+  const game = new Game('', 4);
+  const agentId = uuid();
+  const agent: Player = { id: agentId, username: 'agent', team: 'red', role: 'agent' };
+  game.addPlayer(agent);
+  game.initial();
+  game['gamePhase'] = 'answer';
+  game['answerUserId'] = agentId;
+  const checkQuestion: CheckQuestion = {
+    id: uuid(),
+    word: 'word',
+    question: 'question',
+    question_en: 'question_en',
+    referenceAnswer: 'answer',
+    referenceAnswer_en: 'answer_en',
+    difficulty: 1,
+    tags: ['tag1', 'tag2'],
+  };
+  game['checkQuestion'] = checkQuestion;
+  const result = game.giveAnswer(agentId, 'answer');
+  console.log(result);
+  expect(result).toEqual({
+    error: 'ACTION_IS_PROHIBITED',
+  });
+});
+
+test('The giveAnswer method should clear the timer', () => {
+  const game = new Game('', 4);
+  const agentId = uuid();
+  const agent: Player = { id: agentId, username: 'agent', team: 'red', role: 'agent' };
+  const opponentSpymasterId = uuid();
+  const opponentSpymaster: Player = {
+    id: opponentSpymasterId,
+    username: 'spymaster',
+    team: 'blue',
+    role: 'spymaster',
+  };
+  game.addPlayer(agent);
+  game.addPlayer(opponentSpymaster);
+  game.initial();
+  game['gamePhase'] = 'answer';
+  game['answerUserId'] = agentId;
+  const checkQuestion: CheckQuestion = {
+    id: uuid(),
+    word: 'word',
+    question: 'question',
+    question_en: 'question_en',
+    referenceAnswer: 'answer',
+    referenceAnswer_en: 'answer_en',
+    difficulty: 1,
+    tags: ['tag1', 'tag2'],
+  };
+  game['checkQuestion'] = checkQuestion;
+  game.startAnswerPhase(() => {});
+  expect(game['phaseTimer']).not.toBeNull();
+  const result = game.giveAnswer(agentId, 'answer');
+  expect(result).toEqual({
+    answer: 'answer',
+    checkQuestion,
+    spymasterId: opponentSpymasterId,
+    playerIds: [opponentSpymasterId],
+  });
+  expect(game['phaseTimer']).toBeNull();
 });
