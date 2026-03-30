@@ -251,12 +251,12 @@ list.removeItem(0);
 
 ### Методы:
 
-- [ ] `getValue(): string` --- возвращает текущее значение.
-- [ ] `setValue(value: string): this` --- устанавливает текст.
-- [ ] `setPlaceholder(placeholder: string): this` --- задает placeholder.
-- [ ] `setRows(rows: number): this` --- устанавливает количество строк.
-- [ ] `setCols(cols: number): this` --- устанавливает количество колонок.
-- [ ] `clear(): this` --- очищает содержимое.
+- [x] `getValue(): string` --- возвращает текущее значение.
+- [x] `setValue(value: string): this` --- устанавливает текст.
+- [x] `setPlaceholder(placeholder: string): this` --- задает placeholder.
+- [x] `setRows(rows: number): this` --- устанавливает количество строк.
+- [x] `setCols(cols: number): this` --- устанавливает количество колонок.
+- [x] `clear(): this` --- очищает содержимое.
 
 **Пример:**
 
