@@ -273,14 +273,14 @@ textarea.setValue('Hello');
 
 ### Методы:
 
-- [ ] `setOptions(options: { value: string; label: string; selected?: boolean }[]): this` --- полностью заменяет список опций.
-- [ ] `addOption(value: string, label: string, selected?: boolean): this` --- добавляет новую опцию.
-- [ ] `removeOption(value: string): this` --- удаляет опцию по значению.
-- [ ] `clearOptions(): this` --- очищает все опции.
-- [ ] `getValue(): string | string[]` --- возвращает выбранное значение (или массив при multiple).
-- [ ] `setValue(value: string | string[]): this` --- устанавливает выбранное значение.
-- [ ] `isMultiple(): boolean` --- проверяет, включен ли множественный выбор.
-- [ ] `setMultiple(multiple: boolean): this` --- включает или отключает режим multiple.
+- [x] `setOptions(options: { value: string; label: string; selected?: boolean }[]): this` --- полностью заменяет список опций.
+- [x] `addOption(value: string, label: string, selected?: boolean): this` --- добавляет новую опцию.
+- [x] `removeOption(value: string): this` --- удаляет опцию по значению.
+- [x] `clearOptions(): this` --- очищает все опции.
+- [x] `getValue(): string | string[]` --- возвращает выбранное значение (или массив при multiple).
+- [x] `setValue(value: string | string[]): this` --- устанавливает выбранное значение.
+- [x] `isMultiple(): boolean` --- проверяет, включен ли множественный выбор.
+- [x] `setMultiple(multiple: boolean): this` --- включает или отключает режим multiple.
 
 **Пример:**
 
