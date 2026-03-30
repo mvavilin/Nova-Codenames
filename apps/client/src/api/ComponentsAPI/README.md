@@ -170,11 +170,11 @@ header.setLevel(3);
 
 ### Методы:
 
-- [ ] `appendText(text: string | number): this` --- добавляет текст в конец содержимого.
-- [ ] `prependText(text: string | number): this` --- добавляет текст в начало.
-- [ ] `uppercase(): this` --- переводит текст в верхний регистр.
-- [ ] `lowercase(): this` --- переводит текст в нижний регистр.
-- [ ] `capitalize(): this` --- делает заглавными первые буквы слов.
+- [x] `appendText(text: string | number): this` --- добавляет текст в конец содержимого.
+- [x] `prependText(text: string | number): this` --- добавляет текст в начало.
+- [x] `uppercase(): this` --- переводит текст в верхний регистр.
+- [x] `lowercase(): this` --- переводит текст в нижний регистр.
+- [x] `capitalize(): this` --- делает заглавными первые буквы слов.
 
 **Пример:**
 
