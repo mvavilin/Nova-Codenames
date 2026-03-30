@@ -251,12 +251,10 @@ export class Game {
               const checkQuestion = this.getCheckQuestion(card.word);
               if (userId && checkQuestion) {
                 this.checkQuestion = checkQuestion;
-                const { question, question_en } = this.checkQuestion;
+                const { word, question, question_en } = this.checkQuestion;
                 const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
-                const observers = team
-                  .filter((player) => player.id !== userId)
-                  .map((player) => player.id);
-                return { type: 'own', payload: { userId, question, question_en, observers } };
+                const playerIds = team.map((player) => player.id);
+                return { type: 'own', payload: { userId, word, question, question_en, playerIds } };
               }
               break;
             }

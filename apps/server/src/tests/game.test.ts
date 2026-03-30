@@ -490,10 +490,11 @@ test('The giveClue method called the callback function with alien type if chosen
     const checkQuestion = game['checkQuestion'];
     expect(checkQuestion).not.toBeNull();
     if (checkQuestion) {
-      const { question, question_en } = checkQuestion;
+      const { word, question, question_en } = checkQuestion;
+      const playerIds = game['redTeam'].map((player) => player.id);
       const result: CardTestResult = {
         type: 'own',
-        payload: { userId: agentId, question, question_en, observers: [redSpymasterId] },
+        payload: { userId: agentId, word, question, question_en, playerIds },
       };
       expect(callback).toHaveBeenCalledWith(result);
     }

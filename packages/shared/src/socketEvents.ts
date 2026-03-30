@@ -53,7 +53,13 @@ export type GAME_PHASE = 'clue' | 'guess' | 'check' | 'finish';
 export type CardTestResult =
   | {
       type: 'own';
-      payload: { userId: string; question: string; question_en: string; observers: string[] };
+      payload: {
+        userId: string;
+        word: string;
+        question: string;
+        question_en: string;
+        playerIds: string[];
+      };
     }
   | {
       type: 'alien';
@@ -132,6 +138,10 @@ export type ServerEvent =
   | { type: 'game:clue-given'; payload: { clue: string } }
   | { type: 'game:card-chosen'; payload: { cardId: string; players: Player[] } }
   | { type: 'game:card-shown'; payload: { cardId: string; color: CardColor } }
+  | {
+      type: 'game:ask-answer';
+      payload: { word: string; question: string; question_en: string; answer: boolean };
+    }
   | { type: 'profile:entered'; payload: { profileInfo: ProfileInfo } }
   | { type: 'profile:left'; payload: { roomPreviews: RoomPreview[] } }
   | { type: 'error'; payload: { code: ErrorCode } };
