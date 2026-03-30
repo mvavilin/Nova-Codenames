@@ -119,15 +119,15 @@ export class Game {
     }
   }
 
-  public askClue(callback: (value: string, team: Teams) => void): string | undefined {
+  public askClue(callback: (team: Teams) => void): string | undefined {
     const currentTeam = this.currentTeam;
     const team = currentTeam === 'red' ? this.redTeam : this.blueTeam;
     const spymaster = team.find((player) => player.role === 'spymaster');
     if (spymaster) {
       this.clueTimer = setTimeout(() => {
         this.clueTimer = null;
-        const spymasterId = this.turnChange();
-        callback(spymasterId, this.currentTeam);
+        this.turnChange();
+        callback(this.currentTeam);
       }, SECOND_COUNT_FOR_ASK_CLUE * 1000);
       return spymaster.id;
     }

@@ -200,7 +200,7 @@ test('The askClue method should call the callback function after the time is up'
   expect(callback).not.toHaveBeenCalled();
 
   vi.advanceTimersByTime(SECOND_COUNT_FOR_ASK_CLUE * 1000);
-  expect(callback).toHaveBeenCalledWith(spymasterBlueId, 'blue');
+  expect(callback).toHaveBeenCalledWith('blue');
 });
 
 test('The giveClue method should return the clue and the agent ids if current team is red', () => {

@@ -44,39 +44,40 @@ function setupGameAddPlayerHandler(
         }
       }
 
-      const spymasterId = game.askClue((newSpymasterId, team) => {
-        if (spymasterId) {
-          const socketId = socketIdMap.get(spymasterId);
-          if (socketId) {
-            io.to(socketId).emit('game:clue-timeout');
-            logger.emit(spymasterId, 'game:clue-timeout');
-          }
-        }
-        if (newSpymasterId) {
-          const socketId = socketIdMap.get(newSpymasterId);
-          if (socketId) {
-            io.to(socketId).emit('game:ask-clue');
-            logger.emit(newSpymasterId, 'game:ask-clue');
-          }
-          const playerIds = game.getPlayerIds();
-          for (const playerId of playerIds) {
-            const socketId = socketIdMap.get(playerId);
-            if (socketId) {
-              io.to(socketId).emit('game:turn-changed', { team });
-              logger.emit(playerId, 'game:turn-changed', { team });
-            }
-          }
-        }
-      });
-      if (spymasterId) {
-        const socketId = socketIdMap.get(spymasterId);
-        if (socketId) {
-          io.to(socketId).emit('game:ask-clue');
-          logger.emit(spymasterId, 'game:ask-clue');
-        }
-      }
+      startClueState(game);
     }
   });
+}
+
+function startClueState(game: Game): void {
+  const spymasterId = game.askClue((team) => {
+    if (spymasterId) {
+      const socketId = socketIdMap.get(spymasterId);
+      if (socketId) {
+        io.to(socketId).emit('game:clue-timeout');
+        logger.emit(spymasterId, 'game:clue-timeout');
+      }
+    }
+
+    const playerIds = game.getPlayerIds();
+    for (const playerId of playerIds) {
+      const socketId = socketIdMap.get(playerId);
+      if (socketId) {
+        io.to(socketId).emit('game:turn-changed', { team });
+        logger.emit(playerId, 'game:turn-changed', { team });
+      }
+    }
+
+    startClueState(game);
+  });
+
+  if (spymasterId) {
+    const socketId = socketIdMap.get(spymasterId);
+    if (socketId) {
+      io.to(socketId).emit('game:ask-clue');
+      logger.emit(spymasterId, 'game:ask-clue');
+    }
+  }
 }
 
 function setupClueGiveHandler(
