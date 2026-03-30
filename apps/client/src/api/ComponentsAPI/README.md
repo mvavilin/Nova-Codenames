@@ -85,11 +85,11 @@ submitButton.setDisabled(false);
 
 ### Методы:
 
-- [ ] `setAction(action: string): this` --- задает URL отправки формы.
-- [ ] `setMethod(method: HTMLFormElement['method']): this` --- устанавливает HTTP-метод (get, post).
-- [ ] `submit(): void` --- программно отправляет форму.
-- [ ] `reset(): void` --- сбрасывает все поля формы.
-- [ ] `getFormData(): FormData` --- возвращает данные формы в виде FormData.
+- [x] `setAction(action: string): this` --- задает URL отправки формы.
+- [x] `setMethod(method: HTMLFormElement['method']): this` --- устанавливает HTTP-метод (get, post).
+- [x] `submit(): void` --- программно отправляет форму.
+- [x] `reset(): void` --- сбрасывает все поля формы.
+- [x] `getFormData(): FormData` --- возвращает данные формы в виде FormData.
 
 **Пример:**
 
