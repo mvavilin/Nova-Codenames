@@ -28,6 +28,8 @@ export class Game {
   private gamePhase: GAME_PHASE = 'clue';
   private chosenCards: Map<string, string[]> = new Map();
   private checkQuestion: CheckQuestion | null = null;
+  private gameTimer: NodeJS.Timeout | null = null;
+  private gameTime: number = 0;
 
   constructor(roomId: string, maxPlayers: number) {
     this.id = uuid();
@@ -99,6 +101,9 @@ export class Game {
 
   public initial(): void {
     this.createCards();
+    this.gameTimer = setInterval(() => {
+      this.gameTime += 1;
+    }, 1000);
   }
 
   private createCards(): void {

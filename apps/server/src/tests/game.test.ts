@@ -56,6 +56,23 @@ test('The agent does not see the color of the cards', () => {
   expect(unknownCards).toHaveLength(CardCounts.ALL);
 });
 
+test('The gameTimer should start when the game is initialized', () => {
+  const game = new Game('', 4);
+  game.initial();
+  expect(game['gameTimer']).not.toBeNull();
+});
+
+test('The gameTimer should update the gameTime every second', () => {
+  vi.useFakeTimers();
+  const game = new Game('', 4);
+  game.initial();
+  expect(game['gameTime']).toBe(0);
+  vi.advanceTimersByTime(1000);
+  expect(game['gameTime']).toBe(1);
+  vi.advanceTimersByTime(2000);
+  expect(game['gameTime']).toBe(3);
+});
+
 test('The addPlayer method should add a player to the game', () => {
   const game = new Game('', 4);
 
