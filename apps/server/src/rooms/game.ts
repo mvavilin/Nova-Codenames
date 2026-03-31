@@ -14,6 +14,7 @@ import {
   SECOND_COUNT_FOR_GUESS,
   TIMER_INTERVAL,
   type CardTestResult,
+  type CheckResults,
   type ErrorCode,
   type GAME_PHASE,
 } from '../../../../packages/shared/src/socketEvents.ts';
@@ -352,7 +353,7 @@ export class Game {
     return { error: 'ACTION_IS_PROHIBITED' };
   }
 
-  public startCheckPhase(callback: () => void): void {
+  public startCheckPhase(callback: (results: CheckResults) => void): void {
     this.gamePhase = 'check';
     this.phaseTime = 0;
     this.phaseTimer = setInterval(() => {
@@ -363,10 +364,9 @@ export class Game {
           clearInterval(this.phaseTimer);
           this.phaseTimer = null;
         }
-        // this.checkQuestion = null;
-        // this.turnChange();
+        const result = this.resultsProcessing();
         this.gamePhase = 'finish';
-        callback();
+        callback(result);
       }
     }, TIMER_INTERVAL);
   }
@@ -382,5 +382,15 @@ export class Game {
         this.accepts.push({ userId, accept });
       }
     }
+  }
+
+  private resultsProcessing(): CheckResults {
+    const correct = this.accepts.length === 0 || this.accepts.some((item) => item.accept);
+    this.accepts = [];
+    this.checkQuestion = null;
+    this.answerCard = null;
+    this.answerUserId = undefined;
+    this.turnChange();
+    return { type: 'turn-end', payload: { correct, team: this.currentTeam } };
   }
 }

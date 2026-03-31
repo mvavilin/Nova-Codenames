@@ -94,6 +94,13 @@ export type CardTestResult =
     }
   | { type: 'no-change'; payload: { spymasterId: string; team: Teams } };
 
+export type CheckResults =
+  | {
+      type: 'turn-end';
+      payload: { correct: boolean; team: Teams };
+    }
+  | { type: 'game-end'; payload: { winningTeam: Teams } };
+
 export const RECONNECT_MAX_TIME = 60_000;
 export const SECOND_COUNT_BEFORE_START_GAME = 15;
 export const SECOND_COUNT_FOR_ASK_CLUE = 30;
@@ -152,6 +159,7 @@ export type ServerEvent =
       type: 'game:ask-check';
       payload: { answer: string; checkQuestion: CheckQuestion; check: boolean };
     }
+  | { type: 'game:check-results'; payload: { correct: boolean } }
   | { type: 'profile:entered'; payload: { profileInfo: ProfileInfo } }
   | { type: 'profile:left'; payload: { roomPreviews: RoomPreview[] } }
   | { type: 'error'; payload: { code: ErrorCode } };

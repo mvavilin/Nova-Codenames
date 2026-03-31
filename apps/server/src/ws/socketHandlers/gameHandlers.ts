@@ -1,6 +1,7 @@
 import type { Socket } from 'socket.io';
 import type {
   CardTestResult,
+  CheckResults,
   ClientToServerEvents,
   ServerToClientEvents,
 } from '../../../../../packages/shared/src/socketEvents.ts';
@@ -176,7 +177,9 @@ function setupCardChooseHandler(
             logger.emit(recipient, 'game:card-chosen', { cardId, players });
           }
         }
-        game.startCheckPhase(() => {});
+        game.startCheckPhase((results) => {
+          sendResults(game, results);
+        });
       }
     }
   });
@@ -215,4 +218,22 @@ function setupCheckGiveHandler(
       game.giveCheck(userId, accept);
     }
   });
+}
+
+function sendResults(game: Game, results: CheckResults): void {
+  const { type, payload } = results;
+  if (type === 'turn-end') {
+    const playerIds = game.getPlayerIds();
+    const { correct, team } = payload;
+    for (const playerId of playerIds) {
+      const socketId = socketIdMap.get(playerId);
+      if (socketId) {
+        io.to(socketId).emit('game:check-results', { correct });
+        logger.emit(playerId, 'game:check-results', { correct });
+
+        io.to(socketId).emit('game:turn-changed', { team });
+        logger.emit(playerId, 'game:turn-changed', { team });
+      }
+    }
+  }
 }
