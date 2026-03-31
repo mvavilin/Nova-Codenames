@@ -31,12 +31,12 @@ export class Game {
   private gamePhase: GAME_PHASE = 'clue';
   private chosenCards: Map<string, string[]> = new Map();
   private checkQuestion: CheckQuestion | null = null;
-  private gameTimer: NodeJS.Timeout | null = null;
-  private gameTime: number = 0;
+  // private gameTimer: NodeJS.Timeout | null = null;
+  // private gameTime: number = 0;
   private phaseTimer: NodeJS.Timeout | null = null;
   private phaseTime: number = 0;
   private answerUserId: string | undefined;
-  private answerCard: Card | null = null;
+  // private answerCard: Card | null = null;
   private accepts: Array<{ userId: string; accept: boolean }> = [];
 
   constructor(roomId: string, maxPlayers: number) {
@@ -109,9 +109,9 @@ export class Game {
 
   public initial(): void {
     this.createCards();
-    this.gameTimer = setInterval(() => {
-      this.gameTime += 1;
-    }, 1000);
+    // this.gameTimer = setInterval(() => {
+    //   this.gameTime += 1;
+    // }, 1000);
   }
 
   private createCards(): void {
@@ -261,7 +261,7 @@ export class Game {
                 const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
                 const playerIds = team.map((player) => player.id);
                 this.answerUserId = userId;
-                this.answerCard = card;
+                // this.answerCard = card;
                 return { type: 'own', payload: { userId, word, question, question_en, playerIds } };
               }
               break;
@@ -315,7 +315,7 @@ export class Game {
           this.phaseTimer = null;
         }
         this.checkQuestion = null;
-        this.answerCard = null;
+        // this.answerCard = null;
         this.answerUserId = undefined;
         this.turnChange();
         callback(this.currentTeam);
@@ -387,7 +387,7 @@ export class Game {
     const correct = this.accepts.length === 0 || this.accepts.some((item) => item.accept);
     this.accepts = [];
     this.checkQuestion = null;
-    this.answerCard = null;
+    // this.answerCard = null;
     this.answerUserId = undefined;
     this.turnChange();
     return { type: 'turn-end', payload: { correct, team: this.currentTeam } };
