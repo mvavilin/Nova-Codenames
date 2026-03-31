@@ -11,7 +11,6 @@ import { logger } from '../logger/logger.ts';
 import type { SocketData } from '../../types/types.ts';
 import type { Game } from '../../rooms/game.ts';
 import type { Teams } from '../../../../../packages/shared/src/types/room.ts';
-import type { Card, CardColor } from '../../../../../packages/shared/src/types/game.ts';
 
 export function setupGameHandlers(
   socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
@@ -118,29 +117,19 @@ function guessCallback(game: Game, result: CardTestResult): void {
   const { type } = result;
   switch (type) {
     case 'own': {
-      const { payload } = result;
-      guessOwnCardCallback(game, payload);
+      guessOwnCardCallback(game, result);
       break;
     }
     case 'alien': {
-      const { payload } = result;
-      guessAlienCardCallback(game, payload);
+      guessAlienCardCallback(game, result);
       break;
     }
   }
 }
 
-function guessOwnCardCallback(
-  game: Game,
-  payload: {
-    userId: string;
-    question: string;
-    question_en: string;
-    card: Card;
-    playerIds: string[];
-  }
-): void {
-  const { userId, question, question_en, card, playerIds } = payload;
+function guessOwnCardCallback(game: Game, result: CardTestResult & { type: 'own' }): void {
+  const { payload } = result;
+  const { userId, question, question_en, card, score, playerIds } = payload;
   const { word, color, id: cardId } = card;
 
   const allPlayerIds = game.getPlayerIds();
@@ -149,6 +138,8 @@ function guessOwnCardCallback(
     if (socketId) {
       io.to(socketId).emit('game:card-shown', { cardId, color });
       logger.emit(playerId, 'game:card-shown', { cardId, color });
+      io.to(socketId).emit('game:send-score', { score });
+      logger.emit(playerId, 'game:send-score', { score });
     }
   }
 
@@ -172,16 +163,8 @@ function guessOwnCardCallback(
   });
 }
 
-function guessAlienCardCallback(
-  game: Game,
-  payload: {
-    spymasterId: string;
-    team: Teams;
-    cardId: string;
-    color: CardColor;
-    recipients: string[];
-  }
-): void {
+function guessAlienCardCallback(game: Game, result: CardTestResult & { type: 'alien' }): void {
+  const { payload } = result;
   const { spymasterId, team, cardId, color, recipients } = payload;
   for (const recipient of recipients) {
     const socketId = socketIdMap.get(recipient);

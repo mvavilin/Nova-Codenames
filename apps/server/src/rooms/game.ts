@@ -17,6 +17,7 @@ import {
   type CheckResults,
   type ErrorCode,
   type GAME_PHASE,
+  type Score,
 } from '../../../../packages/shared/src/socketEvents.ts';
 import type { CheckQuestion } from '../../../../packages/shared/src/types/question.ts';
 
@@ -38,6 +39,7 @@ export class Game {
   private answerUserId: string | undefined;
   // private answerCard: Card | null = null;
   private accepts: Array<{ userId: string; accept: boolean }> = [];
+  private score: Score = { red: 0, blue: 0 };
 
   constructor(roomId: string, maxPlayers: number) {
     this.id = uuid();
@@ -281,7 +283,9 @@ export class Game {
       card.whoSees.add(this.currentTeam === 'red' ? 'blue' : 'red');
       this.answerUserId = userId;
       // this.answerCard = card;
-      return { type: 'own', payload: { userId, question, question_en, card, playerIds } };
+      this.updateScore();
+      const score = this.score;
+      return { type: 'own', payload: { userId, question, question_en, card, score, playerIds } };
     }
     const spymasterId = this.turnChange();
     return { type: 'no-change', payload: { team: this.currentTeam, spymasterId } };
@@ -403,5 +407,13 @@ export class Game {
     this.answerUserId = undefined;
     this.turnChange();
     return { type: 'turn-end', payload: { correct, team: this.currentTeam } };
+  }
+
+  private updateScore(): void {
+    if (this.currentTeam === 'red') {
+      this.score.red += 1;
+    } else {
+      this.score.blue += 1;
+    }
   }
 }

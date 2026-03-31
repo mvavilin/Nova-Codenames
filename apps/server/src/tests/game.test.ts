@@ -497,9 +497,10 @@ test('The giveClue method called the callback function with alien type if chosen
     if (checkQuestion) {
       const { question, question_en } = checkQuestion;
       const playerIds = game['redTeam'].map((player) => player.id);
+      const score = { red: 1, blue: 0 };
       const result: CardTestResult = {
         type: 'own',
-        payload: { userId: redAgentId, question, question_en, card, playerIds },
+        payload: { userId: redAgentId, question, question_en, card, score, playerIds },
       };
       expect(callback).toHaveBeenCalledWith(result);
     }
@@ -733,4 +734,15 @@ test('The giveCheck method should return the result of the check', () => {
   game['gamePhase'] = 'check';
   game.giveCheck(playerId, true);
   expect(game['accepts']).toEqual([{ userId: playerId, accept: true }]);
+});
+
+test('The updateScore method should update the score of the teams', () => {
+  const game = new Game('', 4);
+  game['score'] = { red: 1, blue: 2 };
+  game['currentTeam'] = 'red';
+  game['updateScore']();
+  expect(game['score']).toEqual({ red: 2, blue: 2 });
+  game['currentTeam'] = 'blue';
+  game['updateScore']();
+  expect(game['score']).toEqual({ red: 2, blue: 3 });
 });

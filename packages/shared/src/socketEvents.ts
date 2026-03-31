@@ -59,6 +59,7 @@ export type CardTestResult =
         question: string;
         question_en: string;
         card: Card;
+        score: Score;
         playerIds: string[];
       };
     }
@@ -83,6 +84,11 @@ export type CardTestResult =
       };
     }
   | { type: 'no-change'; payload: { spymasterId: string; team: Teams } };
+
+export type Score = {
+  red: number;
+  blue: number;
+};
 
 export type CheckResults =
   | {
@@ -150,6 +156,7 @@ export type ServerEvent =
       payload: { answer: string; checkQuestion: CheckQuestion; check: boolean };
     }
   | { type: 'game:check-results'; payload: { correct: boolean } }
+  | { type: 'game:send-score'; payload: { score: Score } }
   | { type: 'profile:entered'; payload: { profileInfo: ProfileInfo } }
   | { type: 'profile:left'; payload: { roomPreviews: RoomPreview[] } }
   | { type: 'error'; payload: { code: ErrorCode } };
