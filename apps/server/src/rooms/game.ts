@@ -251,11 +251,11 @@ export class Game {
         const opponentColor = this.currentTeam === 'red' ? 'blue' : 'red';
         if (card) {
           switch (card.color) {
-            case this.currentTeam: {
+            case this.currentTeam:
+            case 'neutral': {
               return this.chosenOwnCard(choice, card);
             }
-            case opponentColor:
-            case 'neutral': {
+            case opponentColor: {
               return this.chosenOpponentCard(card);
             }
           }
@@ -274,26 +274,27 @@ export class Game {
     const checkQuestion = this.getCheckQuestion(card.word);
     if (userId && checkQuestion) {
       this.checkQuestion = checkQuestion;
-      const { word, question, question_en } = this.checkQuestion;
+      const { question, question_en } = this.checkQuestion;
       const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
       const playerIds = team.map((player) => player.id);
+      card.whoSees.add(this.currentTeam);
+      card.whoSees.add(this.currentTeam === 'red' ? 'blue' : 'red');
       this.answerUserId = userId;
       // this.answerCard = card;
-      return { type: 'own', payload: { userId, word, question, question_en, playerIds } };
+      return { type: 'own', payload: { userId, question, question_en, card, playerIds } };
     }
     const spymasterId = this.turnChange();
     return { type: 'no-change', payload: { team: this.currentTeam, spymasterId } };
   }
 
   private chosenOpponentCard(card: Card): CardTestResult {
-    const opponentColor = this.currentTeam === 'red' ? 'blue' : 'red';
     const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
     const recipients = team.map((player) => player.id);
     card.whoSees.add(this.currentTeam);
     const { id: cardId, color } = card;
     const spymasterId = this.turnChange();
     return {
-      type: card.color === opponentColor ? 'alien' : 'neutral',
+      type: 'alien',
       payload: { spymasterId, team: this.currentTeam, cardId, color, recipients },
     };
   }

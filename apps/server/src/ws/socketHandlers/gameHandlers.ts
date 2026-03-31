@@ -11,7 +11,7 @@ import { logger } from '../logger/logger.ts';
 import type { SocketData } from '../../types/types.ts';
 import type { Game } from '../../rooms/game.ts';
 import type { Teams } from '../../../../../packages/shared/src/types/room.ts';
-import type { CardColor } from '../../../../../packages/shared/src/types/game.ts';
+import type { Card, CardColor } from '../../../../../packages/shared/src/types/game.ts';
 
 export function setupGameHandlers(
   socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
@@ -122,7 +122,6 @@ function guessCallback(game: Game, result: CardTestResult): void {
       guessOwnCardCallback(game, payload);
       break;
     }
-    case 'neutral':
     case 'alien': {
       const { payload } = result;
       guessAlienCardCallback(game, payload);
@@ -135,13 +134,24 @@ function guessOwnCardCallback(
   game: Game,
   payload: {
     userId: string;
-    word: string;
     question: string;
     question_en: string;
+    card: Card;
     playerIds: string[];
   }
 ): void {
-  const { userId, word, question, question_en, playerIds } = payload;
+  const { userId, question, question_en, card, playerIds } = payload;
+  const { word, color, id: cardId } = card;
+
+  const allPlayerIds = game.getPlayerIds();
+  for (const playerId of allPlayerIds) {
+    const socketId = socketIdMap.get(playerId);
+    if (socketId) {
+      io.to(socketId).emit('game:card-shown', { cardId, color });
+      logger.emit(playerId, 'game:card-shown', { cardId, color });
+    }
+  }
+
   for (const playerId of playerIds) {
     const socketId = socketIdMap.get(playerId);
     if (socketId) {

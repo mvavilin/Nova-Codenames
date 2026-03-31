@@ -1,4 +1,4 @@
-import type { CardColor, GameInfo } from './types/game.ts';
+import type { Card, CardColor, GameInfo } from './types/game.ts';
 import type { ProfileInfo } from './types/profile.ts';
 import type { CheckQuestion } from './types/question.ts';
 import type { Player, RoomInfo, RoomPreview, RoomSettings, Teams } from './types/room.ts';
@@ -56,9 +56,9 @@ export type CardTestResult =
       type: 'own';
       payload: {
         userId: string;
-        word: string;
         question: string;
         question_en: string;
+        card: Card;
         playerIds: string[];
       };
     }
@@ -74,16 +74,6 @@ export type CardTestResult =
     }
   | {
       type: 'bomb';
-      payload: {
-        spymasterId: string;
-        team: Teams;
-        cardId: string;
-        color: CardColor;
-        recipients: string[];
-      };
-    }
-  | {
-      type: 'neutral';
       payload: {
         spymasterId: string;
         team: Teams;
