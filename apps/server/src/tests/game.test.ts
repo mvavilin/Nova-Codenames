@@ -6,6 +6,7 @@ import { Game } from '../rooms/game.ts';
 import {
   SECOND_COUNT_FOR_ANSWER,
   SECOND_COUNT_FOR_ASK_CLUE,
+  SECOND_COUNT_FOR_CHECK,
   SECOND_COUNT_FOR_GUESS,
   type CardTestResult,
 } from '../../../../packages/shared/src/socketEvents.ts';
@@ -722,4 +723,44 @@ test('The giveAnswer method should clear the timer', () => {
     playerIds: [opponentSpymasterId],
   });
   expect(game['phaseTimer']).toBeNull();
+});
+
+test('The startCheckPhase method should reset the game state for a new round', () => {
+  vi.useFakeTimers();
+  const game = new Game('', 4);
+  const playerId = uuid();
+  const player: Player = { id: playerId, username: 'player', team: 'red', role: 'agent' };
+  game.addPlayer(player);
+  game.initial();
+  game['currentTeam'] = 'red';
+  game['gamePhase'] = 'guess';
+  game['cards'] = [{ id: uuid(), word: 'word', color: 'red', whoSees: new Set() }];
+  game['chosenCards'].set(uuid(), [playerId]);
+  game['checkQuestion'] = {
+    id: uuid(),
+    word: 'word',
+    question: 'question',
+    question_en: 'question_en',
+    referenceAnswer: 'answer',
+    referenceAnswer_en: 'answer_en',
+    difficulty: 1,
+    tags: ['tag1', 'tag2'],
+  };
+  game.startCheckPhase(() => {});
+  vi.advanceTimersByTime(SECOND_COUNT_FOR_CHECK * 1000);
+  expect(game['currentTeam']).toBe('blue');
+  expect(game['gamePhase']).toBe('clue');
+  expect(game['chosenCards'].size).toBe(0);
+  expect(game['checkQuestion']).toBeNull();
+});
+
+test('The giveCheck method should return the result of the check', () => {
+  const game = new Game('', 4);
+  const playerId = uuid();
+  const player: Player = { id: playerId, username: 'player', team: 'blue', role: 'agent' };
+  game.addPlayer(player);
+  game.initial();
+  game['gamePhase'] = 'check';
+  game.giveCheck(playerId, true);
+  expect(game['accepts']).toEqual([{ userId: playerId, accept: true }]);
 });

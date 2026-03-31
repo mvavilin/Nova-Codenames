@@ -365,7 +365,6 @@ export class Game {
           this.phaseTimer = null;
         }
         const result = this.resultsProcessing();
-        this.gamePhase = 'finish';
         callback(result);
       }
     }, TIMER_INTERVAL);
