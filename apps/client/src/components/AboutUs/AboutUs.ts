@@ -12,8 +12,7 @@ type TranslationKey = (typeof TranslationKeys)[keyof typeof TranslationKeys];
 export default class AboutUs extends ContainerComponent {
   constructor() {
     super({
-      classes:
-        'flex flex-col gap-6 max-w-3xl mx-auto p-8 rounded-lg bg-[var(--color-dark)] text-[var(--color-light)]',
+      classes: 'flex flex-col gap-6 max-w-3xl mx-auto p-8 rounded-lg text-[var(--color-light)]',
     });
 
     this.render();

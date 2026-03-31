@@ -40,7 +40,7 @@ export default class WelcomePage extends ContainerComponent {
   private render(): void {
     const header = new ContainerComponent({
       tag: 'header',
-      classes: 'flex justify-end items-center w-full max-w-[1440px]',
+      classes: 'flex justify-end items-center w-full max-w-[1440px] gap-[20px]',
     });
     const nav = new ContainerComponent({ tag: 'nav', classes: 'flex' });
     header.appendChildren(nav);

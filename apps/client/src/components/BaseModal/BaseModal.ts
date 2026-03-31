@@ -12,7 +12,8 @@ export default class BaseModal extends Modal {
     });
 
     this.setClasses(
-      '!px-0 !py-0 rounded-lg !bg-[var(--color-dark)] border border-[var(--color-brand)]'
+      // '!px-0 !py-0 rounded-lg !bg-[var(--color-dark)] border border-[var(--color-brand)]'
+      '!px-0 !py-0 !bg-white/25 backdrop-blur border border-white/20 text-white rounded p-4'
     );
 
     this.setupCloseIcon();
@@ -32,7 +33,7 @@ export default class BaseModal extends Modal {
       new Button({
         label: t(TranslationKeys.GAME_RULES_CLOSE_BTN),
         classes:
-          'mb-6 mx-auto !bg-[var(--color-brand)] hover:!bg-[var(--color-accent)] !font-brand !text-[var(--color-dark)] transition-colors duration-200',
+          'mb-6 mx-auto !bg-green-600 hover:!bg-green-700 !font-brand !text-[var(--color-dark)] transition-colors duration-200',
         onClick: (): Modal => this.hide(),
       })
     );
