@@ -10,6 +10,7 @@ import { v4 as uuid } from 'uuid';
 import {
   SECOND_COUNT_FOR_ANSWER,
   SECOND_COUNT_FOR_ASK_CLUE,
+  SECOND_COUNT_FOR_CHECK,
   SECOND_COUNT_FOR_GUESS,
   TIMER_INTERVAL,
   type CardTestResult,
@@ -35,6 +36,7 @@ export class Game {
   private phaseTime: number = 0;
   private answerUserId: string | undefined;
   private answerCard: Card | null = null;
+  private accepts: Array<{ userId: string; accept: boolean }> = [];
 
   constructor(roomId: string, maxPlayers: number) {
     this.id = uuid();
@@ -312,6 +314,8 @@ export class Game {
           this.phaseTimer = null;
         }
         this.checkQuestion = null;
+        this.answerCard = null;
+        this.answerUserId = undefined;
         this.turnChange();
         callback(this.currentTeam);
       }
@@ -346,5 +350,37 @@ export class Game {
     }
 
     return { error: 'ACTION_IS_PROHIBITED' };
+  }
+
+  public startCheckPhase(callback: () => void): void {
+    this.gamePhase = 'check';
+    this.phaseTime = 0;
+    this.phaseTimer = setInterval(() => {
+      this.phaseTime += 1;
+      if (this.phaseTime >= SECOND_COUNT_FOR_CHECK) {
+        this.phaseTime = 0;
+        if (this.phaseTimer) {
+          clearInterval(this.phaseTimer);
+          this.phaseTimer = null;
+        }
+        // this.checkQuestion = null;
+        // this.turnChange();
+        this.gamePhase = 'finish';
+        callback();
+      }
+    }, TIMER_INTERVAL);
+  }
+
+  public giveCheck(userId: string, accept: boolean): void {
+    const opponentTeam = this.currentTeam === 'red' ? this.blueTeam : this.redTeam;
+    const agentIds = opponentTeam
+      .filter((player) => player.role === 'agent')
+      .map((player) => player.id);
+    if (this.gamePhase === 'check' && agentIds.includes(userId)) {
+      const userAccept = this.accepts.find((item) => item.userId === userId);
+      if (!userAccept) {
+        this.accepts.push({ userId, accept });
+      }
+    }
   }
 }

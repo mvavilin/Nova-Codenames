@@ -99,6 +99,7 @@ export const SECOND_COUNT_BEFORE_START_GAME = 15;
 export const SECOND_COUNT_FOR_ASK_CLUE = 30;
 export const SECOND_COUNT_FOR_GUESS = 60;
 export const SECOND_COUNT_FOR_ANSWER = 60;
+export const SECOND_COUNT_FOR_CHECK = 60;
 export const TIMER_INTERVAL = 1000;
 
 export type ClientEvent =
@@ -115,6 +116,7 @@ export type ClientEvent =
   | { type: 'game:clue-give'; payload: { clue: string } }
   | { type: 'game:card-choose'; payload: { cardId: string } }
   | { type: 'game:answer-give'; payload: { answer: string } }
+  | { type: 'game:check-give'; payload: { accept: boolean } }
   | { type: 'profile:enter' }
   | { type: 'profile:leave' }
   | { type: 'profile:ask-info' };

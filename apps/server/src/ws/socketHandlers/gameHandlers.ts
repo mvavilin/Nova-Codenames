@@ -18,6 +18,7 @@ export function setupGameHandlers(
   setupClueGiveHandler(socket);
   setupCardChooseHandler(socket);
   setupAnswerGiveHandler(socket);
+  setupCheckGiveHandler(socket);
 }
 
 function setupGameAddPlayerHandler(
@@ -175,6 +176,7 @@ function setupCardChooseHandler(
             logger.emit(recipient, 'game:card-chosen', { cardId, players });
           }
         }
+        game.startCheckPhase(() => {});
       }
     }
   });
@@ -199,6 +201,18 @@ function setupAnswerGiveHandler(
           }
         }
       }
+    }
+  });
+}
+
+function setupCheckGiveHandler(
+  socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
+): void {
+  const { userId } = socket.data;
+  socket.on('game:check-give', ({ accept }) => {
+    const game = roomManager.getGameByUserId(userId);
+    if (game) {
+      game.giveCheck(userId, accept);
     }
   });
 }
