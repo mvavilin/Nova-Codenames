@@ -12,6 +12,24 @@ import {
 } from '../../../../packages/shared/src/socketEvents.ts';
 import type { CheckQuestion } from '../../../../packages/shared/src/types/question.ts';
 
+const redSpymasterId = uuid();
+const redSpymaster: Player = {
+  id: redSpymasterId,
+  username: 'redSpymaster',
+  team: 'red',
+  role: 'spymaster',
+};
+const redAgentId: string = uuid();
+const agent: Player = { id: redAgentId, username: 'redAgent', team: 'red', role: 'agent' };
+
+const blueSpymasterId = uuid();
+const blueSpymaster: Player = {
+  id: blueSpymasterId,
+  username: 'blueSpymaster',
+  team: 'blue',
+  role: 'spymaster',
+};
+
 test('The game should create 25 cards', () => {
   const game = new Game('', 4);
   game.initial();
@@ -459,22 +477,6 @@ test('The giveClue method called the callback function with no-change type if ca
 test('The giveClue method called the callback function with alien type if chosen card is own', () => {
   vi.useFakeTimers();
   const game = new Game('', 4);
-  const redSpymasterId = uuid();
-  const redSpymaster: Player = {
-    id: redSpymasterId,
-    username: 'spymaster',
-    team: 'red',
-    role: 'spymaster',
-  };
-  const agentId: string = uuid();
-  const agent: Player = { id: agentId, username: 'agent', team: 'red', role: 'agent' };
-  const blueSpymasterId = uuid();
-  const blueSpymaster: Player = {
-    id: blueSpymasterId,
-    username: 'spymaster2',
-    team: 'blue',
-    role: 'spymaster',
-  };
   game.addPlayer(redSpymaster);
   game.addPlayer(agent);
   game.addPlayer(blueSpymaster);
@@ -488,7 +490,7 @@ test('The giveClue method called the callback function with alien type if chosen
   if (card) {
     card.color = 'red';
     const { id: cardId } = card;
-    game.chooseCard(agentId, cardId);
+    game.chooseCard(redAgentId, cardId);
     vi.advanceTimersByTime(SECOND_COUNT_FOR_GUESS * 1000);
     const checkQuestion = game['checkQuestion'];
     expect(checkQuestion).not.toBeNull();
@@ -497,7 +499,7 @@ test('The giveClue method called the callback function with alien type if chosen
       const playerIds = game['redTeam'].map((player) => player.id);
       const result: CardTestResult = {
         type: 'own',
-        payload: { userId: agentId, word, question, question_en, playerIds },
+        payload: { userId: redAgentId, word, question, question_en, playerIds },
       };
       expect(callback).toHaveBeenCalledWith(result);
     }
@@ -507,22 +509,6 @@ test('The giveClue method called the callback function with alien type if chosen
 test('The giveClue method called the callback function with alien type if chosen card is alien', () => {
   vi.useFakeTimers();
   const game = new Game('', 4);
-  const redSpymasterId = uuid();
-  const redSpymaster: Player = {
-    id: redSpymasterId,
-    username: 'spymaster',
-    team: 'red',
-    role: 'spymaster',
-  };
-  const agentId: string = uuid();
-  const agent: Player = { id: agentId, username: 'agent', team: 'red', role: 'agent' };
-  const blueSpymasterId = uuid();
-  const blueSpymaster: Player = {
-    id: blueSpymasterId,
-    username: 'spymaster2',
-    team: 'blue',
-    role: 'spymaster',
-  };
   game.addPlayer(redSpymaster);
   game.addPlayer(agent);
   game.addPlayer(blueSpymaster);
@@ -536,7 +522,7 @@ test('The giveClue method called the callback function with alien type if chosen
   if (card) {
     card.color = 'blue';
     const { id: cardId, color } = card;
-    game.chooseCard(agentId, cardId);
+    game.chooseCard(redAgentId, cardId);
     vi.advanceTimersByTime(SECOND_COUNT_FOR_GUESS * 1000);
     const result: CardTestResult = {
       type: 'alien',
@@ -545,7 +531,7 @@ test('The giveClue method called the callback function with alien type if chosen
         team: 'blue',
         cardId,
         color,
-        recipients: [redSpymasterId, agentId],
+        recipients: [redSpymasterId, redAgentId],
       },
     };
     expect(callback).toHaveBeenCalledWith(result);
@@ -555,22 +541,6 @@ test('The giveClue method called the callback function with alien type if chosen
 test('The giveClue method called the callback function with alien type if question in not found', () => {
   vi.useFakeTimers();
   const game = new Game('', 4);
-  const redSpymasterId = uuid();
-  const redSpymaster: Player = {
-    id: redSpymasterId,
-    username: 'spymaster',
-    team: 'red',
-    role: 'spymaster',
-  };
-  const agentId: string = uuid();
-  const agent: Player = { id: agentId, username: 'agent', team: 'red', role: 'agent' };
-  const blueSpymasterId = uuid();
-  const blueSpymaster: Player = {
-    id: blueSpymasterId,
-    username: 'spymaster2',
-    team: 'blue',
-    role: 'spymaster',
-  };
   game.addPlayer(redSpymaster);
   game.addPlayer(agent);
   game.addPlayer(blueSpymaster);
@@ -585,7 +555,7 @@ test('The giveClue method called the callback function with alien type if questi
     card.color = 'red';
     card.word = 'word';
     const { id: cardId } = card;
-    game.chooseCard(agentId, cardId);
+    game.chooseCard(redAgentId, cardId);
     vi.advanceTimersByTime(SECOND_COUNT_FOR_GUESS * 1000);
     const checkQuestion = game['checkQuestion'];
     expect(checkQuestion).toBeNull();
