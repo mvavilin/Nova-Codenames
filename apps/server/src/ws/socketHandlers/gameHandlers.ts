@@ -129,6 +129,10 @@ function guessCallback(game: Game, result: CardTestResult): void {
       guessBombCardCallback(game, result);
       break;
     }
+    case 'no-change': {
+      guessNoChangeCallback(game, result);
+      break;
+    }
   }
 }
 
@@ -200,6 +204,17 @@ function guessBombCardCallback(game: Game, result: CardTestResult & { type: 'bom
       logger.emit(playerId, 'game:game-end', { gameEndInfo: { ...gameEndInfo, win } });
     }
   }
+}
+
+function guessNoChangeCallback(game: Game, result: CardTestResult & { type: 'no-change' }): void {
+  const { payload } = result;
+  const { spymasterId, team } = payload;
+  const socketId = socketIdMap.get(spymasterId);
+  if (socketId) {
+    io.to(socketId).emit('game:ask-clue');
+    logger.emit(spymasterId, 'game:ask-clue');
+  }
+  turnChange(game, team);
 }
 
 function setupCardChooseHandler(
