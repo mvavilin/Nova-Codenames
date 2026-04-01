@@ -1,4 +1,4 @@
-import type { Card, CardColor, GameInfo } from './types/game.ts';
+import type { Card, CardColor, GameEndInfo, GameInfo } from './types/game.ts';
 import type { ProfileInfo } from './types/profile.ts';
 import type { CheckQuestion } from './types/question.ts';
 import type { Player, RoomInfo, RoomPreview, RoomSettings, Teams } from './types/room.ts';
@@ -95,7 +95,7 @@ export type CheckResults =
       type: 'turn-end';
       payload: { correct: boolean; team: Teams };
     }
-  | { type: 'game-end'; payload: { winningTeam: Teams } };
+  | { type: 'game-end'; payload: { gameEndInfo: GameEndInfo; winPlayerIds: string[] } };
 
 export const RECONNECT_MAX_TIME = 60_000;
 export const SECOND_COUNT_BEFORE_START_GAME = 15;
@@ -157,6 +157,7 @@ export type ServerEvent =
     }
   | { type: 'game:check-results'; payload: { correct: boolean } }
   | { type: 'game:send-score'; payload: { score: Score } }
+  | { type: 'game:game-end'; payload: { gameEndInfo: GameEndInfo } }
   | { type: 'profile:entered'; payload: { profileInfo: ProfileInfo } }
   | { type: 'profile:left'; payload: { roomPreviews: RoomPreview[] } }
   | { type: 'error'; payload: { code: ErrorCode } };

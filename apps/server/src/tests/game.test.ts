@@ -1,5 +1,5 @@
 import { expect, test, vi } from 'vitest';
-import { CardCounts } from '../../../../packages/shared/src/types/game.ts';
+import { CardCounts, type GameEndInfo } from '../../../../packages/shared/src/types/game.ts';
 import type { Player } from '../../../../packages/shared/src/types/room.ts';
 import { v4 as uuid } from 'uuid';
 import { Game } from '../rooms/game.ts';
@@ -20,7 +20,7 @@ const redSpymaster: Player = {
   role: 'spymaster',
 };
 const redAgentId: string = uuid();
-const agent: Player = { id: redAgentId, username: 'redAgent', team: 'red', role: 'agent' };
+const redAgent: Player = { id: redAgentId, username: 'redAgent', team: 'red', role: 'agent' };
 
 const blueSpymasterId = uuid();
 const blueSpymaster: Player = {
@@ -478,7 +478,7 @@ test('The giveClue method called the callback function with alien type if chosen
   vi.useFakeTimers();
   const game = new Game('', 4);
   game.addPlayer(redSpymaster);
-  game.addPlayer(agent);
+  game.addPlayer(redAgent);
   game.addPlayer(blueSpymaster);
   game.initial();
   const clue = 'clue';
@@ -511,7 +511,7 @@ test('The giveClue method called the callback function with alien type if chosen
   vi.useFakeTimers();
   const game = new Game('', 4);
   game.addPlayer(redSpymaster);
-  game.addPlayer(agent);
+  game.addPlayer(redAgent);
   game.addPlayer(blueSpymaster);
   game.initial();
   const clue = 'clue';
@@ -543,7 +543,7 @@ test('The giveClue method called the callback function with alien type if questi
   vi.useFakeTimers();
   const game = new Game('', 4);
   game.addPlayer(redSpymaster);
-  game.addPlayer(agent);
+  game.addPlayer(redAgent);
   game.addPlayer(blueSpymaster);
   game.initial();
   const clue = 'clue';
@@ -740,9 +740,59 @@ test('The updateScore method should update the score of the teams', () => {
   const game = new Game('', 4);
   game['score'] = { red: 1, blue: 2 };
   game['currentTeam'] = 'red';
+  game['answerCard'] = { id: uuid(), word: 'word', color: 'red', whoSees: new Set() };
   game['updateScore']();
   expect(game['score']).toEqual({ red: 2, blue: 2 });
   game['currentTeam'] = 'blue';
+  game['answerCard'] = { id: uuid(), word: 'word', color: 'blue', whoSees: new Set() };
   game['updateScore']();
   expect(game['score']).toEqual({ red: 2, blue: 3 });
+});
+
+test('The resultsProcessing method should return the winning team if a team has won', () => {
+  const game = new Game('', 4);
+  game.addPlayer(redAgent);
+  game['answerUserId'] = redAgentId;
+  // game['setCheckResult'](true);
+  game['score'] = { red: 9, blue: 8 };
+  const gameEndInfo: GameEndInfo = {
+    bluePlayerScores: [],
+    redPlayerScores: [
+      {
+        id: redAgentId,
+        username: 'redAgent',
+        score: 1,
+        attempts: 1,
+      },
+    ],
+    winningTeam: 'red',
+    win: false,
+    bombRevealed: false,
+    score: { red: 9, blue: 8 },
+    time: 0,
+  };
+  let result = game['resultsProcessing']();
+  expect(result).toEqual({
+    type: 'game-end',
+    payload: { gameEndInfo, winPlayerIds: [redAgentId] },
+  });
+  game['answerUserId'] = undefined;
+  game['score'] = { red: 8, blue: 9 };
+  game['currentTeam'] = 'blue';
+  gameEndInfo.winningTeam = 'blue';
+  gameEndInfo.score = { red: 8, blue: 9 };
+  result = game['resultsProcessing']();
+  expect(result).toEqual({ type: 'game-end', payload: { gameEndInfo, winPlayerIds: [] } });
+});
+
+test('The getGameEndInfo method should stop the game timer and return the game end info', () => {
+  vi.useFakeTimers();
+  const game = new Game('', 4);
+  game.addPlayer(blueSpymaster);
+  game.initial();
+  vi.advanceTimersByTime(5000);
+  expect(game['gameTime']).toBe(5);
+  game['getGameEndInfo']();
+  vi.advanceTimersByTime(1000);
+  expect(game['gameTime']).toBe(5);
 });

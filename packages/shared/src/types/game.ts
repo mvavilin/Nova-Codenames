@@ -25,3 +25,23 @@ export interface GameInfo {
   currentTeam: Teams;
   cards: Card[];
 }
+
+export interface PlayerScore {
+  id: string;
+  username: string;
+  score: number;
+  attempts: number;
+}
+
+export interface GameEndInfo {
+  winningTeam: Teams;
+  win: boolean;
+  bombRevealed: boolean;
+  score: {
+    red: number;
+    blue: number;
+  };
+  time: number;
+  redPlayerScores: PlayerScore[];
+  bluePlayerScores: PlayerScore[];
+}

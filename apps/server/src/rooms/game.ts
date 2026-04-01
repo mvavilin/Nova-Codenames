@@ -2,7 +2,9 @@ import {
   CardCounts,
   type Card,
   type CardColor,
+  type GameEndInfo,
   type GameInfo,
+  type PlayerScore,
 } from '../../../../packages/shared/src/types/game.ts';
 import type { Player, Teams } from '../../../../packages/shared/src/types/room.ts';
 import jsonData from '../../../../packages/shared/src/question-bank.json' with { type: 'json' };
@@ -32,14 +34,15 @@ export class Game {
   private gamePhase: GAME_PHASE = 'clue';
   private chosenCards: Map<string, string[]> = new Map();
   private checkQuestion: CheckQuestion | null = null;
-  // private gameTimer: NodeJS.Timeout | null = null;
-  // private gameTime: number = 0;
+  private gameTimer: NodeJS.Timeout | null = null;
+  private gameTime: number = 0;
   private phaseTimer: NodeJS.Timeout | null = null;
   private phaseTime: number = 0;
   private answerUserId: string | undefined;
-  // private answerCard: Card | null = null;
+  private answerCard: Card | null = null;
   private accepts: Array<{ userId: string; accept: boolean }> = [];
   private score: Score = { red: 0, blue: 0 };
+  private playerAnswers = new Map<string, boolean[]>();
 
   constructor(roomId: string, maxPlayers: number) {
     this.id = uuid();
@@ -111,9 +114,9 @@ export class Game {
 
   public initial(): void {
     this.createCards();
-    // this.gameTimer = setInterval(() => {
-    //   this.gameTime += 1;
-    // }, 1000);
+    this.gameTimer = setInterval(() => {
+      this.gameTime += 1;
+    }, 1000);
   }
 
   private createCards(): void {
@@ -282,7 +285,7 @@ export class Game {
       card.whoSees.add(this.currentTeam);
       card.whoSees.add(this.currentTeam === 'red' ? 'blue' : 'red');
       this.answerUserId = userId;
-      // this.answerCard = card;
+      this.answerCard = card;
       this.updateScore();
       const score = this.score;
       return { type: 'own', payload: { userId, question, question_en, card, score, playerIds } };
@@ -331,7 +334,7 @@ export class Game {
           this.phaseTimer = null;
         }
         this.checkQuestion = null;
-        // this.answerCard = null;
+        this.answerCard = null;
         this.answerUserId = undefined;
         this.turnChange();
         callback(this.currentTeam);
@@ -401,19 +404,64 @@ export class Game {
 
   private resultsProcessing(): CheckResults {
     const correct = this.accepts.length === 0 || this.accepts.some((item) => item.accept);
+    this.setCheckResult(correct);
+
+    const isEnd = this.score.red >= CardCounts.RED || this.score.blue >= CardCounts.BLUE;
+    if (isEnd) {
+      this.gamePhase = 'finish';
+      const gameEndInfo = this.getGameEndInfo();
+      const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
+      const winPlayerIds = team.map((player) => player.id);
+      return { type: 'game-end', payload: { gameEndInfo, winPlayerIds } };
+    }
+
     this.accepts = [];
     this.checkQuestion = null;
-    // this.answerCard = null;
+    this.answerCard = null;
     this.answerUserId = undefined;
     this.turnChange();
     return { type: 'turn-end', payload: { correct, team: this.currentTeam } };
   }
 
   private updateScore(): void {
-    if (this.currentTeam === 'red') {
-      this.score.red += 1;
-    } else {
-      this.score.blue += 1;
+    if (this.answerCard?.color === this.currentTeam) {
+      if (this.currentTeam === 'red') {
+        this.score.red += 1;
+      } else {
+        this.score.blue += 1;
+      }
     }
+  }
+
+  private getGameEndInfo(bombRevealed: boolean = false): GameEndInfo {
+    if (this.gameTimer) {
+      clearInterval(this.gameTimer);
+    }
+    const winningTeam = this.score.red >= CardCounts.RED ? 'red' : 'blue';
+    const redPlayerScores = this.redTeam.map((player) => this.getPlayerScore(player));
+    const bluePlayerScores = this.blueTeam.map((player) => this.getPlayerScore(player));
+    return {
+      winningTeam,
+      win: false,
+      bombRevealed,
+      score: this.score,
+      time: this.gameTime,
+      redPlayerScores,
+      bluePlayerScores,
+    };
+  }
+
+  private setCheckResult(correct: boolean): void {
+    if (this.answerUserId) {
+      const userAnswers = this.playerAnswers.get(this.answerUserId) || [];
+      userAnswers.push(correct);
+      this.playerAnswers.set(this.answerUserId, userAnswers);
+    }
+  }
+
+  private getPlayerScore(player: Player): PlayerScore {
+    const answers = this.playerAnswers.get(player.id) || [];
+    const score = answers.filter((answer) => answer === true).length;
+    return { id: player.id, username: player.username, score, attempts: answers.length };
   }
 }

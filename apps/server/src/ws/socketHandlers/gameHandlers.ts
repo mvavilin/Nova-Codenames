@@ -257,4 +257,19 @@ function sendResults(game: Game, results: CheckResults): void {
       }
     }
   }
+
+  if (type === 'game-end') {
+    const playerIds = game.getPlayerIds();
+    const { gameEndInfo, winPlayerIds } = payload;
+    for (const playerId of playerIds) {
+      const socketId = socketIdMap.get(playerId);
+      if (socketId) {
+        io.to(socketId).emit('game:check-results', { correct: false });
+        logger.emit(playerId, 'game:check-results', { correct: false });
+        const win = winPlayerIds.includes(playerId);
+        io.to(socketId).emit('game:game-end', { gameEndInfo: { ...gameEndInfo, win } });
+        logger.emit(playerId, 'game:game-end', { gameEndInfo: { ...gameEndInfo, win } });
+      }
+    }
+  }
 }
