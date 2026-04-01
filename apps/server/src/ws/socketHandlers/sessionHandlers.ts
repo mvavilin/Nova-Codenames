@@ -101,8 +101,8 @@ function setupAskStatusHandler(
     const { userStatus } = roomManager.getStatus(userId, username);
     const socketId = socketIdMap.get(userId);
     if (socketId) {
-      io.to(socketId).emit('session:send-status', { userStatus });
-      logger.emit(userId, 'session:send-status', { userStatus });
+      io.to(socketId).emit('session:send-status', { userStatus, userId, username });
+      logger.emit(userId, 'session:send-status', { userStatus, userId, username });
     }
   });
 }

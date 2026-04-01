@@ -133,7 +133,10 @@ export type ServerEvent =
   | { type: 'session:player-connected'; payload: { player: Player } }
   | { type: 'session:player-disconnected'; payload: { player: Player } }
   | { type: 'session:player-exit'; payload: { player: Player } }
-  | { type: 'session:send-status'; payload: { userStatus: UserStatus } }
+  | {
+      type: 'session:send-status';
+      payload: { userStatus: UserStatus; userId: string; username: string };
+    }
   | { type: 'room:send-list'; payload: { roomPreviews: RoomPreview[] } }
   | { type: 'room:created'; payload: { roomPreview: RoomPreview } }
   | { type: 'room:state'; payload: { roomInfo: RoomInfo } }
