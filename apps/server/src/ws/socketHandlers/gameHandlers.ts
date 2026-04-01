@@ -208,11 +208,18 @@ function guessBombCardCallback(game: Game, result: CardTestResult & { type: 'bom
 
 function guessNoChangeCallback(game: Game, result: CardTestResult & { type: 'no-change' }): void {
   const { payload } = result;
-  const { spymasterId, team } = payload;
+  const { spymasterId, team, playerIds } = payload;
   const socketId = socketIdMap.get(spymasterId);
   if (socketId) {
     io.to(socketId).emit('game:ask-clue');
     logger.emit(spymasterId, 'game:ask-clue');
+  }
+  for (const playerId of playerIds) {
+    const socketId = socketIdMap.get(playerId);
+    if (socketId) {
+      io.to(socketId).emit('game:check-timeout');
+      logger.emit(playerId, 'game:check-timeout');
+    }
   }
   turnChange(game, team);
 }

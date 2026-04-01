@@ -473,7 +473,7 @@ test('The giveClue method called the callback function with no-change type if ca
   vi.advanceTimersByTime(SECOND_COUNT_FOR_GUESS * 1000);
   const result: CardTestResult = {
     type: 'no-change',
-    payload: { spymasterId: blueSpymasterId, team: 'blue' },
+    payload: { spymasterId: blueSpymasterId, team: 'blue', playerIds: [redSpymasterId, agentId] },
   };
   expect(callback).toHaveBeenCalledWith(result);
 });
@@ -566,7 +566,11 @@ test('The giveClue method called the callback function with alien type if questi
     expect(checkQuestion).toBeNull();
     const result: CardTestResult = {
       type: 'no-change',
-      payload: { spymasterId: blueSpymasterId, team: 'blue' },
+      payload: {
+        spymasterId: blueSpymasterId,
+        team: 'blue',
+        playerIds: [redSpymasterId, redAgentId],
+      },
     };
     expect(callback).toHaveBeenCalledWith(result);
   }

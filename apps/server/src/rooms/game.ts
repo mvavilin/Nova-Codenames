@@ -274,8 +274,10 @@ export class Game {
       }
     }
 
+    const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
+    const playerIds = team.map((player) => player.id);
     const spymasterId = this.turnChange();
-    return { type: 'no-change', payload: { team: this.currentTeam, spymasterId } };
+    return { type: 'no-change', payload: { team: this.currentTeam, spymasterId, playerIds } };
   }
 
   private chosenOwnCard(choice: [string, string[]], card: Card): CardTestResult {
@@ -296,8 +298,10 @@ export class Game {
       const score = this.score;
       return { type: 'own', payload: { userId, question, question_en, card, score, playerIds } };
     }
+    const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
+    const playerIds = team.map((player) => player.id);
     const spymasterId = this.turnChange();
-    return { type: 'no-change', payload: { team: this.currentTeam, spymasterId } };
+    return { type: 'no-change', payload: { team: this.currentTeam, spymasterId, playerIds } };
   }
 
   private chosenOpponentCard(card: Card): CardTestResult {

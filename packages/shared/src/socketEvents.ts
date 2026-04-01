@@ -87,7 +87,7 @@ export type CardTestResult =
         winPlayerIds: string[];
       };
     }
-  | { type: 'no-change'; payload: { spymasterId: string; team: Teams } };
+  | { type: 'no-change'; payload: { spymasterId: string; team: Teams; playerIds: string[] } };
 
 export type CheckResults =
   | {
@@ -162,6 +162,7 @@ export type ServerEvent =
       payload: { answer: string; checkQuestion: CheckQuestion; check: boolean };
     }
   | { type: 'game:check-results'; payload: { correct: boolean } }
+  | { type: 'game:check-timeout' }
   | { type: 'game:send-score'; payload: { score: Score } }
   | { type: 'game:game-end'; payload: { gameEndInfo: GameEndInfo } }
   | { type: 'game:state'; payload: { gameState: GameStateForClient } }
