@@ -1,5 +1,9 @@
 import { expect, test, vi } from 'vitest';
-import { CardCounts, type GameEndInfo } from '../../../../packages/shared/src/types/game.ts';
+import {
+  CardCounts,
+  type Card,
+  type GameEndInfo,
+} from '../../../../packages/shared/src/types/game.ts';
 import type { Player } from '../../../../packages/shared/src/types/room.ts';
 import { v4 as uuid } from 'uuid';
 import { Game } from '../rooms/game.ts';
@@ -753,7 +757,6 @@ test('The resultsProcessing method should return the winning team if a team has 
   const game = new Game('', 4);
   game.addPlayer(redAgent);
   game['answerUserId'] = redAgentId;
-  // game['setCheckResult'](true);
   game['score'] = { red: 9, blue: 8 };
   const gameEndInfo: GameEndInfo = {
     bluePlayerScores: [],
@@ -795,4 +798,28 @@ test('The getGameEndInfo method should stop the game timer and return the game e
   game['getGameEndInfo']();
   vi.advanceTimersByTime(1000);
   expect(game['gameTime']).toBe(5);
+});
+
+test('The guessTest method should ', () => {
+  const game = new Game('', 4);
+  game.addPlayer(redAgent);
+  game.addPlayer(blueSpymaster);
+  game.initial();
+  game['gamePhase'] = 'guess';
+  const bombCard: Card = { id: uuid(), word: 'word', color: 'bomb', whoSees: new Set() };
+  game['cards'] = [bombCard];
+  game.chooseCard(redAgentId, bombCard.id);
+  const result = game['guessTest']();
+  const gameEndInfo = game['getGameEndInfo'](true);
+  const cardTestResult: CardTestResult = {
+    type: 'bomb',
+    payload: {
+      cardId: bombCard.id,
+      color: bombCard.color,
+      winPlayerIds: [blueSpymasterId],
+      gameEndInfo,
+    },
+  };
+
+  expect(result).toEqual(cardTestResult);
 });

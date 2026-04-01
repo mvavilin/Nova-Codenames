@@ -124,6 +124,10 @@ function guessCallback(game: Game, result: CardTestResult): void {
       guessAlienCardCallback(game, result);
       break;
     }
+    case 'bomb': {
+      guessBombCardCallback(game, result);
+      break;
+    }
   }
 }
 
@@ -179,6 +183,22 @@ function guessAlienCardCallback(game: Game, result: CardTestResult & { type: 'al
     logger.emit(spymasterId, 'game:ask-clue');
   }
   turnChange(game, team);
+}
+
+function guessBombCardCallback(game: Game, result: CardTestResult & { type: 'bomb' }): void {
+  const { payload } = result;
+  const { cardId, color, gameEndInfo, winPlayerIds } = payload;
+  const playerIds = game.getPlayerIds();
+  for (const playerId of playerIds) {
+    const socketId = socketIdMap.get(playerId);
+    if (socketId) {
+      io.to(socketId).emit('game:card-shown', { cardId, color });
+      logger.emit(playerId, 'game:card-shown', { cardId, color });
+      const win = winPlayerIds.includes(playerId);
+      io.to(socketId).emit('game:game-end', { gameEndInfo: { ...gameEndInfo, win } });
+      logger.emit(playerId, 'game:game-end', { gameEndInfo: { ...gameEndInfo, win } });
+    }
+  }
 }
 
 function setupCardChooseHandler(

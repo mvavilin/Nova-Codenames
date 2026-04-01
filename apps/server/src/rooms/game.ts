@@ -263,6 +263,9 @@ export class Game {
             case opponentColor: {
               return this.chosenOpponentCard(card);
             }
+            case 'bomb': {
+              return this.chosenBombCard(card);
+            }
           }
         }
       }
@@ -303,6 +306,24 @@ export class Game {
     return {
       type: 'alien',
       payload: { spymasterId, team: this.currentTeam, cardId, color, recipients },
+    };
+  }
+
+  private chosenBombCard(card: Card): CardTestResult {
+    const opponentTeam = this.currentTeam === 'red' ? this.blueTeam : this.redTeam;
+    const winPlayerIds = opponentTeam.map((player) => player.id);
+    const gameEndInfo = this.getGameEndInfo(true);
+    card.whoSees.add(this.currentTeam);
+    gameEndInfo.winningTeam = opponentTeam === this.redTeam ? 'red' : 'blue';
+    this.gamePhase = 'finish';
+    return {
+      type: 'bomb',
+      payload: {
+        cardId: card.id,
+        color: card.color,
+        gameEndInfo,
+        winPlayerIds,
+      },
     };
   }
 

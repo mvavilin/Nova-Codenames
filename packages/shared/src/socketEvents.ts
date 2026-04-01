@@ -76,11 +76,10 @@ export type CardTestResult =
   | {
       type: 'bomb';
       payload: {
-        spymasterId: string;
-        team: Teams;
         cardId: string;
         color: CardColor;
-        recipients: string[];
+        gameEndInfo: GameEndInfo;
+        winPlayerIds: string[];
       };
     }
   | { type: 'no-change'; payload: { spymasterId: string; team: Teams } };
