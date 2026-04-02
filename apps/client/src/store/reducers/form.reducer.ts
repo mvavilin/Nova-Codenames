@@ -4,10 +4,11 @@ import type { FieldName } from '@/components/InputForm/InputForm.types';
 import type { FieldState } from '@/components/BaseForm/BaseForm.types';
 import store from '../store';
 import { saveSessionStorageData } from '@/utils';
-import { sessionStorageProps } from '@/constants/sessionStorage.constants';
+
 import { SocketActionTypes } from '../actions/socket.actions';
 import { AppActionTypes } from '../actions';
 import type { AppActions } from '../types';
+import { TOKENS } from '@/constants/tokens';
 
 export default function formReducer(state: State, action: AppActions): State {
   switch (action.type) {
@@ -37,7 +38,7 @@ export default function formReducer(state: State, action: AppActions): State {
 
     case FormActionTypes.FETCH_SUCCESS: {
       if (action.payload.token) {
-        saveSessionStorageData(sessionStorageProps.authToken, action.payload.token);
+        saveSessionStorageData(TOKENS.AUTH, action.payload.token);
 
         store.dispatch({
           type: SocketActionTypes.SOCKET_REQUEST_SESSION_TOKEN,

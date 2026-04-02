@@ -17,6 +17,7 @@ export enum ClientEventType {
   ROOM_JOIN = 'room:join',
   ROOM_LEAVE = 'room:leave',
   ROOM_ASK_ROOM_INFO = 'room:ask-room-info',
+  SESSION_LOGOUT = 'session:logout',
   SESSION_PLAYER_EXIT = 'session:player-exit',
   TEAM_CHANGE = 'team:change',
   GAME_ADD_PLAYER = 'game:add-player',
