@@ -57,7 +57,7 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
         socketClient.connect(authToken);
       } catch (error) {
         router.navigate(URLS.LOGIN());
-        showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_SESSION_TOKEN);
+        showErrorToast(error, SOCKET_ERROR_MESSAGES.CONNECT_ERROR);
       }
     }
 

@@ -183,10 +183,8 @@ class SocketClient extends BaseSocketClient {
   }
 }
 
-const socketClient = new SocketClient(ServerUrl.LOCAL_BASE);
+const socketClient = new SocketClient(ServerUrl.DEPLOY_BASE);
 // socketClient.socket.onAny((eventName, ...args) => {
 //   console.log(`>>> [ANY EVENT] Пришло событие: ${eventName}`, args);
 // });
-
-// const socketClient = new SocketClient(ServerUrl.DEPLOY_BASE);
 export default socketClient;

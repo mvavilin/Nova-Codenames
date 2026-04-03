@@ -15,7 +15,6 @@ export default abstract class BaseSocketClient {
       autoConnect: false,
       forceNew: true,
       multiplex: false,
-      reconnection: false,
     });
 
     this._socket.on(ServerEventType.CONNECT_ERROR, (error: unknown) => {
