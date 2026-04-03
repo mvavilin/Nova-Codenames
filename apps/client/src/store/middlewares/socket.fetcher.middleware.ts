@@ -7,8 +7,7 @@ import { SOCKET_ERROR_MESSAGES } from '@SocketClientAPI/socket.constants';
 import { AppActionTypes, RoomPageActionTypes, SocketActionTypes } from '@actions';
 import { URLS } from '@RouterAPI/router.constants';
 import { router } from '@router';
-import { TOKENS } from '@constants/tokens';
-import { saveSessionStorageData, showErrorToast } from '@utils';
+import { showErrorToast } from '@utils';
 import store from '@store';
 import { Toast } from '@components';
 import MessageType from '@constants/messageType';
@@ -59,17 +58,11 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
     //   }
     // }
 
-    if (context.action.type === SocketActionTypes.SOCKET_REQUEST_SESSION_TOKEN) {
+    if (context.action.type === SocketActionTypes.SOCKET_CONNECT) {
       try {
         const authToken = context.action.payload.authToken;
 
         if (authToken === null) throw new Error('Authorization token not found');
-
-        socketClient.onSessionToken(({ sessionToken }) => {
-          saveSessionStorageData(TOKENS.SESSION, sessionToken);
-
-          socketClient.off(ServerEventType.SESSION_TOKEN);
-        });
 
         socketClient.onSessionConnect(({ userStatus, userId, username }) => {
           context.next({
@@ -91,7 +84,6 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
         });
 
         socketClient.onError(({ code }) => {
-          console.log(code);
           showErrorToast(code, SOCKET_ERROR_MESSAGES.GENERAL_ERROR);
 
           context.next({

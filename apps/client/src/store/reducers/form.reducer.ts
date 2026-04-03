@@ -41,7 +41,7 @@ export default function formReducer(state: State, action: AppActions): State {
         saveSessionStorageData(TOKENS.AUTH, action.payload.token);
 
         store.dispatch({
-          type: SocketActionTypes.SOCKET_REQUEST_SESSION_TOKEN,
+          type: SocketActionTypes.SOCKET_CONNECT,
           payload: { authToken: action.payload.token },
         });
       }
@@ -60,18 +60,9 @@ export default function formReducer(state: State, action: AppActions): State {
       };
     }
 
-    case FormActionTypes.GO_TO_WELCOME_PAGE: {
-      return { ...state };
-    }
-
-    case FormActionTypes.GO_TO_LOGIN_PAGE: {
-      return { ...state };
-    }
-
-    case FormActionTypes.GO_TO_REGISTRATION_PAGE: {
-      return { ...state };
-    }
-
+    case FormActionTypes.GO_TO_WELCOME_PAGE:
+    case FormActionTypes.GO_TO_LOGIN_PAGE:
+    case FormActionTypes.GO_TO_REGISTRATION_PAGE:
     case AppActionTypes.SWITCH_LANGUAGE: {
       return { ...state };
     }

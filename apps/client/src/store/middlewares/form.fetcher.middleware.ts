@@ -12,7 +12,6 @@ import { TranslationKeys } from '@/i18n/translationKeys';
 const FORM_ENDPOINTS: Record<string, string> = {
   registration: Endpoints.REGISTRATION,
   login: Endpoints.LOGIN,
-  // profile: Endpoints.????
 };
 
 export default function fetcher<State>(): Middleware<State, AppActions> {
