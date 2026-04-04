@@ -12,6 +12,15 @@ import { t } from '@/i18n';
 import type { TranslationKey } from '@/i18n/translationKeys';
 import { AppActionTypes } from '@/store/actions';
 
+const styles = {
+  container: 'w-full flex flex-col self-center gap-1',
+  label: 'uppercase text-sm md:text-base font-medium font-main',
+  tooltip:
+    'min-h-[32px] whitespace-pre-line text-red-600 text-xs font-medium transition-opacity duration-200',
+  input:
+    'text-sm md:text-base px-3 py-2 bg-white/60 border border-solid border-black rounded-md outline-none transition-colors duration-300 hover:border-green-600 focus:border-brand',
+};
+
 export default class InputForm extends ContainerComponent {
   private formId: FormType;
   private fieldName: FieldName;
@@ -25,7 +34,7 @@ export default class InputForm extends ContainerComponent {
   private unsubscribe: () => void;
 
   constructor(parameters: InputBlockProps) {
-    super({ classes: 'w-full flex flex-col self-center gap-1' });
+    super({ classes: styles.container });
     this.formId = parameters.formId;
     this.fieldName = parameters.fieldName;
     this.labelKey = parameters.labelTextKey;
@@ -40,15 +49,14 @@ export default class InputForm extends ContainerComponent {
 
   private render(parameters: InputBlockProps): void {
     this.label = new LabelComponent({
-      classes: 'uppercase text-sm md:text-base font-medium font-main',
+      classes: styles.label,
       content: t(this.labelKey),
       htmlFor: parameters.id,
     });
 
     this.tooltip = new TextComponent({
       tag: 'span',
-      classes:
-        'min-h-[32px] whitespace-pre-line text-red-600 text-xs font-medium transition-opacity duration-200',
+      classes: styles.tooltip,
     });
 
     this.input = new InputComponent({
@@ -57,8 +65,7 @@ export default class InputForm extends ContainerComponent {
       name: parameters.name,
       placeholder: t(this.placeholderKey),
       autocomplete: parameters.autocomplete,
-      classes:
-        'text-sm md:text-base px-3 py-2 bg-white/60 border border-solid border-black rounded-md outline-none transition-colors duration-300 hover:border-green-600 focus:border-brand',
+      classes: styles.input,
     });
 
     if (parameters.minLength) {
@@ -103,6 +110,7 @@ export default class InputForm extends ContainerComponent {
   private updateInputForm(_state: State, action: Action): void {
     const isFieldUpdate = action.type === FormActionTypes.FORM_UPDATE_FIELD;
     const isLanguageSwitch = action.type === AppActionTypes.SWITCH_LANGUAGE;
+
     if (isFieldUpdate || isLanguageSwitch) {
       const formState = store.getState()[this.formId];
       const fieldState = formState.fields[this.fieldName];

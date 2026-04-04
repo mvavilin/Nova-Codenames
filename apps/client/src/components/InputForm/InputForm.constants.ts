@@ -36,4 +36,15 @@ export const formInputValues: Record<FieldName, InputFieldProps> = {
     labelTextKey: TranslationKeys.FORM_LABEL_PASSWORD,
     errorKey: TranslationKeys.FORM_ERROR_MESSAGE_PASSWORD,
   },
+
+  confirmPassword: {
+    id: 'userConfirmPassword',
+    type: 'password',
+    name: 'confirmPasswordInput',
+    autocomplete: 'off',
+    minLength: '6',
+    placeholderKey: TranslationKeys.FORM_PLACEHOLDER_CONFIRM_PASSWORD,
+    labelTextKey: TranslationKeys.FORM_LABEL_CONFIRM_PASSWORD,
+    errorKey: TranslationKeys.FORM_ERROR_MESSAGE_CONFIRM_PASSWORD,
+  },
 };
