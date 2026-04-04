@@ -1,19 +1,17 @@
 import { ContainerComponent, HeadingComponent } from '@api/ComponentsAPI';
 import { Header } from '@components';
-
 import { GAME_PAGE_BACKGROUND } from '@assets/backgrounds';
-
 import { TITLE_CLASSES } from '@constants/styles';
-import { logOutput, TeamTurnIndicator, Timer } from '@pages/GamePage/components';
+import { TeamTurnIndicator, Timer } from '@pages/GamePage/components';
+// import { logOutput } from '@pages/GamePage/components';
 import { GameBoardSection, LogChatSection } from '@pages/GamePage/components/sections';
-
 import { TeamsEnum } from '@repo/shared/src/types/room';
 import { t } from '@i18n';
 import { TranslationKeys } from '@i18n/translationKeys';
 import { getSessionStorageData } from '@utils';
 import { SESSION_STORAGE_KEYS } from '@constants/sessionStorageKeys';
 import { socketClient } from '@SocketClientAPI';
-import { LogMessageKeys, LogMessageType } from '@shared/types/logMessage';
+// import { LogMessageKeys, LogMessageType } from '@shared/types/logMessage';
 
 const GAME_PAGE_CLASSES = `w-full h-full flex flex-col items-center justify-start gap-5 px-20 py-5 bg-cover bg-right font-text`;
 const MAIN_CLASSES = `w-full h-full max-w-7xl grid grid-cols-2 grid-cols-[3fr_1fr] gap-5 text-white rounded`;
@@ -30,11 +28,91 @@ export default class GamePage extends ContainerComponent {
 
     this.render();
 
+    this.setupSocketListeners();
+  }
+
+  private setupSocketListeners(): void {
+    // GAME_ASK_CLUE
     socketClient.onGameAskClue(() => {
-      logOutput.addMessage({
-        type: LogMessageType.SYSTEM,
-        key: LogMessageKeys.LOG_HINT_PHASE_STARTED,
-      });
+      console.log('[GamePage] Получено событие: GAME_ASK_CLUE - запрос подсказки у шпиона');
+    });
+
+    // GAME_START_TIMER
+    socketClient.onGameStartTimer(() => {
+      console.log('[GamePage] Получено событие: GAME_START_TIMER - таймер перед стартом игры');
+    });
+
+    // GAME_START
+    socketClient.onGameStart((payload) => {
+      console.log('[GamePage] Получено событие: GAME_START - игра началась', payload);
+    });
+
+    // GAME_CLUE_TIMEOUT
+    socketClient.onGameClueTimeout(() => {
+      console.log('[GamePage] Получено событие: GAME_CLUE_TIMEOUT - время подсказки истекло');
+    });
+
+    // GAME_TURN_CHANGED
+    socketClient.onGameTurnChanged((payload) => {
+      console.log('[GamePage] Получено событие: GAME_TURN_CHANGED - смена хода', payload);
+    });
+
+    // GAME_CLUE_GIVEN
+    socketClient.onGameClueGiven((payload) => {
+      console.log('[GamePage] Получено событие: GAME_CLUE_GIVEN - подсказка передана', payload);
+    });
+
+    // GAME_CARD_CHOSEN
+    socketClient.onGameCardChosen((payload) => {
+      console.log('[GamePage] Получено событие: GAME_CARD_CHOSEN - карта выбрана', payload);
+    });
+
+    // GAME_CARD_SHOWN
+    socketClient.onGameCardShown((payload) => {
+      console.log('[GamePage] Получено событие: GAME_CARD_SHOWN - карта открыта', payload);
+    });
+
+    // GAME_ASK_ANSWER
+    socketClient.onGameAskAnswer((payload) => {
+      console.log(
+        '[GamePage] Получено событие: GAME_ASK_ANSWER - запрос ответа на вопрос',
+        payload
+      );
+    });
+
+    // GAME_ANSWER_TIMEOUT
+    socketClient.onGameAnswerTimeout(() => {
+      console.log('[GamePage] Получено событие: GAME_ANSWER_TIMEOUT - время ответа истекло');
+    });
+
+    // GAME_ASK_CHECK
+    socketClient.onGameAskCheck((payload) => {
+      console.log('[GamePage] Получено событие: GAME_ASK_CHECK - запрос проверки ответа', payload);
+    });
+
+    // GAME_CHECK_RESULTS
+    socketClient.onGameCheckResults((payload) => {
+      console.log('[GamePage] Получено событие: GAME_CHECK_RESULTS - результаты проверки', payload);
+    });
+
+    // GAME_CHECK_TIMEOUT
+    socketClient.onGameCheckTimeout(() => {
+      console.log('[GamePage] Получено событие: GAME_CHECK_TIMEOUT - время проверки истекло');
+    });
+
+    // GAME_SEND_SCORE
+    socketClient.onGameSendScore((payload) => {
+      console.log('[GamePage] Получено событие: GAME_SEND_SCORE - обновление счета', payload);
+    });
+
+    // GAME_GAME_END
+    socketClient.onGameGameEnd((payload) => {
+      console.log('[GamePage] Получено событие: GAME_GAME_END - конец игры', payload);
+    });
+
+    // GAME_STATE
+    socketClient.onGameState((payload) => {
+      console.log('[GamePage] Получено событие: GAME_STATE - состояние игры', payload);
     });
   }
 
