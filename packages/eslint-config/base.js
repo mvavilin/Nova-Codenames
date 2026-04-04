@@ -113,6 +113,8 @@ export default [
       '**/src/store/middlewares/socket.fetcher.middleware.ts',
       '**/src/store/middlewares/form.fetcher.middleware.ts',
       '**/src/store/middlewares/room.fetcher.middleware.ts',
+      '**/src/store/middlewares/game.fetcher.middleware.ts',
+      '**/src/store/reducers/game.reducer.ts',
       '**/src/pages/GamePage/components/modals/GameResultsModal/GameResultsModal.ts',
       '**/src/pages/GamePage/components/modals/KnowledgeCheckModal/KnowledgeCheckModal.ts',
       '**/src/pages/RoomPage/RoomInfoBlock/RoomInfoBlock.ts',
