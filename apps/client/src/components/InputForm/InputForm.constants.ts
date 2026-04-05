@@ -31,7 +31,7 @@ export const formInputValues: Record<FieldName, InputFieldProps> = {
     name: 'passwordInput',
     autocomplete: 'off',
     minLength: '6',
-    pattern: /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]+$/,
+    // pattern: /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]+$/,
     placeholderKey: TranslationKeys.FORM_PLACEHOLDER_PASSWORD,
     labelTextKey: TranslationKeys.FORM_LABEL_PASSWORD,
     errorKey: TranslationKeys.FORM_ERROR_MESSAGE_PASSWORD,

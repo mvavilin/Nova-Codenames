@@ -10,6 +10,7 @@ import type { State } from '@/store/types/state';
 import store from '@/store/store';
 import { t } from '@/i18n';
 import type { TranslationKey } from '@/i18n/translationKeys';
+import { TranslationKeys } from '@/i18n/translationKeys';
 import { AppActionTypes } from '@/store/actions';
 
 const styles = {
@@ -92,9 +93,24 @@ export default class InputForm extends ContainerComponent {
     if (!(event.target instanceof HTMLInputElement)) return;
     const value = event.target.value.trim().replaceAll(/\s+/g, ' ');
 
-    const isValid = this.pattern
-      ? this.pattern.test(value) && value.length >= Number(event.target.minLength)
-      : value.length >= Number(event.target.minLength);
+    let isValid = true;
+
+    if (this.fieldName === 'password') {
+      if (!/^[A-Za-z0-9!@#$%^&*]*$/.test(value)) {
+        this.errorKey = TranslationKeys.FORM_ERROR_MESSAGE_PASSWORD_ONLY_ENGLISH;
+        isValid = false;
+      } else if (!/(?=.*[A-Z])(?=.*[!@#$%^&*])/.test(value)) {
+        this.errorKey = TranslationKeys.FORM_ERROR_MESSAGE_PASSWORD_REQUIREMENTS;
+        isValid = false;
+      } else if (value.length < 6) {
+        this.errorKey = TranslationKeys.FORM_ERROR_MESSAGE_PASSWORD_MIN_LENGTH;
+        isValid = false;
+      }
+    } else {
+      isValid = this.pattern
+        ? this.pattern.test(value) && value.length >= Number(event.target.minLength)
+        : value.length >= Number(event.target.minLength);
+    }
 
     store.dispatch({
       type: FormActionTypes.FORM_UPDATE_FIELD,
