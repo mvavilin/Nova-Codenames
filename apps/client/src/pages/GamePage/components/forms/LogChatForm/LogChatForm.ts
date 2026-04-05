@@ -7,6 +7,7 @@ import { FORM_CLASSES } from '@constants/styles';
 import { CREATE_ROOM_FORM_CONFIG as CONFIG } from '@constants/forms';
 import { t } from '@i18n';
 import { TranslationKeys } from '@i18n/translationKeys';
+import store from '@store';
 
 export default class LogChatForm extends FormComponent {
   private input?: InputText;
@@ -26,9 +27,7 @@ export default class LogChatForm extends FormComponent {
   private render(): void {
     this.initOutput();
 
-    // feat: add role verification
-
-    this.initControls();
+    if (store.getState().game?.isSpymaster) this.initControls();
   }
 
   private initOutput(): void {
