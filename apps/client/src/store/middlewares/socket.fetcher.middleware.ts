@@ -9,22 +9,16 @@ import {
 
 import { socketClient } from '@SocketClientAPI';
 import { SOCKET_ERROR_MESSAGES } from '@SocketClientAPI/socket.constants';
-import { RoomPageActionTypes, SocketActionTypes } from '@actions';
+import { GameActionTypes, RoomPageActionTypes, SocketActionTypes } from '@actions';
 import { URLS } from '@RouterAPI/router.constants';
 import { router } from '@router';
 
 import { TOKENS } from '@constants/tokens';
-import {
-  saveSessionStorageData,
-  showErrorToast,
-  removeSessionStorageData,
-  getSessionStorageData,
-} from '@utils';
+import { saveSessionStorageData, showErrorToast, removeSessionStorageData } from '@utils';
 import store from '@store';
 import { Toast } from '@components';
 import MessageType from '@constants/messageType';
 import { SESSION_STORAGE_KEYS } from '@constants/sessionStorageKeys';
-import { isObject } from '@utils/isObject';
 
 export default function socketFetcher<State>(): Middleware<State, AppActions> {
   return function middleware(context) {
@@ -45,7 +39,7 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
           if (userStatus === UserStatusType.IN_ROOM)
             store.dispatch({ type: SocketActionTypes.ROOM_ASK_ROOM_INFO });
           if (userStatus === UserStatusType.IN_GAME)
-            store.dispatch({ type: SocketActionTypes.ROOM_ASK_GAME_INFO });
+            store.dispatch({ type: GameActionTypes.GAME_ASK_GAME_STATE });
 
           socketClient.off(ServerEventType.SESSION_TOKEN);
         });
@@ -106,7 +100,7 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
       }
     }
 
-    // точка входа в комнату
+    // Точка входа в комнату
     if (context.action.type === SocketActionTypes.SOCKET_JOIN_ROOM) {
       try {
         const { roomId } = context.action.payload;
@@ -156,7 +150,7 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
       }
     }
 
-    // точка реконнекта пользователя, включающая запрос информации о комнате и навигацию в нее
+    // Точка реконнекта пользователя, включающая запрос информации о комнате и навигацию в нее
     if (context.action.type === SocketActionTypes.ROOM_ASK_ROOM_INFO) {
       try {
         socketClient.onRoomState(({ roomInfo }) => {
@@ -192,18 +186,6 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
         });
 
         socketClient.emit(ClientEventType.ROOM_ASK_ROOM_INFO);
-      } catch (error) {
-        showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ERROR);
-      }
-    }
-
-    // точка реконнекта пользователя, включающая запрос информации об игре и навигацию в нее
-    if (context.action.type === SocketActionTypes.ROOM_ASK_GAME_INFO) {
-      try {
-        const gameInfo = getSessionStorageData(SESSION_STORAGE_KEYS.GAME_INFO);
-
-        if (isObject(gameInfo) && 'id' in gameInfo && typeof gameInfo['id'] === 'string')
-          router.init(URLS.GAME(gameInfo['id']));
       } catch (error) {
         showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ERROR);
       }

@@ -131,11 +131,6 @@ export default class GamePage extends ContainerComponent {
     socketClient.onGameGameEnd((payload) => {
       console.log('[GamePage] Получено событие: GAME_GAME_END - конец игры', payload);
     });
-
-    // GAME_STATE
-    socketClient.onGameState((payload) => {
-      console.log('[GamePage] Получено событие: GAME_STATE - состояние игры', payload);
-    });
   }
 
   private render(): void {
