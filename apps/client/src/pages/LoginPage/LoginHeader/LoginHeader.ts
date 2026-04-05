@@ -31,14 +31,6 @@ export default class LoginHeader extends ContainerComponent {
 
   private render(): void {
     this.logo = new Logo();
-    this.logo.setClasses('hover:cursor-pointer');
-    this.logo.setListeners({
-      click: (): void => {
-        store.dispatch({
-          type: FormActionTypes.GO_TO_WELCOME_PAGE,
-        });
-      },
-    });
 
     const container = new ContainerComponent({ classes: styles.container });
     this.loginLink = new TextComponent({

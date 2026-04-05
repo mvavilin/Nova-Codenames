@@ -77,9 +77,28 @@ export default function formReducer(state: State, action: AppActions): State {
       };
     }
 
-    case FormActionTypes.GO_TO_WELCOME_PAGE:
-    case FormActionTypes.GO_TO_LOGIN_PAGE:
-    case FormActionTypes.GO_TO_REGISTRATION_PAGE:
+    case FormActionTypes.CLEAN_DATA: {
+      return {
+        ...state,
+        registration: {
+          fields: {
+            username: { value: '', isValid: false, isChanged: false },
+            email: { value: '', isValid: false, isChanged: false },
+            password: { value: '', isValid: false, isChanged: false },
+            confirmPassword: { value: '', isValid: false, isChanged: false },
+          },
+          isFormValid: false,
+        },
+        login: {
+          fields: {
+            email: { value: '', isValid: false, isChanged: false },
+            password: { value: '', isValid: false, isChanged: false },
+          },
+          isFormValid: false,
+        },
+      };
+    }
+
     case AppActionTypes.SWITCH_LANGUAGE: {
       return { ...state };
     }
