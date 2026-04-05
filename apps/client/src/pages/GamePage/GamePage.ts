@@ -9,7 +9,7 @@ import { TeamsEnum } from '@repo/shared/src/types/room';
 import { t } from '@i18n';
 import { TranslationKeys } from '@i18n/translationKeys';
 import { socketClient } from '@SocketClientAPI';
-import { LogMessageKeys, LogMessageType } from '@shared/types/logMessage';
+import { LogMessageKeys, LogMessageType } from '@repo/shared/src/types/logMessage';
 import store from '@store';
 
 const GAME_PAGE_CLASSES = `w-full h-full flex flex-col items-center justify-start gap-5 px-20 py-5 bg-cover bg-right font-text`;
@@ -81,6 +81,13 @@ export default class GamePage extends ContainerComponent {
     // GAME_CLUE_GIVEN
     socketClient.onGameClueGiven((payload) => {
       console.log('[GamePage] Получено событие: GAME_CLUE_GIVEN - подсказка передана', payload);
+
+      logOutput.addMessage({
+        key: LogMessageKeys.LOG_HINT_GIVEN,
+        info: payload.clue,
+      });
+
+      logOutput.addMessage({ key: LogMessageKeys.LOG_VOTE_STARTED });
     });
 
     // GAME_CARD_CHOSEN

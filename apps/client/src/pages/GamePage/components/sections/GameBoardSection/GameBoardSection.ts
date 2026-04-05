@@ -64,7 +64,6 @@ export default class GameBoardSection extends BaseComponent {
     this.main.appendChildren([
       new GameBoard({ cards: this.gameState.cards, isSpymaster: this.gameState.isSpymaster }),
     ]);
-    // this.main.appendChildren([new GameBoard({ cards, role: Role.OPERATIVE })]);
 
     this.appendChildren([this.header, this.main]);
   }

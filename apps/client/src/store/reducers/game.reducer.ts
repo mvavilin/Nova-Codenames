@@ -6,59 +6,6 @@ import { GameActionTypes } from '@actions';
 
 export default function gameReducer(state: State, action: AppActions): State {
   switch (action.type) {
-    // Таймер перед стартом игры
-    // case GameActionTypes.GAME_START_TIMER: {
-    //   console.log('[GAME REDUCER] Старт таймера перед игрой');
-    //   return {
-    //     ...state,
-    //     game: {
-    //       ...state.game,
-    //       startTimer: true,
-    //     },
-    //   };
-    // }
-
-    // Старт игры, получение GameInfo
-    // case GameActionTypes.GAME_START: {
-    //   console.log('[GAME REDUCER] Игра началась, получены карты и команды');
-    //   return {
-    //     ...state,
-    //     game: {
-    //       ...state.game,
-    //       gameInfo: action.payload.gameInfo,
-    //       cards: action.payload.gameInfo.cards,
-    //       currentTeam: action.payload.gameInfo.currentTeam,
-    //       redTeam: action.payload.gameInfo.redTeam,
-    //       blueTeam: action.payload.gameInfo.blueTeam,
-    //       startTimer: false,
-    //       clue: null,
-    //       gamePhase: 'clue',
-    //       score: { red: 0, blue: 0 },
-    //       selectedCardId: null,
-    //       selectedByPlayers: [],
-    //       guessPhaseInfo: null,
-    //       answerPhaseInfo: null,
-    //       checkPhaseInfo: null,
-    //       finishPhaseInfo: null,
-    //       gameEndInfo: null,
-    //     },
-    //   };
-    // }
-
-    // Сервер запрашивает подсказку у шпиона
-    // case GameActionTypes.GAME_ASK_CLUE: {
-    //   console.log('[GAME REDUCER] Ожидание подсказки от шпиона');
-    //   return {
-    //     ...state,
-    //     game: {
-    //       ...state.game,
-    //       gamePhase: 'clue',
-    //       isSpymaster: true,
-    //       clue: null,
-    //     },
-    //   };
-    // }
-
     // Таймаут подсказки
     // case GameActionTypes.GAME_CLUE_TIMEOUT: {
     //   console.log('[GAME REDUCER] Время подсказки истекло');
@@ -250,6 +197,7 @@ export default function gameReducer(state: State, action: AppActions): State {
     case GameActionTypes.GAME_STATE: {
       return {
         ...state,
+
         game: {
           ...state.game,
 

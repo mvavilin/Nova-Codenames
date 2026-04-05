@@ -150,7 +150,9 @@ export const TranslationKeys = {
   [LogMessageKeys.LOG_HINT_BLUE]: 'logHintBlue',
   [LogMessageKeys.LOG_HINT_TIMEOUT]: 'logHintTimeout',
   [LogMessageKeys.LOG_HINT_PHASE_STARTED]: 'logHintPhaseStarted',
+  [LogMessageKeys.LOG_HINT_PHASE_ENDED]: 'logHintPhaseEnded',
   [LogMessageKeys.LOG_HINT_REQUEST]: 'logHintRequest',
+  [LogMessageKeys.LOG_HINT_GIVEN]: 'logHintGiven',
 
   [LogMessageKeys.LOG_VOTE_STARTED]: 'logVoteStarted',
   [LogMessageKeys.LOG_VOTE_ENDED]: 'logVoteEnded',

@@ -18,7 +18,9 @@ const gamePage = {
     [TranslationKeys.LOG_HINT_BLUE]: 'Blue team spymaster gives a hint',
     [TranslationKeys.LOG_HINT_TIMEOUT]: 'Hint time expired!',
     [TranslationKeys.LOG_HINT_PHASE_STARTED]: 'Hint phase started',
+    [TranslationKeys.LOG_HINT_PHASE_ENDED]: 'Hint phase ended',
     [TranslationKeys.LOG_HINT_REQUEST]: 'Enter a hint (word and number)',
+    [TranslationKeys.LOG_HINT_GIVEN]: 'Hint: ',
 
     [TranslationKeys.LOG_VOTE_STARTED]: 'Card selection voting started',
     [TranslationKeys.LOG_VOTE_ENDED]: 'Card selection voting ended',
@@ -56,16 +58,18 @@ const gamePage = {
     [TranslationKeys.CHOOSING_TURN]: 'Выбор хода',
     [TranslationKeys.RED_TEAM]: 'Красная команда',
     [TranslationKeys.BLUE_TEAM]: 'Синяя команда',
-    [TranslationKeys.CHAT_LOG_TITLE]: 'Лог чата',
+    [TranslationKeys.CHAT_LOG_TITLE]: 'Лог чат',
     [TranslationKeys.CHAT_INPUT_PLACEHOLDER]: 'Введите подсказку',
 
     [TranslationKeys.LOG_START_GAME]: 'Игра началась!',
 
-    [TranslationKeys.LOG_HINT_RED]: 'Капитан красной команды дает подсказку',
-    [TranslationKeys.LOG_HINT_BLUE]: 'Капитан синей команды дает подсказку',
+    [TranslationKeys.LOG_HINT_RED]: 'Капитан команды дает подсказку',
+    [TranslationKeys.LOG_HINT_BLUE]: 'Капитан команды дает подсказку',
     [TranslationKeys.LOG_HINT_TIMEOUT]: 'Время подсказки истекло!',
     [TranslationKeys.LOG_HINT_PHASE_STARTED]: 'Старт фазы подсказки',
+    [TranslationKeys.LOG_HINT_PHASE_ENDED]: 'Завершение фазы подсказки',
     [TranslationKeys.LOG_HINT_REQUEST]: 'Введите подсказку (слово и число)',
+    [TranslationKeys.LOG_HINT_GIVEN]: 'Подсказка: ',
 
     [TranslationKeys.LOG_VOTE_STARTED]: 'Голосование выбора карточки запущено',
     [TranslationKeys.LOG_VOTE_ENDED]: 'Голосование выбора карточки завершено',

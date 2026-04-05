@@ -3,6 +3,7 @@ import type {
   Score,
   GameStateForClient,
   GameEndInfo,
+  GameInfo,
 } from '@repo/shared/src/types/game';
 import type { Player, Teams } from '@repo/shared/src/types/room';
 import type { CheckQuestion } from '@repo/shared/src/types/question';
@@ -137,7 +138,7 @@ type GameStartTimer = {
 
 type GameStart = {
   type: GameActionTypes.GAME_START;
-  payload: { gameInfo: import('@shared/types/game').GameInfo };
+  payload: { gameInfo: GameInfo };
 };
 
 export type GameActions =

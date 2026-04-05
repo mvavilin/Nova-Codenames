@@ -28,16 +28,16 @@ export default function gameFetcher<State>(): Middleware<State, AppActions> {
     }
 
     // Отправка подсказки шпионом (клиент → сервер)
-    // if (context.action.type === GameActionTypes.GAME_CLUE_GIVE) {
-    //   try {
-    //     const { clue } = context.action.payload;
-    //     console.log('[GAME] Отправка подсказки:', { clue });
-    //     socketClient.emit(ClientEventType.GAME_CLUE_GIVE, { clue });
-    //   } catch (error) {
-    //     console.error('[GAME] Ошибка GAME_CLUE_GIVE:', error);
-    //     showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ERROR);
-    //   }
-    // }
+    if (context.action.type === GameActionTypes.GAME_CLUE_GIVE) {
+      try {
+        const { clue } = context.action.payload;
+        console.log('[GAME] Отправка подсказки:', { clue });
+        socketClient.emit(ClientEventType.GAME_CLUE_GIVE, { clue });
+      } catch (error) {
+        console.error('[GAME] Ошибка GAME_CLUE_GIVE:', error);
+        showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ERROR);
+      }
+    }
 
     // Выбор карты агентом (клиент → сервер)
     // if (context.action.type === GameActionTypes.GAME_CARD_CHOOSE) {
