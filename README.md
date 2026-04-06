@@ -1,4 +1,4 @@
-# Nova Codenames Game
+# 🎮 Nova Codenames Game
 
 **Nova Codenames Game** – это многопользовательская игра для подготовки к техническим собеседованиям, где классическая механика Codenames сочетается с проверкой знаний по JavaScript, TypeScript и фронтенду.
 
@@ -8,15 +8,15 @@
 
 Игра завершается победой команды, которая первой раскроет все свои карточки-агенты. Если команда открывает карточку убийцы (бомбу), она мгновенно проигрывает. Также возможно техническое поражение при потере всех оперативников или капитана.
 
-## Демо-видео
+## 🎬 Демо-видео
 
-[![YouTube](https://img.shields.io/badge/Демо_видео-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](ссылка-на-видео)
+[![YouTube](https://img.shields.io/badge/Демо_видео-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/Thb_HHRJmCc)
 
-## Деплой
+## 🚀 Деплой
 
 [![Vercel](https://img.shields.io/badge/Nova_Codenames_Game-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://nova-codenames-client.vercel.app/)
 
-## Технологии
+## 🛠️ Технологии
 
 | Категория | Технологии |
 |-----------|------------|
@@ -31,7 +31,7 @@
 | **Безопасность** | ![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white) ![Argon2](https://img.shields.io/badge/Argon2-FF6B6B?style=for-the-badge) |
 | **Валидация** | ![Zod](https://img.shields.io/badge/Zod-3E67B1?style=for-the-badge&logo=zod&logoColor=white) |
 
-## Команда разработки
+## 👥 Команда разработки
 
 <div align="center">
 
@@ -40,26 +40,11 @@
 | **Mikhail Vavilin** | **Sergey Elsukov** | **Andrey Zharkikh** | **Elena Valiullina** |
 | *Lead* | *Backend* | *Frontend* | *Frontend* |
 | [![GitHub](https://img.shields.io/badge/-mvavilin-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin) | [![GitHub](https://img.shields.io/badge/-sergey--ado-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/sergey-ado) | [![GitHub](https://img.shields.io/badge/-Peccopa-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Peccopa) | [![GitHub](https://img.shields.io/badge/-Walle908-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Walle908) |
+| [![GitHub](https://img.shields.io/badge/Дневник_Mikhail-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/tree/main/development-notes/mvavilin) | [![GitHub](https://img.shields.io/badge/Дневник_Sergey-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/tree/main/development-notes/sergey-ado) | [![GitHub](https://img.shields.io/badge/Дневник_Andrey-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/tree/main/development-notes/peccopa) | [![GitHub](https://img.shields.io/badge/Дневник_Elena-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/tree/main/development-notes/walle908) |
 
 </div>
 
-> *Текст будет добавлен позже*
-> <p align="right">– <em>Mikhail Vavilin</em></p>
-[![GitHub](https://img.shields.io/badge/Дневник_Mikhail-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/tree/main/development-notes/mvavilin)
-
-> *Текст будет добавлен позже*
-> <p align="right">– <em>Sergey Elsukov</em></p>
-[![GitHub](https://img.shields.io/badge/Дневник_Sergey-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/tree/main/development-notes/sergey-ado)
-
-> *Текст будет добавлен позже*
-> <p align="right">– <em>Andrey Zharkikh</em></p>
-[![GitHub](https://img.shields.io/badge/Дневник_Andrey-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/tree/main/development-notes/peccopa)
-
-> *Текст будет добавлен позже*
-> <p align="right">– <em>Elena Valiullina</em></p>
-[![GitHub](https://img.shields.io/badge/Дневник_Elena-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/tree/main/development-notes/walle908)
-
-## Доска
+## 📌 Доска
 
 [![GitHub](https://img.shields.io/badge/GitHub_Projects-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/users/mvavilin/projects/1)
 
@@ -70,3 +55,36 @@
     width="800" 
   />
 </div>
+
+Лучшие PR (3-4 PR с содержательным code review)
+Meeting Notes (ссылки на 3+ записей)
+
+## 🔥 Лучшие пул-реквесты
+
+[![GitHub](https://img.shields.io/badge/PR_№119-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/pull/119)
+[![GitHub](https://img.shields.io/badge/PR_№75-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/pull/75)
+[![GitHub](https://img.shields.io/badge/PR_№55-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/pull/55)
+[![GitHub](https://img.shields.io/badge/PR_№42-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/pull/42)
+[![GitHub](https://img.shields.io/badge/PR_№36-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/pull/36)
+[![GitHub](https://img.shields.io/badge/PR_№38-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/pull/38)
+
+## 📝 Записи встреч
+
+[![GitHub](https://img.shields.io/badge/Все_записи_встреч-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/tree/main/meeting-notes)
+[![GitHub](https://img.shields.io/badge/24.02.2026-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/blob/main/meeting-notes/meeting-notes-2026-02-24.md)
+[![GitHub](https://img.shields.io/badge/03.03.2026-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/blob/main/meeting-notes/meeting-notes-2026-03-03.md)
+[![GitHub](https://img.shields.io/badge/24.03.2026-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/blob/main/meeting-notes/meeting-notes-2026-03-24.md)
+
+## 📋 Самооценка
+
+**Pull Requests:**
+
+[![GitHub](https://img.shields.io/badge/Mikhail_Vavilin-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/pull/214)
+[![GitHub](https://img.shields.io/badge/Elena_Valiullina-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/pull/211)
+[![GitHub](https://img.shields.io/badge/Andrey_Zharkikh-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/pull/205)
+
+**Файлы:**
+
+[![GitHub](https://img.shields.io/badge/self--assessment_mvavilin-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/blob/dev/development-notes/mvavilin/self-assessment.md)
+[![GitHub](https://img.shields.io/badge/self--assessment_peccopa-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/blob/dev/development-notes/peccopa/self-assessment.md)
+[![GitHub](https://img.shields.io/badge/self--assessment_walle908-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/blob/dev/development-notes/walle908/self-assessment.md)
