@@ -11,7 +11,7 @@ import { TranslationKeys } from '@i18n/translationKeys';
 import { socketClient } from '@SocketClientAPI';
 import { LogMessageKeys, LogMessageType } from '@repo/shared/src/types/logMessage';
 import store from '@store';
-import { ProfileSection } from '../LobbyPage/components';
+import { ProfileSection } from '@pages/LobbyPage/components';
 
 const GAME_PAGE_CLASSES = `w-full h-full flex flex-col items-center justify-start gap-5 px-20 py-5 bg-cover bg-right font-text`;
 const MAIN_CLASSES = `w-full h-full max-w-7xl grid grid-cols-2 grid-cols-[3fr_1fr] gap-5 text-white rounded`;
