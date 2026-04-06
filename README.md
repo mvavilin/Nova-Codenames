@@ -1,91 +1,72 @@
 # Nova Codenames Game
 
-This is an interactive multiplayer Codenames game, aimed at preparing for technical interviews frontend-developers and training hard skills (JS, TS, Algorithms). There are two modes - playing in a team as a Spymaster or a field agent and playing as a field agent with AI as a Spymaster.
-Being a field agent answer the various JS/TS/Front-end questions right and earn points, being a Spymaster
-help your team win. You can track your progress in your Profile.
+**Nova Codenames Game** – это многопользовательская игра для подготовки к техническим собеседованиям, где классическая механика Codenames сочетается с проверкой знаний по JavaScript, TypeScript и фронтенду.
 
-Prototype: [Classic game Codenames](<https://en.wikipedia.org/wiki/Codenames_(board_game)>)
+Игроки делятся на две команды (красную и синюю) в формате 2×2, 3×3 или 4×4. В каждой команде один капитан дает ассоциативные подсказки, а остальные – полевые агенты, которые угадывают слова на игровом поле 5×5.
 
-## Development Team
+После выбора карточки своей команды наступает фаза проверки знаний: выбранный случайным образом оперативник отвечает на вопрос по концепту, а команда соперников оценивает ответ кнопками «Зачтено» или «Не зачтено». Очко засчитывается только при положительной оценке.
 
-- [mvavilin](https://github.com/mvavilin) Mikhail Vavilin (Lead)
-- [sergey-ado](https://github.com/sergey-ado) Sergey Elsukov (Backend-Dev)
-- [Peccopa](https://github.com/Peccopa) Andrey Zharkikh (Frontend-Dev)
-- [Walle908](https://github.com/Walle908) Elena Valiullina (Frontend-Dev)
+Игра завершается победой команды, которая первой раскроет все свои карточки-агенты. Если команда открывает карточку убийцы (бомбу), она мгновенно проигрывает. Также возможно техническое поражение при потере всех оперативников или капитана.
 
-## Tech Stack
+## Демо-видео
 
-- TypeScript (strict mode)
-- Node.js + Express + Socket.IO
-- NPM Workspaces / Shared types
-- Vitest
-- Husky, Commintlint, lint-staged
-- Eslint
-- Prettier
-- Tailwind
+[![YouTube](https://img.shields.io/badge/Демо_видео-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](ссылка-на-видео)
 
-## Link to the deployment
+## Деплой
 
-https://nova-codenames-client.vercel.app/
+[![Vercel](https://img.shields.io/badge/Nova_Codenames_Game-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://nova-codenames-client.vercel.app/)
 
-## 404 page, loading state, and error handling tests
+## Технологии
 
-https://drive.google.com/file/d/1TJOmjeb6R6mmiboVv1dhbeA2l9oF8tVx/view
+| Категория | Технологии |
+|-----------|------------|
+| **Язык** | ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white) |
+| **Фронтенд** | ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white) ![Tailwind CSS](https://img.shields.io/badge/Tailwind-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white) |
+| **Бэкенд** | ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white) ![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white) |
+| **Real-time** | ![Socket.IO](https://img.shields.io/badge/Socket.IO-010101?style=for-the-badge&logo=socketdotio&logoColor=white) |
+| **База данных** | ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white) ![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white) |
+| **Монорепозиторий** | ![Turbo](https://img.shields.io/badge/Turbo-EF4444?style=for-the-badge&logo=turborepo&logoColor=white) ![NPM Workspaces](https://img.shields.io/badge/NPM_Workspaces-CB3837?style=for-the-badge&logo=npm&logoColor=white) |
+| **Тестирование** | ![Vitest](https://img.shields.io/badge/Vitest-6E9F18?style=for-the-badge&logo=vitest&logoColor=white) |
+| **Качество кода** | ![ESLint](https://img.shields.io/badge/ESLint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white) ![Prettier](https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=prettier&logoColor=black) ![Husky](https://img.shields.io/badge/Husky-000000?style=for-the-badge&logo=git&logoColor=white) |
+| **Безопасность** | ![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white) ![Argon2](https://img.shields.io/badge/Argon2-FF6B6B?style=for-the-badge) |
+| **Валидация** | ![Zod](https://img.shields.io/badge/Zod-3E67B1?style=for-the-badge&logo=zod&logoColor=white) |
 
-## Setup
+## Команда разработки
 
-- Clone this repository: `git clone https://github.com/mvavilin/nova`.
-- Run `npm install` to install all the dependencies.
+<div align="center">
 
-## Usage
+| <img src="https://avatars.githubusercontent.com/mvavilin?s=120&v=4" width="100" height="100" style="border-radius: 50%;"> | <img src="https://avatars.githubusercontent.com/sergey-ado?s=120&v=4" width="100" height="100" style="border-radius: 50%;"> | <img src="https://avatars.githubusercontent.com/Peccopa?s=120&v=4" width="100" height="100" style="border-radius: 50%;"> | <img src="https://avatars.githubusercontent.com/Walle908?s=120&v=4" width="100" height="100" style="border-radius: 50%;"> |
+|:-:|:-:|:-:|:-:|
+| **Mikhail Vavilin** | **Sergey Elsukov** | **Andrey Zharkikh** | **Elena Valiullina** |
+| *Lead* | *Backend* | *Frontend* | *Frontend* |
+| [![GitHub](https://img.shields.io/badge/-mvavilin-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin) | [![GitHub](https://img.shields.io/badge/-sergey--ado-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/sergey-ado) | [![GitHub](https://img.shields.io/badge/-Peccopa-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Peccopa) | [![GitHub](https://img.shields.io/badge/-Walle908-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Walle908) |
 
-- Once the dependencies are installed, you can run `npm run dev` to start the application.
-- You will then be able to access it at localhost:5173.
+</div>
 
-## Game Rules
+> *Текст будет добавлен позже*
+> <p align="right">– <em>Mikhail Vavilin</em></p>
+[![GitHub](https://img.shields.io/badge/Дневник_Mikhail-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/tree/main/development-notes/mvavilin)
 
-### Preparation
+> *Текст будет добавлен позже*
+> <p align="right">– <em>Sergey Elsukov</em></p>
+[![GitHub](https://img.shields.io/badge/Дневник_Sergey-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/tree/main/development-notes/sergey-ado)
 
-1. Nova Codenames is a game played by 4 players.
-2. Players are randomly split into two teams, red and blue.
-3. One player from each team is the Spymaster, the other plays as the field agent. The roles are randomly assigned.
-4. During setup, 25 cards are randomly laid out in a 5x5 grid. Each card has a word (JS/TS concepts), and cards are face-up, so all players can see all words. But what is hidden is what each card represents: 9 cards represent red agents (red squares), other 9 cards represent blue agents (blue squares), one represents the assassin (black square), the rest 6 cards are innocent bystanders (beige squares).
-5. Spymasters see a “map” - the board's red/blue/black/beige colors cards. Field agents see only 25 cards with words and try to guess their own.
+> *Текст будет добавлен позже*
+> <p align="right">– <em>Andrey Zharkikh</em></p>
+[![GitHub](https://img.shields.io/badge/Дневник_Andrey-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/tree/main/development-notes/peccopa)
 
-### Game process
+> *Текст будет добавлен позже*
+> <p align="right">– <em>Elena Valiullina</em></p>
+[![GitHub](https://img.shields.io/badge/Дневник_Elena-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/tree/main/development-notes/walle908)
 
-1. Teams take turns.
-2. Each turn, one team's Spymaster gives a hint to help their field agent guess the squares with words in their team's color, while avoiding the squares intended for enemy agents, innocent bystanders, and the assassin. A hint can only be one word and a number. The number indicates how many word squares the field agents must choose in that round, and the word itself (ideally) contains a thematic clue telling the field agent which word squares to choose. For example: "Asynchrony, 3" - means 3 words related to asynchrony.
-3. The field agent clicks the card following the Spymaster's hint. If the card belongs to the player's team, the word “opens” with a question, then the Check phase is mandatory - the result (point or not) is determined by the result of the check.
-4. Check: the game is paused, a pop-up opens with a question for the selected word (for example: “What is the difference from sessionStorage?”, “Data volume limit?”). Depending on the room settings:
-   - Self/mutual assessment mode:
-     - The player enters the answer in the field and clicks “Show answer” button.
-     - Everyone sees the player's answer and the right answer.
-     - Then the player and his opponents evaluate the player's answer: “Right” / “Wrong” button and a point is counted only for majority chosses “Right”.
-     - If the answer is wrong a point is not counted and the turn goes to the other team.
+## Доска
 
-   - AI mode: the player enters the answer by text or voice (Speech-to-Text); AI evaluates the essence of the answer and decides whether to count the point or not.
+[![GitHub](https://img.shields.io/badge/GitHub_Projects-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/users/mvavilin/projects/1)
 
-5. After completing the check, the pop-up closes, the game continues (the card is already open, the point is either counted or not).
-6. If the answer is right and not all round words have been guessed yet, the player continues to guess the word (you can see remaining attempts to guess).
-7. If the card belongs to other team or is an innocent bystander, it isn't opened and the turn goes to the other team.
-8. If the card is an assassin card, it opens and the team immediately loses and the game finishes.
-
-### Victory
-
-- The first team to reveal all their words wins.
-- If the team chooses an assassin card - instant loss.
-
-## Application Structure
-
-1. **Welcome page**: Welcomes users with game information and contains 'Login' and 'Sign in' buttons.
-2. **Login page**: Contains two input fields for login and password with validation for user log in.
-3. **Register page**: Contains the form with name, password, email, avatar input fields with validation for registration new users. The registration is required to access the game.
-4. **Lobby page**: Contains 'Play Solo with AI' button for playing in solo mode, 'Create Room' button and the input field 'Room Code' with 'Join' button and list of rooms for playing in team mode. You can join only an available (waiting) room.
-5. **Room page**: Contains a list of joined players, waiting to fill room with players.
-   Once the number of players 4 is reached, the players are randomly divided into 2 teams and roles are randomly assigned. The Spymasters now have a button to start the game and the game starts after both Spymaster click on this button.
-6. **Game page**: Contains the room name, game field with cards, game score, message about turn, the player's role, SpyMaster hints field with the name of current SpyMaster, “Right” / “Wrong” buttons to evaluate the player's answer and timer. Depending on the the player's role it can contain input for entering SpyMaster's hint or input for entering player answers and 'Show answer' button.
-
-7. **Solo game page**: Game with AI as a Spymaster.
-8. **Result page**: Show the results of the game: the winning and losing team, a list of participating players with their roles: the spymasters earns 1 point as a master, if the their team wins, the fiels agents earns the count of their right answers. The game results are recorded into the players’ profiles.
-9. **Profile page**: Contains form with info about the player with the ability to change the password or change the avatar and statistics: number of games won as a Spymasters and points earned as field agent, the current player's level (it is determined by the combination of the results of the Spymaster and field agent roles results).
+<div align="center">
+  <img 
+    src="https://github.com/user-attachments/assets/7cb3f870-751a-4fcf-9077-c9457ca3d396" 
+    alt="Доска проекта Nova Codenames" 
+    width="800" 
+  />
+</div>
