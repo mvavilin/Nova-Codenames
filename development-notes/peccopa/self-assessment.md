@@ -1,6 +1,6 @@
 # 📄 Self-Assessment
 
-> 🔗 **PR с self-assessment:** _[PR #666](https://github.com/your-repo/pull/123)_
+> 🔗 **PR с self-assessment:** _[PR #205](https://github.com/mvavilin/Nova-Codenames/pull/205)_
 
 ---
 
@@ -9,26 +9,24 @@
 | Category             | Feature                          | Description                                                                           | Score | PR / Code                                                                                                                                                                                      |
 | -------------------- | -------------------------------- | ------------------------------------------------------------------------------------- | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **My Components**    | Complex Component: ComponentsAPI | Собственная система UI-компонентов (BaseComponent + менеджеры + фасад)                | +25   | _[PR#58](https://github.com/mvavilin/Nova-Codenames/pull/58)_                                                                                                                                  |
-| **My Components**    | Complex Component: StateAPI      | Реализация state-менеджера (Store, Dispatcher, reducer, middleware/afterware)         | +25   | _(PR link)_                                                                                                                                                                                    |
-| **My Components**    | Rich UI Screen: Welcome Page     | Главная страница с логикой, состоянием, модалками, i18n                               | +20   | _(PR link)_                                                                                                                                                                                    |
-| **My Components**    | Rich UI Screen: Profile Page     | Страница профиля с логикой и интеграцией i18n                                         | +20   | _(PR link)_                                                                                                                                                                                    |
-| **Backend & Data**   | BaaS CRUD / API integration      | Работа с сервером (Render backend, запросы, интеграция)                               | +15   | _(PR link)_                                                                                                                                                                                    |
-| **Game**             | Audio API                        | SoundManager для управления звуками                                                   | +5    | _(PR link)_                                                                                                                                                                                    |
-| **UI & Interaction** | i18n                             | Переключение языка (минимум 2 языка, интеграция в компоненты)                         | +10   | _(PR link)_                                                                                                                                                                                    |
-| **UI & Interaction** | Theme/UX improvements            | Обновление стилей модалок, UI-улучшения                                               | +10   | _(PR link)_                                                                                                                                                                                    |
-| **UI & Interaction** | Responsive                       | Адаптивность компонентов                                                              | +5    | _(PR link)_                                                                                                                                                                                    |
-| **Quality**          | Unit Tests (Basic)               | Покрытие тестами компонентов и менеджеров                                             | +10   | _(PR link)_                                                                                                                                                                                    |
-| **Quality**          | Unit Tests (Full)                | Расширенное покрытие (50%+)                                                           | +10   | _(PR link)_                                                                                                                                                                                    |
-| **DevOps & Role**    | Architect                        | Проектирование ComponentsAPI и StateAPI                                               | +10   | _(PR link)_                                                                                                                                                                                    |
-| **DevOps & Role**    | Auto-deploy / tooling            | Husky, проверки перед коммитом                                                        | +5    | _(PR link)_                                                                                                                                                                                    |
-| **Architecture**     | State Manager                    | Собственный StateAPI                                                                  | +10   | _(PR link)_                                                                                                                                                                                    |
-| **Architecture**     | Design Patterns                  | Facade, Manager pattern, Observer                                                     | +10   | _(PR link)_                                                                                                                                                                                    |
-| **Architecture**     | API Layer                        | Изоляция работы с API                                                                 | +10   | _(PR link)_                                                                                                                                                                                    |
-| **Frameworks**       | Vanilla TS (custom architecture) | Собственная архитектура без фреймворков                                               | +5    | _(PR link)_                                                                                                                                                                                    |
+| **My Components**    | Complex Component: StateAPI      | Реализация state-менеджера (Store, Dispatcher, reducer, middleware/afterware)         | +25   | _[PR#79](https://github.com/mvavilin/Nova-Codenames/pull/79)_                                                                                                                                  |
+| **My Components**    | Rich UI Screen: Welcome Page     | Главная страница с логикой, состоянием, модалками, i18n                               | +20   | _[PR#115](https://github.com/mvavilin/Nova-Codenames/pull/115)_                                                                                                                                |
+| **My Components**    | Rich UI Screen: Profile Page     | Страница профиля с логикой и интеграцией i18n                                         | +20   | _[PR#173](https://github.com/mvavilin/Nova-Codenames/pull/173)_                                                                                                                                |
+| **Game**             | Audio API                        | SoundManager для управления звуками                                                   | +5    | _[PR#163](https://github.com/mvavilin/Nova-Codenames/pull/163)_                                                                                                                                |
+| **UI & Interaction** | i18n                             | Переключение языка (минимум 2 языка, интеграция в компоненты)                         | +10   | _[PR#104](https://github.com/mvavilin/Nova-Codenames/pull/104)_                                                                                                                                |
+| **UI & Interaction** | Theme/UX improvements            | Обновление стилей модалок, UI-улучшения                                               | +10   | _[PR#196](https://github.com/mvavilin/Nova-Codenames/pull/196)_                                                                                                                                |
+| **UI & Interaction** | Responsive                       | Адаптивность компонентов                                                              | +5    | _[PR#115](https://github.com/mvavilin/Nova-Codenames/pull/115)_                                                                                                                                |
+| **Quality**          | Unit Tests (Basic)               | Покрытие тестами компонентов и менеджеров                                             | +10   | _[PR#125](https://github.com/mvavilin/Nova-Codenames/pull/125)_                                                                                                                                |
+| **Quality**          | Unit Tests (Full)                | Расширенное покрытие (50%+)                                                           | +10   | _[PR#188](https://github.com/mvavilin/Nova-Codenames/pull/188)_                                                                                                                                |
+| **Architecture**     | State Manager                    | Собственный StateAPI                                                                  | +10   | _[PR#79](https://github.com/mvavilin/Nova-Codenames/pull/58)_                                                                                                                                  |
+| **Architecture**     | Design Patterns                  | Facade, Manager pattern, Observer                                                     | +10   | _[PR#58](https://github.com/mvavilin/Nova-Codenames/pull/58)_                                                                                                                                  |
+| **Architecture**     | API Layer                        | Изоляция работы с API                                                                 | +10   | _[PR#58](https://github.com/mvavilin/Nova-Codenames/pull/58)_                                                                                                                                  |
+| **Frameworks**       | Vanilla TS (custom architecture) | Собственная архитектура без фреймворков                                               | +5    | _[PR#58](https://github.com/mvavilin/Nova-Codenames/pull/58)_, _[PR#79](https://github.com/mvavilin/Nova-Codenames/pull/79)_                                                                   |
+| **DevOps & Role**    | Architect                        | Проектирование ComponentsAPI и StateAPI                                               | +10   | _[PR#58](https://github.com/mvavilin/Nova-Codenames/pull/58)_, _[PR#79](https://github.com/mvavilin/Nova-Codenames/pull/79)_                                                                   |
 | **DevOps & Role**    | Project Workflow Setup           | Шаблоны для создания issues по конкретным типам                                       | +5    | _[PR #34](https://github.com/mvavilin/Nova-Codenames/pull/34)_                                                                                                                                 |
 | **DevOps & Role**    | Code Quality Automation          | Husky (pre-commit, pre-push), запуск тестов и проверок, добавлен validate-branch-name | +5    | _[PR #39](https://github.com/mvavilin/Nova-Codenames/pull/39)_, _[PR #40](https://github.com/mvavilin/Nova-Codenames/pull/40)_, _[PR #71](https://github.com/mvavilin/Nova-Codenames/pull/71)_ |
 
-### 💯 Total: **~220–250 баллов (cap: 250)**
+### 💯 Total: **~195 баллов (cap: 250)**
 
 ---
 
@@ -123,7 +121,6 @@
 
 #### 5. Тестирование
 
-- внедрил **Vitest**
 - написал тесты для:
   - компонентов
   - менеджеров
@@ -236,7 +233,4 @@
 
 ## 💬 (Опционально)
 
-> “Сначала я разделил BaseComponent на 8 частей и был доволен.
-> Потом понял, что ничего не изменилось.
-> Потом сделал StateAPI.
-> И вот тут уже стало интересно.” 😄
+> Моя сильная сторона — проектирование и реализация архитектуры с нуля (ComponentsAPI и StateAPI). На презентации стоит обратить внимание на внутреннее устройство этих решений и их интеграцию в приложение. Больше всего горжусь тем, что смог реализовать собственный state-менеджер и компонентную систему. Основные сложности были связаны с декомпозицией архитектуры, типизацией в TypeScript и тестированием сложных взаимосвязанных компонентов.
