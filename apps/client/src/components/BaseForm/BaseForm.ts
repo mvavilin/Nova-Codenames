@@ -56,16 +56,6 @@ export default class BaseForm extends FormComponent {
     else this.buttonSubmit.setAttributes({ disabled: 'disabled' });
 
     this.buttonSubmit.toggleClasses('disabled-state', !isValid);
-
-    //Для изменения инпутов через состояние формы
-    for (const input of this.inputArray) {
-      const fieldName = input.getFieldName();
-      const fieldData = state.fields[fieldName];
-
-      if (fieldData?.isChanged) {
-        input.updateStatus(fieldData.isValid);
-      }
-    }
   }
 
   public getFormInputValues(): Record<string, string> {

@@ -126,8 +126,9 @@ export default class InputForm extends ContainerComponent {
   private updateInputForm(_state: State, action: Action): void {
     const isFieldUpdate = action.type === FormActionTypes.FORM_UPDATE_FIELD;
     const isLanguageSwitch = action.type === AppActionTypes.SWITCH_LANGUAGE;
+    const isCleanData = action.type === FormActionTypes.CLEAN_DATA;
 
-    if (isFieldUpdate || isLanguageSwitch) {
+    if (isFieldUpdate || isLanguageSwitch || isCleanData) {
       const formState = store.getState()[this.formId];
       const fieldState = formState.fields[this.fieldName];
       if (!fieldState || !this.input || !this.label || !this.tooltip) return;
@@ -143,18 +144,6 @@ export default class InputForm extends ContainerComponent {
       this.input.toggleClasses('focus:border-yellow-500', !isInvalid);
       this.tooltip.setContent(isInvalid ? t(this.errorKey) : '');
     }
-  }
-
-  //Для возможности изменения инпутов через состояние формы
-  public getFieldName(): FieldName {
-    return this.fieldName;
-  }
-
-  public updateStatus(isValid: boolean): void {
-    if (!this.input || !this.tooltip) return;
-    this.input.toggleClasses('border-red-500', !isValid);
-    this.input.toggleClasses('focus:border-yellow-500', isValid);
-    this.tooltip.setContent(isValid ? '' : t(this.errorKey));
   }
 
   public override destroy(): this {
