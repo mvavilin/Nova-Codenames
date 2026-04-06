@@ -6,11 +6,15 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
+    css: {
+      include: [/.+/],
+    },
     server: {
       deps: {
-        inline: ['cssstyle', '@asamuzakjp/css-color'],
+        external: ['cssstyle', '@asamuzakjp/css-color'],
       },
     },
+    pool: 'forks',
   },
   resolve: {
     alias: {
