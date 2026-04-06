@@ -11,6 +11,7 @@ import { TranslationKeys } from '@i18n/translationKeys';
 import { socketClient } from '@SocketClientAPI';
 import { LogMessageKeys, LogMessageType } from '@repo/shared/src/types/logMessage';
 import store from '@store';
+import { ProfileSection } from '../LobbyPage/components';
 
 const GAME_PAGE_CLASSES = `w-full h-full flex flex-col items-center justify-start gap-5 px-20 py-5 bg-cover bg-right font-text`;
 const MAIN_CLASSES = `w-full h-full max-w-7xl grid grid-cols-2 grid-cols-[3fr_1fr] gap-5 text-white rounded`;
@@ -151,10 +152,14 @@ export default class GamePage extends ContainerComponent {
             classes: TITLE_CLASSES,
           }),
           new ContainerComponent({
-            classes: `flex gap-2`,
+            classes: `flex gap-5 items-center`,
             children: [
               new TeamTurnIndicator({ team: store.getState().game?.currentTeam }),
               new Timer(store.getState().game?.gameTime, false),
+              new ProfileSection({
+                name: store.getState().username,
+                id: store.getState().id,
+              }).removeListeners(),
             ],
           }),
         ],

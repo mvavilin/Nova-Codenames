@@ -11,7 +11,7 @@ type TeamTurnIndicatorProperties = {
 };
 
 const TEAM_TURN_INDICATOR = {
-  CONTAINER: `px-2 py-1 rounded-lg font-bold text-lg uppercase text-white`,
+  CONTAINER: `px-2 py-1 w-48 rounded-lg font-bold text-md uppercase text-white text-center`,
   COLORS: {
     [TeamsEnum.RED]: 'bg-red-400',
     [TeamsEnum.BLUE]: 'bg-blue-400',
