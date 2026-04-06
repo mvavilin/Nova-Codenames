@@ -6,20 +6,19 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    css: {
-      include: [/.+/],
-    },
-    server: {
-      deps: {
-        external: ['cssstyle', '@asamuzakjp/css-color'],
+    environmentOptions: {
+      happyDom: {
+        settings: {
+          disableJavaScriptEvaluation: false,
+        },
       },
     },
-    pool: 'forks',
   },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
     },
   },
+
   plugins: [tsconfigPaths()],
 });
