@@ -1,7 +1,7 @@
 import type { RoomInfo, RoomSettings, Player } from '@repo/shared/src/types/room';
 
 export enum SocketActionTypes {
-  SOCKET_REQUEST_SESSION_TOKEN = 'SOCKET/REQUEST_SESSION_TOKEN',
+  SOCKET_CONNECT = 'SOCKET/SOCKET_CONNECT',
   SOCKET_AUTH_FAILED = 'SOCKET/AUTH_FAILED',
   SOCKET_CREATE_ROOM = 'SOCKET/CREATE_ROOM',
   SOCKET_REQUEST_ROOM_LIST = 'SOCKET/REQUEST_ROOM_LIST',
@@ -11,10 +11,11 @@ export enum SocketActionTypes {
   TEAM_CHANGE = 'SOCKET/TEAM_CHANGE',
   LEAVE_ROOM = 'SOCKET/LEAVE_ROOM',
   GAME_ADD_PLAYER = 'SOCKET/GAME_ADD_PLAYER',
+  ROOM_ASK_GAME_INFO = 'SOCKET/ROOM_ASK_GAME_INFO',
 }
 
-type SocketRequestSessionToken = {
-  type: SocketActionTypes.SOCKET_REQUEST_SESSION_TOKEN;
+type SocketConnect = {
+  type: SocketActionTypes.SOCKET_CONNECT;
   payload: { authToken: string | null };
 };
 
@@ -59,8 +60,12 @@ type SocketGameAddPlayer = {
   type: SocketActionTypes.GAME_ADD_PLAYER;
 };
 
+type SocketGameAskGameInfo = {
+  type: SocketActionTypes.ROOM_ASK_GAME_INFO;
+};
+
 export type SocketActions =
-  | SocketRequestSessionToken
+  | SocketConnect
   | SocketAuthFailed
   | SocketCreateRoom
   | SocketRequestRoomList
@@ -69,4 +74,5 @@ export type SocketActions =
   | SocketRoomAskRoomInfo
   | SocketTeamChange
   | SocketLeaveRoom
+  | SocketGameAskGameInfo
   | SocketGameAddPlayer;

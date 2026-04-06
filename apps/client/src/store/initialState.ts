@@ -12,6 +12,7 @@ export const initialState: State = {
       username: { value: '', isValid: false, isChanged: false },
       email: { value: '', isValid: false, isChanged: false },
       password: { value: '', isValid: false, isChanged: false },
+      confirmPassword: { value: '', isValid: false, isChanged: false },
     },
     isFormValid: false,
   },
@@ -22,7 +23,8 @@ export const initialState: State = {
     },
     isFormValid: false,
   },
-  profile: { fields: {}, isFormValid: false },
   rooms: [],
   currentRoom: null,
+
+  game: null,
 };

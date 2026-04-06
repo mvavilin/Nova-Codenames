@@ -161,11 +161,11 @@ export default class GameRules extends ContainerComponent {
           content: t(TranslationKeys.GAME_RULES_CHECK_P2),
           classes: 'font-[var(--font-text)] text-sm text-[var(--color-light)]/80',
         }),
-        new TextComponent({
-          tag: 'p',
-          content: t(TranslationKeys.GAME_RULES_CHECK_P3),
-          classes: 'font-[var(--font-text)] text-sm text-[var(--color-light)]/80',
-        }),
+        // new TextComponent({
+        //   tag: 'p',
+        //   content: t(TranslationKeys.GAME_RULES_CHECK_P3),
+        //   classes: 'font-[var(--font-text)] text-sm text-[var(--color-light)]/80',
+        // }),
       ],
       classes:
         'flex flex-col gap-3 p-4 border border-[var(--color-primary)] rounded-md bg-black/40',

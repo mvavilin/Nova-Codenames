@@ -67,12 +67,18 @@ export const TranslationKeys = {
   FORM_LABEL_NAME: 'labelName',
   FORM_LABEL_EMAIL: 'labelEmail',
   FORM_LABEL_PASSWORD: 'labelPassword',
+  FORM_LABEL_CONFIRM_PASSWORD: 'labelConfirmPassword',
   FORM_PLACEHOLDER_NAME: 'placeholderName',
   FORM_PLACEHOLDER_EMAIL: 'placeholderEmail',
   FORM_PLACEHOLDER_PASSWORD: 'placeholderPassword',
+  FORM_PLACEHOLDER_CONFIRM_PASSWORD: 'placeholderConfirmPassword',
   FORM_ERROR_MESSAGE_NAME: 'errorMessageName',
   FORM_ERROR_MESSAGE_EMAIL: 'errorMessageEmail',
   FORM_ERROR_MESSAGE_PASSWORD: 'errorMessagePassword',
+  FORM_ERROR_MESSAGE_PASSWORD_ONLY_ENGLISH: 'errorMessagePasswordOnlyEnglish',
+  FORM_ERROR_MESSAGE_PASSWORD_REQUIREMENTS: 'errorMessagePasswordRequrements',
+  FORM_ERROR_MESSAGE_PASSWORD_MIN_LENGTH: 'errorMessagePasswordMinLength',
+  FORM_ERROR_MESSAGE_CONFIRM_PASSWORD: 'errorMessageConfirmPassword',
   FORM_ERROR: 'formError',
   FORM_ERROR_400: 'formError400',
   FORM_ERROR_403: 'formError403',
@@ -136,6 +142,7 @@ export const TranslationKeys = {
 
   RED_TURN: 'redTurn',
   BLUE_TURN: 'blueTurn',
+  CHOOSING_TURN: 'choosingTurn',
 
   RED_TEAM: 'redTeam',
   BLUE_TEAM: 'blueTeam',
@@ -144,19 +151,42 @@ export const TranslationKeys = {
   CHAT_INPUT_PLACEHOLDER: 'chatInputPlaceholder',
 
   [LogMessageKeys.LOG_START_GAME]: 'logStartGame',
+
   [LogMessageKeys.LOG_HINT_RED]: 'logHintRed',
   [LogMessageKeys.LOG_HINT_BLUE]: 'logHintBlue',
+  [LogMessageKeys.LOG_HINT_TIMEOUT]: 'logHintTimeout',
+  [LogMessageKeys.LOG_HINT_PHASE_STARTED]: 'logHintPhaseStarted',
+  [LogMessageKeys.LOG_HINT_PHASE_ENDED]: 'logHintPhaseEnded',
+  [LogMessageKeys.LOG_HINT_REQUEST]: 'logHintRequest',
+  [LogMessageKeys.LOG_HINT_GIVEN]: 'logHintGiven',
+
   [LogMessageKeys.LOG_VOTE_STARTED]: 'logVoteStarted',
   [LogMessageKeys.LOG_VOTE_ENDED]: 'logVoteEnded',
+
   [LogMessageKeys.LOG_OWN_CARD_CHOSEN_RED]: 'logOwnCardChosenRed',
   [LogMessageKeys.LOG_OWN_CARD_CHOSEN_BLUE]: 'logOwnCardChosenBlue',
   [LogMessageKeys.LOG_OTHER_CARD_CHOSEN_RED]: 'logOtherCardChosenRed',
   [LogMessageKeys.LOG_OTHER_CARD_CHOSEN_BLUE]: 'logOtherCardChosenBlue',
+
+  [LogMessageKeys.LOG_CARD_REVEALED_RED]: 'logCardRevealedRed',
+  [LogMessageKeys.LOG_CARD_REVEALED_BLUE]: 'logCardRevealedBlue',
+  [LogMessageKeys.LOG_CARD_REVEALED_NEUTRAL]: 'logCardRevealedNeutral',
+  [LogMessageKeys.LOG_CARD_REVEALED_BOMB]: 'logCardRevealedBomb',
+
   [LogMessageKeys.LOG_CHECKING_ANSWER_RED]: 'logCheckingAnswerRed',
   [LogMessageKeys.LOG_CHECKING_ANSWER_BLUE]: 'logCheckingAnswerBlue',
   [LogMessageKeys.LOG_ANSWER_COUNTED_RED]: 'logAnswerCountedRed',
   [LogMessageKeys.LOG_ANSWER_COUNTED_BLUE]: 'logAnswerCountedBlue',
   [LogMessageKeys.LOG_SCORE_POINT]: 'logScorePoint',
+
+  [LogMessageKeys.LOG_ANSWER_TIMEOUT]: 'logAnswerTimeout',
+  [LogMessageKeys.LOG_CHECK_TIMEOUT]: 'logCheckTimeout',
+
+  [LogMessageKeys.LOG_TURN_CHANGED_RED]: 'logTurnChangedRed',
+  [LogMessageKeys.LOG_TURN_CHANGED_BLUE]: 'logTurnChangedBlue',
+
+  [LogMessageKeys.LOG_GAME_END_RED_WIN]: 'logGameEndRedWin',
+  [LogMessageKeys.LOG_GAME_END_BLUE_WIN]: 'logGameEndBlueWin',
 
   UNDO_LABEL: 'undoLabel',
 
@@ -217,6 +247,9 @@ export const TranslationKeys = {
   PROFILE_ACHIEVEMENT_STREAK: 'profileAchievementsStreak',
   PROFILE_ACHIEVEMENT_ANSWERS: 'profileAchievementsAnswers',
   PROFILE_ACHIEVEMENT_FIRST_WIN: 'profileAchievementsWin',
+
+  SOCKET_ERROR: 'socketError',
+  SOCKET_ERROR_ALREADY_ONLINE: 'socketErrorAlreadyOnline',
 } as const;
 
 export type TranslationKey = (typeof TranslationKeys)[keyof typeof TranslationKeys];

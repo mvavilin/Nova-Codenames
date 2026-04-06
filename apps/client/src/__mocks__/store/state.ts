@@ -9,9 +9,10 @@ const mockInitialState: State = {
   language: Language.RU,
   registration: { fields: {}, isFormValid: false },
   login: { fields: {}, isFormValid: false },
-  profile: { fields: {}, isFormValid: false },
   rooms: [],
   currentRoom: null,
+
+  game: null,
 };
 
 export default mockInitialState;
