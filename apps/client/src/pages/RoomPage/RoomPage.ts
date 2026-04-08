@@ -20,7 +20,7 @@ const styles = {
 };
 
 export default class RoomPage extends ContainerComponent {
-  private static currentUnsubscribe: (() => void) | null = null;
+  private static unsubscribe: (() => void) | null = null;
 
   private redTeamSection: RoomTeamSection | null = null;
   private blueTeamSection: RoomTeamSection | null = null;
@@ -28,9 +28,9 @@ export default class RoomPage extends ContainerComponent {
   private roomInfoBlock: RoomInfoBlock | null = null;
 
   constructor() {
-    if (RoomPage.currentUnsubscribe) {
-      RoomPage.currentUnsubscribe();
-      RoomPage.currentUnsubscribe = null;
+    if (RoomPage.unsubscribe) {
+      RoomPage.unsubscribe();
+      RoomPage.unsubscribe = null;
     }
 
     super({
@@ -38,9 +38,7 @@ export default class RoomPage extends ContainerComponent {
       classes: styles.pageContainer,
     });
 
-    RoomPage.currentUnsubscribe = store.subscribe((state, action) =>
-      this.refreshFromStore(state, action)
-    );
+    RoomPage.unsubscribe = store.subscribe((state, action) => this.refreshFromStore(state, action));
 
     this.subscribeToSocket();
 
@@ -103,11 +101,7 @@ export default class RoomPage extends ContainerComponent {
 
   private render(): void {
     const roomInfo = store.getState().currentRoom;
-
-    if (!roomInfo) {
-      //Loader
-      return;
-    }
+    if (!roomInfo) return;
 
     const main = new ContainerComponent({ tag: 'main', classes: styles.main });
 
@@ -137,24 +131,15 @@ export default class RoomPage extends ContainerComponent {
     this.appendChildren([new RoomHeader(), main]);
   }
 
-  public destroyPage(): void {
-    this.redTeamSection?.destroyComponent();
-    this.blueTeamSection?.destroyComponent();
-    this.choosingSection?.destroyComponent();
-    this.roomInfoBlock?.destroyComponent();
-
-    this.blueTeamSection = null;
-    this.redTeamSection = null;
-    this.choosingSection = null;
-    this.roomInfoBlock = null;
-
-    super.destroy();
-
-    if (RoomPage.currentUnsubscribe) {
-      RoomPage.currentUnsubscribe();
-      RoomPage.currentUnsubscribe = null;
+  public override destroy(): this {
+    if (RoomPage.unsubscribe) {
+      RoomPage.unsubscribe();
+      RoomPage.unsubscribe = null;
     }
 
     this.unsubscribeFromSocket();
+    super.destroy();
+
+    return this;
   }
 }

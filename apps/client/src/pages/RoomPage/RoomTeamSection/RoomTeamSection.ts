@@ -56,11 +56,7 @@ export default class RoomTeamSection extends ContainerComponent {
 
   private updatePlayersList(players: Player[]): void {
     if (!this.listContainer) return;
-    for (const item of this.items) {
-      item.destroyComponent();
-    }
     this.items = [];
-
     this.listContainer.destroyChildren();
 
     const header = {
@@ -99,19 +95,5 @@ export default class RoomTeamSection extends ContainerComponent {
     for (const item of this.items) {
       item.switchLanguage();
     }
-  }
-
-  public destroyComponent(): void {
-    for (const item of this.items) {
-      item.destroy();
-    }
-    this.items = [];
-
-    this.buttons?.destroyComponent();
-    this.buttons = null;
-
-    this.destroyChildren();
-
-    super.destroy();
   }
 }

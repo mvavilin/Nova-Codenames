@@ -174,14 +174,4 @@ export default class RoomTeamButtons extends ContainerComponent {
     this.agentButton.setContent(t(TranslationKeys.ROOM_AGENT_BTN));
     this.leaveButton.setContent(t(TranslationKeys.ROOM_LEAVE_TEAM_BTN));
   }
-
-  public destroyComponent(): void {
-    this.destroyChildren();
-
-    this.spyButton = null;
-    this.agentButton = null;
-    this.leaveButton = null;
-
-    super.destroy();
-  }
 }

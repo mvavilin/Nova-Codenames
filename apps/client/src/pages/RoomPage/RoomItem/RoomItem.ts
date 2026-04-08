@@ -61,11 +61,4 @@ export default class RoomItem extends BaseComponent {
       }
     }
   }
-  public destroyComponent(): void {
-    this.role = null;
-    this.user = null;
-
-    this.destroyChildren();
-    super.destroy();
-  }
 }

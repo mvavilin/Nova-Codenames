@@ -138,18 +138,4 @@ export default class RoomInfoBlock extends ContainerComponent {
     this.leaveButton.setContent(t(TranslationKeys.ROOM_LEAVE_ROOM_BTN));
     this.timerMessage.setContent(t(TranslationKeys.ROOM_TIMER_MESSAGE));
   }
-
-  public destroyComponent(): void {
-    this.roomTitle = null;
-    this.playersTitle = null;
-    this.playersCount = null;
-    this.leaveButton = null;
-    this.timerContainer = null;
-    this.timer = null;
-    this.timerMessage = null;
-
-    this.destroyChildren();
-
-    super.destroy();
-  }
 }

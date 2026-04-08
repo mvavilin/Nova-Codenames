@@ -17,6 +17,7 @@ const styles = {
 export default class RoomHeader extends ContainerComponent {
   private userMenu: BaseComponent | null = null;
   private title: HeadingComponent | null = null;
+  private logo: Logo | null = null;
 
   constructor() {
     super({ tag: 'header', classes: styles.header });
@@ -43,19 +44,14 @@ export default class RoomHeader extends ContainerComponent {
 
     container.appendChildren([new LanguageButton(), this.userMenu, new ExitButton()]);
 
-    this.appendChildren([new Logo(), this.title, container]);
+    this.logo = new Logo();
+    this.logo.setClasses('pointer-events-none');
+
+    this.appendChildren([this.logo, this.title, container]);
   }
 
   public switchLanguage(): void {
     if (!this.title) return;
     this.title.setContent(t(TranslationKeys.ROOM_TITLE));
-  }
-
-  public destroyComponent(): void {
-    this.userMenu = null;
-    this.title = null;
-
-    this.destroyChildren();
-    super.destroy();
   }
 }
