@@ -122,6 +122,7 @@ export default class RoomPage extends ContainerComponent {
 
     this.roomInfoBlock = new RoomInfoBlock({
       roomName: roomInfo.name,
+      roomId: roomInfo.id,
       currentCount: roomInfo.playerCount,
       totalCount: roomInfo.maxPlayers,
     });

@@ -108,6 +108,7 @@ export const TranslationKeys = {
   ROOM_LEAVE_TEAM_BTN: 'RoomLeaveTeamBtn',
   ROOM_PLAYERS_CHOOSING: 'RoomPlayersChoosing',
   ROOM_TIMER_MESSAGE: 'RoomTimerMessage',
+  ROOM_COPY_MESSAGE: 'RoomCopyMessage',
 
   LOBBY_TITLE: 'lobbyTitle',
 
