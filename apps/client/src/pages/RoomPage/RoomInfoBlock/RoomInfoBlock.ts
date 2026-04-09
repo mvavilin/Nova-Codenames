@@ -9,14 +9,14 @@ import { Timer } from '@/pages/GamePage/components';
 
 const styles = {
   container:
-    'min-w-[350px] flex justify-center max-[950px]:flex-col max-[950px]:justify-between items-center gap-8 text-white text-2xl font-bold bg-white/25 px-4 py-4 rounded',
+    'min-w-[280px] flex flex-col justify-center sm:flex-row sm:justify-between items-center gap-8 text-white text-xl min-[450px]:text-2xl font-bold bg-white/25 px-4 py-4 rounded',
   textContainerRow: 'w-full flex gap-2 items-center',
-  textContainerCol: 'flex flex-col self-center',
+  textContainerCol: 'flex flex-col self-center flex-1',
   span: 'text-brand truncate',
   button:
-    'w-34 h-12 shrink-0 bg-cyan-600 rounded-md whitespace-normal leading-tight text-base hover:cursor-pointer hover:bg-green-600 hover:transition-colors hover:duration-300',
+    'w-44 min-h-9 h-12 shrink-0 bg-blue-500 rounded-md whitespace-normal leading-tight text-sm min-[450px]:text-base hover:cursor-pointer hover:bg-blue-600 hover:transition-colors hover:duration-300 flex-1',
   timerContainer:
-    'h-full p-2 bg-green-600/70 flex flex-col justify-center items-center gap-5 text-brand text-2xl font-bold transition-all duration-500 opacity-0 scale-95 -> opacity-100 scale-100 rounded hidden',
+    'h-full flex-[2] p-2 bg-green-600/70 flex flex-col justify-center items-center gap-5 text-brand text-xl min-[450px]:text-2xl font-bold transition-all duration-500 rounded hidden',
   timerMessage: 'text-center',
 };
 

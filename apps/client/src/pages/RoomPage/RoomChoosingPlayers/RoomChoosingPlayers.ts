@@ -7,8 +7,8 @@ import { t } from '@/i18n';
 
 const styles = {
   container:
-    'w-[40%] min-w-[250px] flex flex-col items-center justify-center gap-5 p-4 bg-white/25 text-white text-lg rounded',
-  title: 'text-2xl text-center font-bold',
+    'w-[40%] min-w-[280px] flex flex-col items-center justify-center gap-5 p-4 bg-white/25 text-white text-lg rounded',
+  title: 'text-xl min-[450px]:text-2xl text-center font-bold',
   list: 'w-full grid grid-cols-[repeat(auto-fill,150px)] justify-center items-center gap-5',
 };
 
