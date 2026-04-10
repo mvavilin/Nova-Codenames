@@ -27,7 +27,6 @@ export default class Router {
 
     const path = globalThis.location.pathname;
 
-    //нужно для сброса форм при нажатии кнопок вперед/назад и переходе с других стр
     const isUnAuthPage = path === URLS.LOGIN() || path === URLS.REGISTRATION();
     if (isUnAuthPage) {
       store.dispatch({ type: FormActionTypes.CLEAN_DATA });
