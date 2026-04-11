@@ -13,12 +13,16 @@ vi.mock('@/api/RouterAPI/router', () => ({
   },
 }));
 
+vi.mock('@utils', () => ({
+  getSessionStorageData: vi.fn(() => []),
+  setSessionStorageData: vi.fn(),
+}));
+
 import WelcomePage from './WelcomePage';
 
 describe('WelcomePage container creation', () => {
   it('creates a div element', () => {
     const container = new WelcomePage();
-
     expect(container.element?.tagName).toBe('DIV');
   });
 });
