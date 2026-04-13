@@ -94,6 +94,10 @@ export default class GamePage extends ContainerComponent {
     // GAME_CARD_CHOSEN
     socketClient.onGameCardChosen((payload) => {
       console.log('[GamePage] Получено событие: GAME_CARD_CHOSEN - карта выбрана', payload);
+      logOutput.addMessage({
+        key: LogMessageKeys.LOG_VOTE_ENDED,
+        info: payload.cardId,
+      });
     });
 
     // GAME_CARD_SHOWN

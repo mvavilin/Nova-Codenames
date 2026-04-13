@@ -1,5 +1,7 @@
 import { BaseComponent, ContainerComponent } from '@ComponentsAPI';
 import { type Card, CardColorEnum } from '@repo/shared/src/types/game';
+import store from '@/store/store';
+import { GameActionTypes } from '@/store/actions';
 
 type CardProperties = {
   card: Card;
@@ -20,11 +22,26 @@ export default class CardComponent extends BaseComponent {
       this.setClasses(CardColorEnum[card.color]);
     }
 
-    this.render(card.word);
+    this.render(card);
   }
 
-  private render(word: string): void {
-    this.appendChildren(new ContainerComponent({ classes: CARD_CLASSES.CONTENT, content: word }));
+  private render(card: Card): void {
+    this.appendChildren(
+      new ContainerComponent({
+        classes: CARD_CLASSES.CONTENT,
+        content: card.word,
+        listeners: {
+          click: (): void => this.handleClick(card.id),
+        },
+      })
+    );
+  }
+
+  private handleClick(cardId: string): void {
+    store.dispatch({
+      type: GameActionTypes.GAME_CARD_CHOOSE,
+      payload: { cardId },
+    });
   }
 
   // feat: add card color and status change

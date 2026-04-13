@@ -40,16 +40,16 @@ export default function gameFetcher<State>(): Middleware<State, AppActions> {
     }
 
     // Выбор карты агентом (клиент → сервер)
-    // if (context.action.type === GameActionTypes.GAME_CARD_CHOOSE) {
-    //   try {
-    //     const { cardId } = context.action.payload;
-    //     console.log('[GAME] Выбор карты:', { cardId });
-    //     socketClient.emit(ClientEventType.GAME_CARD_CHOOSE, { cardId });
-    //   } catch (error) {
-    //     console.error('[GAME] Ошибка GAME_CARD_CHOOSE:', error);
-    //     showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ERROR);
-    //   }
-    // }
+    if (context.action.type === GameActionTypes.GAME_CARD_CHOOSE) {
+      try {
+        const { cardId } = context.action.payload;
+        console.log('[GAME] Выбор карты:', { cardId });
+        socketClient.emit(ClientEventType.GAME_CARD_CHOOSE, { cardId });
+      } catch (error) {
+        console.error('[GAME] Ошибка GAME_CARD_CHOOSE:', error);
+        showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ERROR);
+      }
+    }
 
     // Отправка ответа на вопрос карты (клиент → сервер)
     // if (context.action.type === GameActionTypes.GAME_ANSWER_GIVE) {
