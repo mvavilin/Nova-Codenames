@@ -96,6 +96,7 @@ export type GameStateForClient = {
   cards: Card[];
   currentTeam: Teams;
   isSpymaster: boolean;
+  myTeam: Teams | null;
   redTeam: Player[];
   blueTeam: Player[];
   gamePhase: GAME_PHASE;

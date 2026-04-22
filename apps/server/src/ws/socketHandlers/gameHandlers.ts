@@ -44,8 +44,8 @@ function setupGameAddPlayerHandler(
       for (const playerId of playerIds) {
         const socketId = socketIdMap.get(playerId);
         if (socketId) {
-          io.to(socketId).emit('game:start', { gameInfo: game.getGameInfo(playerId) });
-          logger.emit(playerId, 'game:start', { gameInfo: game.getGameInfo(playerId) });
+          io.to(socketId).emit('game:start', { gameState: game.getGameStateForClient(playerId) });
+          logger.emit(playerId, 'game:start', { gameState: game.getGameStateForClient(playerId) });
         }
       }
 

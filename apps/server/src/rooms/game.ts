@@ -701,6 +701,7 @@ export class Game {
       cards,
       currentTeam: this.currentTeam,
       isSpymaster: player ? player.role === 'spymaster' : false,
+      myTeam: player ? player.team : null,
       redTeam: this.redTeam,
       blueTeam: this.blueTeam,
       gamePhase: this.gamePhase,

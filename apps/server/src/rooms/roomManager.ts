@@ -273,24 +273,31 @@ export class RoomManager {
   public addPlayerToGame(userId: string): { game: Game } | { error: ErrorCode } {
     const room = this.getRoomByUserId(userId);
 
-    if (room) {
-      const roomId = room.getId();
-      const maxPlayers = room.getMaxPlayers();
-      const game = this.getGameByRoomId(roomId) || this.createGame(roomId, maxPlayers);
-      const player = room.getPlayer(userId);
-      if (player) {
-        game.addPlayer(player);
-        room.removePlayer(player.id);
-        if (game.isFull()) {
-          game.initial();
-          return { game };
-        } else {
-          return { error: 'GAME_IS_NOT_FULL' };
-        }
-      }
+    if (!room) {
+      return { error: 'ROOM_NOT_FOUND' };
     }
 
-    return { error: 'ROOM_NOT_FOUND' };
+    const roomId = room.getId();
+    const maxPlayers = room.getMaxPlayers();
+    const game = this.getGameByRoomId(roomId) || this.createGame(roomId, maxPlayers);
+    const roomPlayer = room.getPlayer(userId);
+
+    if (!roomPlayer) {
+      return { error: 'ROOM_NOT_FOUND' };
+    }
+
+    const player: Player = {
+      ...roomPlayer,
+    };
+
+    game.addPlayer(player);
+
+    if (game.isFull()) {
+      game.initial();
+      return { game };
+    } else {
+      return { error: 'GAME_IS_NOT_FULL' };
+    }
   }
 
   public addPlayerToProfile(userId: string): { profileInfo: ProfileInfo } | { error: ErrorCode } {

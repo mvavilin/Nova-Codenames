@@ -1,6 +1,6 @@
 import type { Player, RoomInfo, RoomPreview, Teams } from '@repo/shared/src/types/room';
 import type { CardColor, GameStateForClient, Score } from '@repo/shared/src/types/game';
-import type { GameInfo, GameEndInfo } from '@shared/types/game';
+import type { GameEndInfo } from '@shared/types/game';
 import type { ProfileInfo } from '@shared/types/profile';
 import { ServerEventType, type ErrorCode, type UserStatus } from '@repo/shared/src/socketEvents';
 import { ServerUrl } from '@repo/shared/src/api.constants';
@@ -97,11 +97,11 @@ class SocketClient extends BaseSocketClient {
     this.socket.off(ServerEventType.GAME_START_TIMER, listener);
   }
 
-  public onGameStart(handler: (payload: { gameInfo: GameInfo }) => void): void {
+  public onGameStart(handler: (payload: { gameState: GameStateForClient }) => void): void {
     this.socket.on(ServerEventType.GAME_START, handler);
   }
 
-  public offGameStart(listener: (payload: { gameInfo: GameInfo }) => void): void {
+  public offGameStart(listener: (payload: { gameState: GameStateForClient }) => void): void {
     this.socket.off(ServerEventType.GAME_START, listener);
   }
 

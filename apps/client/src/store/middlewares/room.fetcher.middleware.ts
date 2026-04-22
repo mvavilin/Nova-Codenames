@@ -7,7 +7,6 @@ import { GameActionTypes, RoomPageActionTypes, SocketActionTypes } from '@action
 import { showErrorToast } from '@utils';
 import { URLS } from '@RouterAPI/router.constants';
 import { router } from '@router';
-import store from '@store';
 
 export default function socketFetcher<State>(): Middleware<State, AppActions> {
   return function middleware(context) {
@@ -53,8 +52,10 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
           socketClient.off(ServerEventType.ERROR);
         });
 
-        socketClient.onGameStart(() => {
-          store.dispatch({ type: GameActionTypes.GAME_ASK_GAME_STATE });
+        socketClient.onGameStart((payload) => {
+          context.next({ type: GameActionTypes.GAME_STATE, payload });
+
+          router.navigate(URLS.GAME(payload.gameState.id));
 
           socketClient.off(ServerEventType.GAME_START);
         });

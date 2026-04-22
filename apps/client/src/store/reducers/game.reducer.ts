@@ -6,9 +6,8 @@ import { GameActionTypes } from '@actions';
 
 export default function gameReducer(state: State, action: AppActions): State {
   switch (action.type) {
-    // Таймаут подсказки
+    //Таймаут подсказки
     // case GameActionTypes.GAME_CLUE_TIMEOUT: {
-    //   console.log('[GAME REDUCER] Время подсказки истекло');
     //   return {
     //     ...state,
     //     game: {
@@ -19,9 +18,8 @@ export default function gameReducer(state: State, action: AppActions): State {
     //   };
     // }
 
-    // Смена хода
+    //Смена хода
     // case GameActionTypes.GAME_TURN_CHANGED: {
-    //   console.log('[GAME REDUCER] Смена хода, новая команда:', action.payload.team);
     //   return {
     //     ...state,
     //     game: {
@@ -38,9 +36,8 @@ export default function gameReducer(state: State, action: AppActions): State {
     //   };
     // }
 
-    // Подсказка передана агентам
+    //Подсказка передана агентам
     // case GameActionTypes.GAME_CLUE_GIVEN: {
-    //   console.log('[GAME REDUCER] Подсказка получена:', action.payload.clue);
     //   return {
     //     ...state,
     //     game: {
@@ -197,12 +194,7 @@ export default function gameReducer(state: State, action: AppActions): State {
     case GameActionTypes.GAME_STATE: {
       return {
         ...state,
-
-        game: {
-          ...state.game,
-
-          ...action.payload.gameState,
-        },
+        game: action.payload.gameState,
       };
     }
 

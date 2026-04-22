@@ -1,11 +1,4 @@
-import type {
-  Card,
-  CardColor,
-  GameEndInfo,
-  GameInfo,
-  GameStateForClient,
-  Score,
-} from './types/game.ts';
+import type { Card, CardColor, GameEndInfo, GameStateForClient, Score } from './types/game.ts';
 import type { ProfileInfo } from './types/profile.ts';
 import type { CheckQuestion } from './types/question.ts';
 import type { Player, RoomInfo, RoomPreview, RoomSettings, Teams } from './types/room.ts';
@@ -203,7 +196,7 @@ export type ServerEvent =
   | { type: 'room:player-left'; payload: { roomInfo: RoomInfo } }
   | { type: 'team:changed'; payload: { roomInfo: RoomInfo } }
   | { type: 'game:start-timer' }
-  | { type: 'game:start'; payload: { gameInfo: GameInfo } }
+  | { type: 'game:start'; payload: { gameState: GameStateForClient } }
   | { type: 'game:ask-clue' }
   | { type: 'game:clue-timeout' }
   | { type: 'game:turn-changed'; payload: { team: Teams } }

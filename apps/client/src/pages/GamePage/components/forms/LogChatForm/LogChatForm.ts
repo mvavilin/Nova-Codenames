@@ -10,7 +10,6 @@ import store from '@store';
 import { GameActionTypes } from '@actions';
 import { LogMessageKeys } from '@repo/shared/src/types/logMessage';
 import { socketClient } from '@SocketClientAPI';
-import { TeamsEnum } from '@repo/shared/src/types/room';
 
 export default class LogChatForm extends FormComponent {
   private input?: InputText;
@@ -27,9 +26,14 @@ export default class LogChatForm extends FormComponent {
 
     this.render();
 
+    socketClient.onGameAskClue(() => {
+      this.setDisableControls(false);
+    });
+
     socketClient.onGameTurnChanged((payload) => {
-      if (payload.team === TeamsEnum.RED) this.setDisableControls(false);
-      else if (payload.team === TeamsEnum.BLUE) this.setDisableControls(false);
+      const isMyTurn = payload.team === this.gameState?.myTeam;
+
+      this.setDisableControls(!(isMyTurn && this.gameState?.isSpymaster));
     });
 
     socketClient.onGameClueTimeout(() => this.setDisableControls(true));
@@ -80,19 +84,17 @@ export default class LogChatForm extends FormComponent {
   }
 
   private handleSubmit(): void {
-    if (this.gameState && this.gameState.gamePhase === 'clue') {
-      const clue = this.input?.value;
+    const clue = this.input?.value;
 
-      if (!clue) return;
+    if (!clue) return;
 
-      this.input?.setValue();
-      this.setDisableControls(true);
+    this.input?.setValue();
+    this.setDisableControls(true);
 
-      logOutput.addMessage({ key: LogMessageKeys.LOG_HINT_PHASE_ENDED });
+    logOutput.addMessage({ key: LogMessageKeys.LOG_HINT_PHASE_ENDED });
 
-      store.dispatch({ type: GameActionTypes.GAME_CLUE_GIVE, payload: { clue } });
+    store.dispatch({ type: GameActionTypes.GAME_CLUE_GIVE, payload: { clue } });
 
-      logOutput.addMessage({ key: LogMessageKeys.LOG_VOTE_STARTED });
-    }
+    logOutput.addMessage({ key: LogMessageKeys.LOG_VOTE_STARTED });
   }
 }
